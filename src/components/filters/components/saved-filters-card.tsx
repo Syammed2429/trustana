@@ -150,7 +150,7 @@ export const SavedFiltersCard = memo(function SavedFiltersCard({
         </CardHeader>
         {showSavedFilters && (
           <CardContent>
-            <ScrollArea className='h-72'>
+            <ScrollArea className='max-h-72'>
               {savedFilters.length === 0 ? (
                 <div className='text-center py-8 text-muted-foreground'>
                   No saved filters yet. Create and save your first filter!

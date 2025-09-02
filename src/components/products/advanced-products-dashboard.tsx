@@ -82,7 +82,6 @@ export const AdvancedProductsDashboard = () => {
       <AdvancedFilters
         onFiltersChange={handleFiltersChange}
         availableAttributes={availableAttributes}
-        supplierAttributes={supplierAttributes}
         isDisabled={isLoading}
         className='bg-card'
       />

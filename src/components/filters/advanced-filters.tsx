@@ -17,14 +17,10 @@ import { QuickSearch } from "./components/quick-search";
 import { SavedFiltersCard } from "./components/saved-filters-card";
 import { FilterGroupCard } from "./components/filter-group-card";
 import { SavedFilter } from "@/utils/filters/filter-utils";
-import { AttributeEnumFilter } from "@/components/attribute-enum-filter";
-import { SupplierAttribute } from "@/app/types/attribute";
-import { AttributeFieldType, AttributeGroup } from "@/app/enums/attribute";
 
 interface AdvancedFiltersProps {
   onFiltersChange: (filters: Record<string, unknown>) => void;
   availableAttributes: string[];
-  supplierAttributes?: SupplierAttribute[]; // Add supplier attributes for enum-based filtering
   isDisabled?: boolean;
   className?: string;
 }
@@ -43,17 +39,10 @@ interface AdvancedFiltersProps {
 export const AdvancedFilters = ({
   onFiltersChange,
   availableAttributes,
-  supplierAttributes = [],
   isDisabled = false,
   className = "",
 }: AdvancedFiltersProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-
-  // State for enum-based filtering
-  const [selectedFieldType, setSelectedFieldType] =
-    React.useState<AttributeFieldType | null>(null);
-  const [selectedGroup, setSelectedGroup] =
-    React.useState<AttributeGroup | null>(null);
 
   const {
     // State
@@ -106,59 +95,8 @@ export const AdvancedFilters = ({
     setIsOpen(false);
   };
 
-  // Handle enum-based filtering
-  const handleEnumFilterChange = React.useCallback(
-    (fieldType: AttributeFieldType | null, group: AttributeGroup | null) => {
-      // Apply enum-based filter logic
-      const enumFilters: Record<string, unknown> = {};
-
-      if (fieldType || group) {
-        const filteredAttributes = supplierAttributes.filter((attr) => {
-          const matchesType = !fieldType || attr.type === fieldType;
-          const matchesGroup = !group || attr.group === group;
-          return matchesType && matchesGroup;
-        });
-
-        // Apply as an attribute filter showing only these types/groups
-        if (filteredAttributes.length > 0) {
-          enumFilters.enumFilter = {
-            fieldType,
-            group,
-            matchingAttributes: filteredAttributes.map((attr) => attr.key),
-          };
-        }
-      }
-
-      onFiltersChange(enumFilters);
-    },
-    [supplierAttributes, onFiltersChange]
-  );
-
-  const handleFieldTypeFilter = (fieldType: AttributeFieldType | null) => {
-    setSelectedFieldType(fieldType);
-    handleEnumFilterChange(fieldType, selectedGroup);
-  };
-
-  const handleGroupFilter = (group: AttributeGroup | null) => {
-    setSelectedGroup(group);
-    handleEnumFilterChange(selectedFieldType, group);
-  };
-
   return (
     <div className={className}>
-      {/* Enum-based Attribute Filter */}
-      {supplierAttributes.length > 0 && (
-        <div className='mb-4'>
-          <AttributeEnumFilter
-            availableAttributes={supplierAttributes}
-            onFilterByType={handleFieldTypeFilter}
-            onFilterByGroup={handleGroupFilter}
-            selectedFieldType={selectedFieldType}
-            selectedGroup={selectedGroup}
-          />
-        </div>
-      )}
-
       <div className='flex items-center justify-between mb-4'>
         <div className='flex items-center gap-2'>
           <QuickSearch
