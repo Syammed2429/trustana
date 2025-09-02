@@ -13,6 +13,12 @@ import {
 import { X } from "lucide-react";
 import { AttributeCombobox } from "@/components/attribute-combobox";
 import { FilterCondition, OPERATORS } from "@/utils/filters/filter-utils";
+import {
+  getDataTypeOptions,
+  getOperatorDataType,
+  getInputType,
+  isBooleanType,
+} from "@/utils/filters/filter-helpers";
 import { InternalFilterValue } from "@/app/types/query-engine/common";
 
 interface FilterConditionItemProps {
@@ -22,7 +28,7 @@ interface FilterConditionItemProps {
   logicalOperator?: "AND" | "OR";
   onAttributeChange: (attribute: string) => void;
   onDataTypeChange: (
-    dataType: "string" | "number" | "boolean" | "date"
+    dataType: "string" | "number" | "boolean" | "date" | "price" | "url"
   ) => void;
   onOperatorChange: (operator: keyof InternalFilterValue) => void;
   onValueChange: (value: string | boolean) => void;
@@ -59,10 +65,13 @@ export const FilterConditionItem = memo(function FilterConditionItem({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='string'>Text</SelectItem>
-          <SelectItem value='number'>Number</SelectItem>
-          <SelectItem value='boolean'>Boolean</SelectItem>
-          <SelectItem value='date'>Date</SelectItem>
+          {getDataTypeOptions().map((option) => (
+            <SelectItem key={option.enumType} value={option.value}>
+              <div className='flex items-center justify-between w-full'>
+                <span>{option.label}</span>
+              </div>
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
 
@@ -71,7 +80,7 @@ export const FilterConditionItem = memo(function FilterConditionItem({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {OPERATORS[condition.dataType].map((op) => (
+          {OPERATORS[getOperatorDataType(condition.dataType)].map((op) => (
             <SelectItem key={op.value} value={op.value}>
               {op.label}
             </SelectItem>
@@ -81,7 +90,7 @@ export const FilterConditionItem = memo(function FilterConditionItem({
 
       {condition.operator !== "$exists" && (
         <>
-          {condition.dataType === "boolean" ? (
+          {isBooleanType(condition.dataType) ? (
             <Select
               value={condition.value.toString()}
               onValueChange={(value) => onValueChange(value === "true")}
@@ -96,13 +105,7 @@ export const FilterConditionItem = memo(function FilterConditionItem({
             </Select>
           ) : (
             <Input
-              type={
-                condition.dataType === "number"
-                  ? "number"
-                  : condition.dataType === "date"
-                  ? "date"
-                  : "text"
-              }
+              type={getInputType(condition.dataType)}
               value={condition.value.toString()}
               onChange={(e) => onValueChange(e.target.value)}
               placeholder='Enter value'

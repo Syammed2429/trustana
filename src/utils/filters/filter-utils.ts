@@ -5,7 +5,7 @@ export interface FilterCondition {
   attribute: string;
   operator: keyof InternalFilterValue;
   value: string | number | boolean;
-  dataType: "string" | "number" | "boolean" | "date";
+  dataType: "string" | "number" | "boolean" | "date" | "price" | "url";
 }
 
 export interface FilterGroup {
@@ -147,15 +147,18 @@ export const detectDataType = (
  */
 export const convertFilterValue = (
   value: string | number | boolean,
-  dataType: "string" | "number" | "boolean" | "date"
+  dataType: "string" | "number" | "boolean" | "date" | "price" | "url"
 ): string | number | boolean => {
   switch (dataType) {
     case "number":
+    case "price":
       return parseFloat(value.toString());
     case "boolean":
       return value === "true" || value === true;
     case "date":
       return new Date(value.toString()).getTime();
+    case "url":
+    case "string":
     default:
       return value;
   }

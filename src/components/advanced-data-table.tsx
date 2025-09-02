@@ -33,6 +33,10 @@ import {
 import { Product } from "@/app/types/product";
 import { ColumnCustomization } from "@/components/column-customization";
 import { RichContentRenderer } from "@/components/rich-content-renderer";
+import {
+  formatAttributeHeader,
+  isMediaOrSpecialField,
+} from "@/utils/attribute-formatting";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader2 } from "lucide-react";
 
@@ -40,51 +44,6 @@ interface ColumnMeta {
   sticky?: "left";
   stickyLeft?: number;
   className?: string;
-}
-
-// Helper function to format attribute keys into readable headers
-function formatAttributeHeader(key: string): string {
-  return (
-    key
-      // Remove leading underscores
-      .replace(/^_+/, "")
-      // Handle common patterns first (more concise)
-      .replace(/basicInfo/g, "Basic")
-      .replace(/addNew/g, "New")
-      .replace(/templateAttribute/g, "Template")
-      .replace(/fromVariant/g, "Variant")
-      .replace(/productAttribute/g, "Product")
-      .replace(/newCreated/g, "Created")
-      .replace(/aboutThis/g, "About")
-      .replace(/Item(\d+)/g, "Item$1")
-      .replace(/Product(\d+)/g, "Prod$1")
-      .replace(/testLoop/g, "Loop")
-      .replace(/testRtf/g, "RTF")
-      // Split camelCase and add spaces
-      .replace(/([a-z])([A-Z])/g, "$1 $2")
-      // Split on numbers
-      .replace(/([a-zA-Z])(\d)/g, "$1 $2")
-      .replace(/(\d)([a-zA-Z])/g, "$1 $2")
-      // Replace common technical terms with proper formatting
-      .replace(/\bsku\b/gi, "SKU")
-      .replace(/\bid\b/gi, "ID")
-      .replace(/\burl\b/gi, "URL")
-      .replace(/\bapi\b/gi, "API")
-      .replace(/\bhtml\b/gi, "HTML")
-      .replace(/\bcss\b/gi, "CSS")
-      .replace(/\bjs\b/gi, "JS")
-      .replace(/\bactive\b/gi, "Active")
-      // Capitalize each word
-      .split(" ")
-      .map((word) => {
-        if (word.length === 0) return "";
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      })
-      .join(" ")
-      // Clean up any remaining issues
-      .replace(/\s+/g, " ")
-      .trim()
-  );
 }
 
 function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
@@ -183,17 +142,7 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
 
           // Handle different value types
           if (typeof value === "string") {
-            const isMediaOrSpecialField =
-              attr.toLowerCase().includes("media") ||
-              attr.toLowerCase().includes("image") ||
-              attr.toLowerCase().includes("video") ||
-              attr.toLowerCase().includes("photo") ||
-              attr.toLowerCase().includes("rtf") ||
-              attr.toLowerCase().includes("test") ||
-              attr.toLowerCase().includes("loop") ||
-              attr.toLowerCase().includes("name") ||
-              attr.toLowerCase().includes("template") ||
-              attr.toLowerCase().includes("title");
+            const isMediaOrSpecial = isMediaOrSpecialField(attr);
 
             // Special handling for _basicInfoRtfTestLoop field
             if (attr === "_basicInfoRtfTestLoop") {
@@ -209,7 +158,7 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
               );
             }
 
-            if (isMediaOrSpecialField) {
+            if (isMediaOrSpecial) {
               // Handle media and special fields with tooltip and truncation
               const maxLength = 50;
               const hasMore = value.length > maxLength;

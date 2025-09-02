@@ -32,11 +32,11 @@ interface UseAdvancedFiltersProps {
  * Custom hook for managing advanced filters logic
  * Separates all business logic from UI components
  */
-export function useAdvancedFilters({
+export const useAdvancedFilters = ({
   onFiltersChange,
   availableAttributes,
   debounceMs = 500,
-}: UseAdvancedFiltersProps) {
+}: UseAdvancedFiltersProps) => {
   // State management
   const [filterGroups, setFilterGroups] = useState<FilterGroup[]>([
     {
@@ -308,4 +308,4 @@ export function useAdvancedFilters({
     exportFilters,
     importFilters,
   };
-}
+};

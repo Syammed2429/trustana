@@ -17,6 +17,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { formatAttributeHeaderSimple } from "@/utils/attribute-formatting";
+import { AttributeGroup } from "@/app/enums/attribute";
 
 interface AttributeComboboxProps {
   value?: string;
@@ -25,26 +27,6 @@ interface AttributeComboboxProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
-}
-
-// Helper function to format attribute keys into readable headers
-function formatAttributeHeader(key: string): string {
-  return key
-    .replace(/^_+/, "")
-    .replace(/basicInfo/g, "Basic Info ")
-    .replace(/addNew/g, "Add New ")
-    .replace(/templateAttribute/g, "Template Attribute")
-    .replace(/fromVariant/g, "From Variant ")
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/([a-zA-Z])(\d)/g, "$1 $2")
-    .replace(/(\d)([a-zA-Z])/g, "$1 $2")
-    .replace(/\bsku\b/gi, "SKU")
-    .replace(/\bid\b/gi, "ID")
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 interface AttributeOption {
@@ -78,23 +60,43 @@ export function AttributeCombobox({
       {
         value: "attributes.name",
         label: "Product Name",
-        group: "Core Attributes",
+        group: AttributeGroup.BASIC_INFO,
       },
-      { value: "attributes.brand", label: "Brand", group: "Core Attributes" },
+      {
+        value: "attributes.brand",
+        label: "Brand",
+        group: AttributeGroup.BASIC_INFO,
+      },
       {
         value: "attributes.category",
         label: "Category",
-        group: "Core Attributes",
+        group: AttributeGroup.BASIC_INFO,
       },
-      { value: "attributes.price", label: "Price", group: "Core Attributes" },
+      {
+        value: "attributes.price",
+        label: "Price",
+        group: AttributeGroup.PRICING_AND_INVENTORY,
+      },
       {
         value: "attributes.description",
         label: "Description",
-        group: "Core Attributes",
+        group: AttributeGroup.DESCRIPTIONS,
       },
-      { value: "attributes.sku", label: "SKU", group: "Core Attributes" },
-      { value: "attributes.status", label: "Status", group: "Core Attributes" },
-      { value: "attributes.type", label: "Type", group: "Core Attributes" },
+      {
+        value: "attributes.sku",
+        label: "SKU",
+        group: AttributeGroup.BASIC_INFO,
+      },
+      {
+        value: "attributes.status",
+        label: "Status",
+        group: AttributeGroup.BASIC_INFO,
+      },
+      {
+        value: "attributes.type",
+        label: "Type",
+        group: AttributeGroup.SPECIFICATIONS,
+      },
     ];
 
     const customAttributes: AttributeOption[] = availableAttributes
@@ -113,7 +115,7 @@ export function AttributeCombobox({
       )
       .map((attr) => ({
         value: `attributes.${attr}`,
-        label: formatAttributeHeader(attr),
+        label: formatAttributeHeaderSimple(attr),
         group: "Other Attributes",
         originalKey: attr,
       }));
