@@ -16,7 +16,9 @@ export type InternalFilterValue = {
 };
 
 export interface InternalQueryFilter {
-  [key: string]: InternalFilterValue;
+  $or?: InternalQueryFilter[];
+  $and?: InternalQueryFilter[];
+  [key: string]: InternalFilterValue | InternalQueryFilter[] | undefined;
 }
 
 export interface InternalQuerySort {

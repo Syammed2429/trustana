@@ -80,7 +80,19 @@ export class SupplierAttributeQueryEngine {
   ): SupplierAttribute[] {
     return attributes.filter((attribute) => {
       return Object.entries(filter).every(([field, filterValue]) => {
-        return this.matchesFilter(attribute, field, filterValue);
+        // Type guard to ensure filterValue is InternalFilterValue
+        if (
+          !filterValue ||
+          typeof filterValue !== "object" ||
+          Array.isArray(filterValue)
+        ) {
+          return true; // Skip invalid filter values
+        }
+        return this.matchesFilter(
+          attribute,
+          field,
+          filterValue as InternalFilterValue
+        );
       });
     });
   }

@@ -79,9 +79,47 @@ export class ProductQueryEngine {
     filter: InternalQueryFilter
   ): Product[] {
     return products.filter((product) => {
-      return Object.entries(filter).every(([field, filterValue]) => {
-        return this.matchesFilter(product, field, filterValue);
-      });
+      return this.evaluateFilterGroup(product, filter);
+    });
+  }
+
+  private evaluateFilterGroup(
+    product: Product,
+    filter: InternalQueryFilter
+  ): boolean {
+    // Handle $or operator
+    if ("$or" in filter) {
+      const orConditions = filter.$or as InternalQueryFilter[];
+      return orConditions.some((condition) =>
+        this.evaluateFilterGroup(product, condition)
+      );
+    }
+
+    // Handle $and operator (explicit)
+    if ("$and" in filter) {
+      const andConditions = filter.$and as InternalQueryFilter[];
+      return andConditions.every((condition) =>
+        this.evaluateFilterGroup(product, condition)
+      );
+    }
+
+    // Handle regular field filters (implicit AND)
+    return Object.entries(filter).every(([field, filterValue]) => {
+      // Skip logical operators
+      if (field === "$or" || field === "$and") {
+        return true;
+      }
+
+      // Type guard to ensure filterValue is InternalFilterValue
+      if (!filterValue || Array.isArray(filterValue)) {
+        return false;
+      }
+
+      return this.matchesFilter(
+        product,
+        field,
+        filterValue as InternalFilterValue
+      );
     });
   }
 
@@ -96,9 +134,35 @@ export class ProductQueryEngine {
       return this.evaluateCondition(productValue, filterValue);
     }
 
+    // Handle sku field (alias for skuId)
+    if (field === "sku") {
+      return this.evaluateCondition(product.skuId, filterValue);
+    }
+
     // For specific attributes filtering
     if (field === "attributes") {
       return this.matchesAttributesFilter(product, filterValue);
+    }
+
+    // Handle attributes.* field pattern (e.g., attributes.brand, attributes.name)
+    if (field.startsWith("attributes.")) {
+      const attributeKey = field.substring("attributes.".length);
+
+      const attribute = product.attributes.find(
+        (attr) => attr.key === attributeKey
+      );
+
+      if (attribute) {
+        return this.evaluateCondition(attribute.value, filterValue);
+      }
+
+      return false;
+    }
+
+    // For individual attribute fields (direct attribute key access)
+    const attribute = product.attributes.find((attr) => attr.key === field);
+    if (attribute) {
+      return this.evaluateCondition(attribute.value, filterValue);
     }
 
     return false;
@@ -273,16 +337,32 @@ export class ProductQueryEngine {
     targetValue: unknown,
     filterValue: InternalFilterValue
   ): boolean {
+    // Handle null/undefined filterValue
+    if (!filterValue || typeof filterValue !== "object") {
+      return false;
+    }
+
     // FilterValue is now always an object with operators
     return Object.entries(filterValue).every(([operator, operatorValue]) => {
-      return this.compareValues(targetValue, operatorValue, operator);
+      // Skip $options as it's not an operator, just a parameter for $regex
+      if (operator === "$options") {
+        return true;
+      }
+
+      return this.compareValues(
+        targetValue,
+        operatorValue,
+        operator,
+        filterValue
+      );
     });
   }
 
   private compareValues(
     targetValue: unknown,
     filterValue: unknown,
-    operator: string
+    operator: string,
+    fullCondition?: InternalFilterValue
   ): boolean {
     switch (operator) {
       case "$eq":
@@ -334,7 +414,16 @@ export class ProductQueryEngine {
           typeof filterValue === "string"
         ) {
           try {
-            const regex = new RegExp(filterValue, "i");
+            // Handle $options parameter for regex flags
+            let options = "i"; // Default to case-insensitive
+            if (
+              fullCondition &&
+              typeof fullCondition === "object" &&
+              "$options" in fullCondition
+            ) {
+              options = fullCondition.$options as string;
+            }
+            const regex = new RegExp(filterValue, options);
             return regex.test(targetValue);
           } catch {
             return false;
