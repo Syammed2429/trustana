@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useEffect } from "react";
-import { useDebounce } from "use-debounce";
+import { useState, useCallback, useEffect } from 'react';
+import { useDebounce } from 'use-debounce';
 import {
   FilterGroup,
   SavedFilter,
@@ -11,16 +11,13 @@ import {
   composeFilters,
   detectDataType,
   FilterCondition,
-} from "@/utils/filters/filter-utils";
+} from '@/utils/filters/filter-utils';
 import {
   loadFiltersFromStorage,
   addFilterToStorage,
   removeFilterFromStorage,
-} from "@/utils/filters/storage-utils";
-import {
-  exportFiltersToJSON,
-  importFiltersFromJSON,
-} from "@/utils/filters/file-operations";
+} from '@/utils/filters/storage-utils';
+import { exportFiltersToJSON, importFiltersFromJSON } from '@/utils/filters/file-operations';
 
 interface UseAdvancedFiltersProps {
   onFiltersChange: (filters: Record<string, unknown>) => void;
@@ -40,18 +37,16 @@ export const useAdvancedFilters = ({
   // State management
   const [filterGroups, setFilterGroups] = useState<FilterGroup[]>([
     {
-      id: "default",
-      name: "Default Group",
+      id: 'default',
+      name: 'Default Group',
       conditions: [],
-      logicalOperator: "AND",
+      logicalOperator: 'AND',
     },
   ]);
 
   const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
-  const [quickSearchTerm, setQuickSearchTerm] = useState("");
-  const [lastAppliedAdvancedFilters, setLastAppliedAdvancedFilters] = useState<
-    FilterGroup[]
-  >([]);
+  const [quickSearchTerm, setQuickSearchTerm] = useState('');
+  const [lastAppliedAdvancedFilters, setLastAppliedAdvancedFilters] = useState<FilterGroup[]>([]);
 
   // Debounced search term
   const [debouncedSearchTerm] = useDebounce(quickSearchTerm, debounceMs);
@@ -80,9 +75,7 @@ export const useAdvancedFilters = ({
 
   // Auto-apply search when debounced search term changes
   useEffect(() => {
-    const lastAppliedAdvancedFiltersApi = convertToAPIFormat(
-      lastAppliedAdvancedFilters
-    );
+    const lastAppliedAdvancedFiltersApi = convertToAPIFormat(lastAppliedAdvancedFilters);
     composeAndApplyFilters(lastAppliedAdvancedFiltersApi, debouncedSearchTerm);
   }, [debouncedSearchTerm, lastAppliedAdvancedFilters, composeAndApplyFilters]);
 
@@ -99,9 +92,9 @@ export const useAdvancedFilters = ({
                   {
                     id: generateFilterId(),
                     attribute: getDefaultAttribute(availableAttributes),
-                    operator: "$eq",
-                    value: "",
-                    dataType: "string",
+                    operator: '$eq',
+                    value: '',
+                    dataType: 'string',
                   },
                 ],
               }
@@ -112,30 +105,21 @@ export const useAdvancedFilters = ({
     [availableAttributes]
   );
 
-  const removeCondition = useCallback(
-    (groupId: string, conditionId: string) => {
-      setFilterGroups((prev) =>
-        prev.map((group) =>
-          group.id === groupId
-            ? {
-                ...group,
-                conditions: group.conditions.filter(
-                  (c) => c.id !== conditionId
-                ),
-              }
-            : group
-        )
-      );
-    },
-    []
-  );
+  const removeCondition = useCallback((groupId: string, conditionId: string) => {
+    setFilterGroups((prev) =>
+      prev.map((group) =>
+        group.id === groupId
+          ? {
+              ...group,
+              conditions: group.conditions.filter((c) => c.id !== conditionId),
+            }
+          : group
+      )
+    );
+  }, []);
 
   const updateCondition = useCallback(
-    (
-      groupId: string,
-      conditionId: string,
-      updates: Partial<FilterCondition>
-    ) => {
+    (groupId: string, conditionId: string, updates: Partial<FilterCondition>) => {
       setFilterGroups((prev) =>
         prev.map((group) =>
           group.id === groupId
@@ -159,7 +143,7 @@ export const useAdvancedFilters = ({
         id: generateFilterId(),
         name: `Group ${prev.length + 1}`,
         conditions: [],
-        logicalOperator: "AND",
+        logicalOperator: 'AND',
       },
     ]);
   }, []);
@@ -173,16 +157,11 @@ export const useAdvancedFilters = ({
     });
   }, []);
 
-  const updateGroup = useCallback(
-    (groupId: string, updates: Partial<FilterGroup>) => {
-      setFilterGroups((prev) =>
-        prev.map((group) =>
-          group.id === groupId ? { ...group, ...updates } : group
-        )
-      );
-    },
-    []
-  );
+  const updateGroup = useCallback((groupId: string, updates: Partial<FilterGroup>) => {
+    setFilterGroups((prev) =>
+      prev.map((group) => (group.id === groupId ? { ...group, ...updates } : group))
+    );
+  }, []);
 
   // Saved filters management
   const saveFilter = useCallback(
@@ -222,7 +201,7 @@ export const useAdvancedFilters = ({
     try {
       exportFiltersToJSON(savedFilters);
     } catch (error) {
-      console.error("Export failed:", error);
+      console.error('Export failed:', error);
       throw error;
     }
   }, [savedFilters]);
@@ -233,7 +212,7 @@ export const useAdvancedFilters = ({
       setSavedFilters((prev) => [...prev, ...importedFilters]);
       return importedFilters;
     } catch (error) {
-      console.error("Import failed:", error);
+      console.error('Import failed:', error);
       throw error;
     }
   }, []);
@@ -242,13 +221,13 @@ export const useAdvancedFilters = ({
   const clearAllFilters = useCallback(() => {
     setFilterGroups([
       {
-        id: "default",
-        name: "Default Group",
+        id: 'default',
+        name: 'Default Group',
         conditions: [],
-        logicalOperator: "AND",
+        logicalOperator: 'AND',
       },
     ]);
-    setQuickSearchTerm("");
+    setQuickSearchTerm('');
     onFiltersChange({});
     setLastAppliedAdvancedFilters([]);
   }, [onFiltersChange]);
@@ -260,20 +239,16 @@ export const useAdvancedFilters = ({
       updateCondition(groupId, conditionId, {
         attribute,
         dataType: detectedType,
-        operator: "$eq", // Reset operator when attribute changes
+        operator: '$eq', // Reset operator when attribute changes
       });
     },
     [updateCondition]
   );
 
   // Computed values
-  const hasActiveFilters =
-    filterGroups.some((g) => g.conditions.length > 0) || quickSearchTerm;
+  const hasActiveFilters = filterGroups.some((g) => g.conditions.length > 0) || quickSearchTerm;
 
-  const totalConditionsCount = filterGroups.reduce(
-    (acc, g) => acc + g.conditions.length,
-    0
-  );
+  const totalConditionsCount = filterGroups.reduce((acc, g) => acc + g.conditions.length, 0);
 
   return {
     // State

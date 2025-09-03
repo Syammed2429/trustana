@@ -1,18 +1,16 @@
-import * as React from "react";
+import * as React from 'react';
 
 interface Toast {
   title: string;
   description?: string;
-  variant?: "default" | "destructive";
+  variant?: 'default' | 'destructive';
 }
 
 interface ToastContextType {
   toast: (toast: Toast) => void;
 }
 
-const ToastContext = React.createContext<ToastContextType | undefined>(
-  undefined
-);
+const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const toast = React.useCallback((toast: Toast) => {
@@ -21,23 +19,19 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     console.log(`Toast: ${toast.title}`, toast.description);
 
     // You could integrate with a toast library like sonner or react-hot-toast here
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // Simple alert for demonstration
-      alert(
-        `${toast.title}${toast.description ? `\n${toast.description}` : ""}`
-      );
+      alert(`${toast.title}${toast.description ? `\n${toast.description}` : ''}`);
     }
   }, []);
 
-  return (
-    <ToastContext.Provider value={{ toast }}>{children}</ToastContext.Provider>
-  );
+  return <ToastContext.Provider value={{ toast }}>{children}</ToastContext.Provider>;
 }
 
 export function useToast() {
   const context = React.useContext(ToastContext);
   if (context === undefined) {
-    throw new Error("useToast must be used within a ToastProvider");
+    throw new Error('useToast must be used within a ToastProvider');
   }
   return context;
 }

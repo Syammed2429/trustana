@@ -1,4 +1,4 @@
-import { Product, ProductAttribute } from "@/app/types/product";
+import { Product, ProductAttribute } from '@/app/types/product';
 
 /**
  * Utility functions for product data manipulation and formatting
@@ -19,18 +19,18 @@ export interface CategorizedAttributes {
  */
 export function formatAttributeKey(key: string): string {
   const formatted = key
-    .replace(/^_+/, "")
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/([a-zA-Z])(\d)/g, "$1 $2")
-    .replace(/(\d)([a-zA-Z])/g, "$1 $2")
+    .replace(/^_+/, '')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([a-zA-Z])(\d)/g, '$1 $2')
+    .replace(/(\d)([a-zA-Z])/g, '$1 $2')
     .split(/[\s_-]+/)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ")
+    .join(' ')
     .trim();
 
   // Truncate very long attribute names for better UI
   if (formatted.length > 50) {
-    return formatted.substring(0, 47) + "...";
+    return formatted.substring(0, 47) + '...';
   }
 
   return formatted;
@@ -41,9 +41,7 @@ export function formatAttributeKey(key: string): string {
  * @param attributes - Array of product attributes
  * @returns Categorized attributes object
  */
-export function categorizeAttributes(
-  attributes: ProductAttribute[]
-): CategorizedAttributes {
+export function categorizeAttributes(attributes: ProductAttribute[]): CategorizedAttributes {
   const categories: CategorizedAttributes = {
     basic: [],
     media: [],
@@ -56,32 +54,32 @@ export function categorizeAttributes(
     const key = attr.key.toLowerCase();
 
     if (
-      key.includes("name") ||
-      key.includes("brand") ||
-      key.includes("title") ||
-      key.includes("category")
+      key.includes('name') ||
+      key.includes('brand') ||
+      key.includes('title') ||
+      key.includes('category')
     ) {
       categories.basic.push(attr);
     } else if (
-      key.includes("image") ||
-      key.includes("media") ||
-      key.includes("photo") ||
-      key.includes("video")
+      key.includes('image') ||
+      key.includes('media') ||
+      key.includes('photo') ||
+      key.includes('video')
     ) {
       categories.media.push(attr);
     } else if (
-      key.includes("spec") ||
-      key.includes("technical") ||
-      key.includes("dimension") ||
-      key.includes("weight") ||
-      key.includes("model")
+      key.includes('spec') ||
+      key.includes('technical') ||
+      key.includes('dimension') ||
+      key.includes('weight') ||
+      key.includes('model')
     ) {
       categories.technical.push(attr);
     } else if (
-      key.includes("description") ||
-      key.includes("about") ||
-      key.includes("marketing") ||
-      key.includes("feature")
+      key.includes('description') ||
+      key.includes('about') ||
+      key.includes('marketing') ||
+      key.includes('feature')
     ) {
       categories.marketing.push(attr);
     } else {
@@ -99,15 +97,10 @@ export function categorizeAttributes(
  */
 export function extractProductInfo(product: Product) {
   const productName = String(
-    product.attributes?.find((attr) => attr.key === "name")?.value ||
-      "Unnamed Product"
+    product.attributes?.find((attr) => attr.key === 'name')?.value || 'Unnamed Product'
   );
-  const productBrand = product.attributes?.find(
-    (attr) => attr.key === "brand"
-  )?.value;
-  const productCategory = product.attributes?.find(
-    (attr) => attr.key === "category"
-  )?.value;
+  const productBrand = product.attributes?.find((attr) => attr.key === 'brand')?.value;
+  const productCategory = product.attributes?.find((attr) => attr.key === 'category')?.value;
 
   return {
     name: productName,
@@ -125,6 +118,6 @@ export function generateProductMetadata(product: Product) {
   return {
     totalAttributes: product.attributes?.length || 0,
     idLength: product.id.length,
-    skuFormat: product.skuId.match(/^[A-Z]+/) ? "Letter-Number" : "Custom",
+    skuFormat: product.skuId.match(/^[A-Z]+/) ? 'Letter-Number' : 'Custom',
   };
 }

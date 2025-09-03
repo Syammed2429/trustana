@@ -1,18 +1,18 @@
-import { FC, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { FC, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { ArrowLeft, Edit, Trash2, Copy, MoreVertical } from "lucide-react";
-import { Product } from "@/app/types/product";
-import { EditProductDialog } from "@/components/dialogs/edit-product-dialog";
-import { DeleteProductDialog } from "@/components/dialogs/delete-product-dialog";
-import { toast } from "sonner";
+} from '@/components/ui/dropdown-menu';
+import { ArrowLeft, Edit, Trash2, Copy, MoreVertical } from 'lucide-react';
+import { Product } from '@/app/types/product';
+import { EditProductDialog } from '@/components/dialogs/edit-product-dialog';
+import { DeleteProductDialog } from '@/components/dialogs/delete-product-dialog';
+import { toast } from 'sonner';
 
 interface ProductHeaderWithCRUDProps {
   productName: string;
@@ -55,24 +55,22 @@ export const ProductHeaderWithCRUD: FC<ProductHeaderWithCRUDProps> = ({
         createdAt: Date.now(),
         updatedAt: Date.now(),
         attributes: product.attributes?.map((attr) =>
-          attr.key === "name"
-            ? { ...attr, value: `${attr.value} (Copy)` }
-            : attr
+          attr.key === 'name' ? { ...attr, value: `${attr.value} (Copy)` } : attr
         ),
       };
 
       // In real implementation, this would be an API call
-      console.log("Duplicating product:", duplicatedProduct);
+      console.log('Duplicating product:', duplicatedProduct);
 
       onDuplicate?.(duplicatedProduct);
 
-      toast.success("Product Duplicated", {
-        description: "Product has been successfully duplicated.",
+      toast.success('Product Duplicated', {
+        description: 'Product has been successfully duplicated.',
       });
     } catch (error) {
-      console.error("Duplication error:", error);
-      toast.error("Duplication Failed", {
-        description: "Failed to duplicate product. Please try again.",
+      console.error('Duplication error:', error);
+      toast.error('Duplication Failed', {
+        description: 'Failed to duplicate product. Please try again.',
       });
     }
   };
@@ -80,24 +78,15 @@ export const ProductHeaderWithCRUD: FC<ProductHeaderWithCRUDProps> = ({
   return (
     <>
       <div data-testid='product-header' className='flex items-center gap-4'>
-        <Button
-          variant='outline'
-          size='icon'
-          onClick={onBack}
-          className='shrink-0'
-        >
+        <Button variant='outline' size='icon' onClick={onBack} className='shrink-0'>
           <ArrowLeft className='h-4 w-4' />
         </Button>
 
         <div className='min-w-0 flex-1'>
-          <h1 className='text-2xl font-bold truncate'>{productName}</h1>
-          <div className='flex items-center gap-2 mt-1'>
-            {productBrand && (
-              <Badge variant='secondary'>{String(productBrand)}</Badge>
-            )}
-            {productCategory && (
-              <Badge variant='outline'>{String(productCategory)}</Badge>
-            )}
+          <h1 className='truncate text-2xl font-bold'>{productName}</h1>
+          <div className='mt-1 flex items-center gap-2'>
+            {productBrand && <Badge variant='secondary'>{String(productBrand)}</Badge>}
+            {productCategory && <Badge variant='outline'>{String(productCategory)}</Badge>}
           </div>
         </div>
 

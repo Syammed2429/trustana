@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { AdvancedFilters } from "@/components/filters";
-import { Separator } from "@/components/ui/separator";
-import { HeaderCard } from "./cards/header-card";
-import { DataTableCard } from "./cards/data-table-card";
-import { ErrorState } from "./dashboard/error-state";
-import { CreateProductDialog } from "@/components/dialogs/create-product-dialog";
-import { useDashboardLogic } from "./dashboard/use-dashboard-logic";
+import React from 'react';
+import { AdvancedFilters } from '@/components/filters';
+import { Separator } from '@/components/ui/separator';
+import { HeaderCard } from './cards/header-card';
+import { DataTableCard } from './cards/data-table-card';
+import { ErrorState } from './dashboard/error-state';
+import { CreateProductDialog } from '@/components/dialogs/create-product-dialog';
+import { useDashboardLogic } from './dashboard/use-dashboard-logic';
 
 /**
  * Optimized Advanced Products Dashboard Component
@@ -30,7 +30,6 @@ export const AdvancedProductsDashboard = () => {
     activeFiltersCount,
     availableAttributesCount,
     availableAttributes,
-    supplierAttributes,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -54,13 +53,7 @@ export const AdvancedProductsDashboard = () => {
 
   // Early return for error state
   if (error) {
-    return (
-      <ErrorState
-        error={error}
-        onRetry={handleRetry}
-        className='min-h-[400px]'
-      />
-    );
+    return <ErrorState error={error} onRetry={handleRetry} className='min-h-[400px]' />;
   }
 
   return (

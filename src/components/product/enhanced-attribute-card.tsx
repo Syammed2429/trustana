@@ -1,15 +1,15 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RichContentRenderer } from "@/components/rich-content-renderer";
-import { ProductAttribute } from "@/app/types/product";
-import { SupplierAttribute } from "@/app/types/attribute";
-import { formatAttributeKey } from "@/app/utils/product-utils";
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { RichContentRenderer } from '@/components/rich-content-renderer';
+import { ProductAttribute } from '@/app/types/product';
+import { SupplierAttribute } from '@/app/types/attribute';
+import { formatAttributeKey } from '@/app/utils/product-utils';
 import {
   getFieldTypeDisplayName,
   getFieldTypeStyles,
   shouldUseTextarea,
-} from "@/utils/attribute-utils";
-import { ComponentType, FC } from "react";
+} from '@/utils/attribute-utils';
+import { ComponentType, FC } from 'react';
 
 interface EnhancedAttributeCardProps {
   title: string;
@@ -32,15 +32,13 @@ export const EnhancedAttributeCard: FC<EnhancedAttributeCardProps> = ({
   attributes,
   supplierAttributes = [],
   icon: Icon,
-  className = "",
+  className = '',
   showFieldTypes = true,
 }) => {
   if (attributes.length === 0) return null;
 
   // Create a map of supplier attributes for type information
-  const supplierAttrMap = new Map(
-    supplierAttributes.map((attr) => [attr.key, attr])
-  );
+  const supplierAttrMap = new Map(supplierAttributes.map((attr) => [attr.key, attr]));
 
   return (
     <Card className={`h-fit ${className}`}>
@@ -62,43 +60,40 @@ export const EnhancedAttributeCard: FC<EnhancedAttributeCardProps> = ({
 
           return (
             <div key={attr.key} className='space-y-2'>
-              <div className='flex items-start gap-2 flex-wrap'>
+              <div className='flex flex-wrap items-start gap-2'>
                 <Badge
                   variant='outline'
-                  className='text-xs max-w-full break-words whitespace-normal leading-relaxed'
+                  className='max-w-full text-xs leading-relaxed break-words whitespace-normal'
                 >
                   {formatAttributeKey(attr.key)}
                 </Badge>
                 {showFieldTypes && fieldType && (
-                  <Badge
-                    variant='secondary'
-                    className={`text-xs ${getFieldTypeStyles(fieldType)}`}
-                  >
+                  <Badge variant='secondary' className={`text-xs ${getFieldTypeStyles(fieldType)}`}>
                     {getFieldTypeDisplayName(fieldType)}
                   </Badge>
                 )}
               </div>
-              <div className='pl-2 border-l-2 border-muted'>
+              <div className='border-muted border-l-2 pl-2'>
                 {shouldUseTextarea(fieldType!) && fieldType ? (
                   // For long text fields, use a more spacious layout
-                  <div className='bg-muted/20 p-3 rounded border'>
+                  <div className='bg-muted/20 rounded border p-3'>
                     <RichContentRenderer
-                      content={String(attr.value || "—")}
+                      content={String(attr.value || '—')}
                       maxLength={-1}
                       allowWrap={true}
-                      className='text-sm text-foreground break-words leading-relaxed'
+                      className='text-foreground text-sm leading-relaxed break-words'
                     />
                   </div>
                 ) : (
                   <RichContentRenderer
-                    content={String(attr.value || "—")}
+                    content={String(attr.value || '—')}
                     maxLength={-1}
                     allowWrap={true}
-                    className='text-sm text-muted-foreground break-words'
+                    className='text-muted-foreground text-sm break-words'
                   />
                 )}
                 {supplierAttr?.description && (
-                  <p className='text-xs text-muted-foreground mt-1 italic'>
+                  <p className='text-muted-foreground mt-1 text-xs italic'>
                     {supplierAttr.description}
                   </p>
                 )}

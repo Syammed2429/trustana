@@ -1,0 +1,56 @@
+# Define protected branches
+protected_branches="main|develop|test|prod"
+
+# Define authorized users
+authorized_users="kerry.blig12@gmail.com"
+
+# Get current branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Get git user email
+user_email=$(git config user.email)
+
+echo "🚀 Pre-push hook running..."
+echo "📧 User email: $user_email"
+echo "🌿 Current branch: $current_branch"
+
+# Check if current branch is protected
+if echo "$current_branch" | grep -qE "^($protected_branches)$"; then
+    echo "🔒 Branch '$current_branch' is protected"
+    
+    # Check if user is authorized
+    if echo "$user_email" | grep -qE "^($authorized_users)$"; then
+        echo "✅ User '$user_email' is authorized to push to '$current_branch'"
+    else
+        echo "❌ Error: User '$user_email' is not authorized to push to protected branch '$current_branch'"
+        echo "🚫 Push blocked!"
+        exit 1
+    fi
+else
+    echo "ℹ️  Branch '$current_branch' is not protected, push allowed for any user"
+fi
+
+# Run comprehensive checks before push
+echo "🔍 Running final TypeScript type check..."
+if ! pnpm run type-check; then
+    echo "❌ TypeScript type check failed!"
+    echo "🚫 Push blocked - please fix type errors before pushing"
+    exit 1
+fi
+
+echo "🔍 Running final ESLint check..."
+if ! pnpm run lint; then
+    echo "❌ ESLint check failed!"
+    echo "� Push blocked - please fix all linting errors and warnings before pushing"
+    exit 1
+fi
+
+# Optional: Run build to ensure everything compiles
+echo "🏗️  Running build check..."
+if ! pnpm build; then
+    echo "❌ Build failed!"
+    echo "🚫 Push blocked - please fix build errors before pushing"
+    exit 1
+fi
+
+echo "✅ All pre-push checks passed! Proceeding with push..."

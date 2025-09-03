@@ -3,7 +3,7 @@
  * Reusable business logic and data processing
  */
 
-import { FeatureCard, DemoLink, ApiExample } from "./home-data";
+import { FeatureCard, DemoLink, ApiExample } from './home-data';
 
 /**
  * Formats code examples with proper indentation and syntax highlighting
@@ -16,39 +16,39 @@ export const formatCodeExample = (code: string): string => {
  * Generates accessible props for feature cards
  */
 export const getFeatureCardProps = (feature: FeatureCard) => ({
-  "aria-label": `${feature.title}: ${feature.description}`,
-  role: "article"
+  'aria-label': `${feature.title}: ${feature.description}`,
+  role: 'article',
 });
 
 /**
  * Generates accessible props for demo links
  */
 export const getDemoLinkProps = (demo: DemoLink) => ({
-  "aria-label": `Navigate to ${demo.title}`,
-  role: "button"
+  'aria-label': `Navigate to ${demo.title}`,
+  role: 'button',
 });
 
 /**
  * Generates structured data for SEO
  */
 export const generateStructuredData = () => ({
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Trustana Product Dashboard",
-  "description": "Advanced product data filtering and exploration platform",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web Browser",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Trustana Product Dashboard',
+  description: 'Advanced product data filtering and exploration platform',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
   },
-  "featureList": [
-    "Advanced filtering with complex operators",
-    "Shareable filter configurations",
-    "Real-time data visualization",
-    "Enterprise-grade performance"
-  ]
+  featureList: [
+    'Advanced filtering with complex operators',
+    'Shareable filter configurations',
+    'Real-time data visualization',
+    'Enterprise-grade performance',
+  ],
 });
 
 /**
@@ -68,23 +68,14 @@ export const validateFeatureCard = (card: FeatureCard): boolean => {
  * Validates demo link data structure
  */
 export const validateDemoLink = (link: DemoLink): boolean => {
-  return !!(
-    link.id &&
-    link.href &&
-    link.title &&
-    ['default', 'outline'].includes(link.variant)
-  );
+  return !!(link.id && link.href && link.title && ['default', 'outline'].includes(link.variant));
 };
 
 /**
  * Validates API example data structure
  */
 export const validateApiExample = (example: ApiExample): boolean => {
-  return !!(
-    example.title &&
-    example.description &&
-    example.code
-  );
+  return !!(example.title && example.description && example.code);
 };
 
 /**
@@ -104,28 +95,28 @@ export const validateJsonExample = (code: string): boolean => {
  */
 export const createAnalyticsEvent = (
   action: string,
-  category: string = "home_page",
+  category: string = 'home_page',
   label?: string
 ) => ({
-  event: "user_interaction",
+  event: 'user_interaction',
   action,
   category,
   label,
-  timestamp: new Date().toISOString()
+  timestamp: new Date().toISOString(),
 });
 
 /**
  * Formats feature badges for display
  */
 export const formatBadges = (badges: string[]): string[] => {
-  return badges.map(badge => badge.trim()).filter(Boolean);
+  return badges.map((badge) => badge.trim()).filter(Boolean);
 };
 
 /**
  * Gets responsive grid classes based on item count
  */
 export const getGridClasses = (itemCount: number): string => {
-  if (itemCount === 1) return "grid-cols-1";
-  if (itemCount === 2) return "grid-cols-1 md:grid-cols-2";
-  return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+  if (itemCount === 1) return 'grid-cols-1';
+  if (itemCount === 2) return 'grid-cols-1 md:grid-cols-2';
+  return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
 };

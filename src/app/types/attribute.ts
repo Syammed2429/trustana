@@ -3,7 +3,7 @@
  * If you need to modify these, please state your reasons in the SUBMISSION.md file.
  */
 
-import { AttributeFieldType, AttributeGroup } from "../enums/attribute";
+import { AttributeFieldType, AttributeGroup } from '../enums/attribute';
 
 export interface AttributeOption {
   // common

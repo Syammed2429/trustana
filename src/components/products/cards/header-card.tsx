@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { FC, memo } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { DashboardHeader } from "../dashboard/dashboard-header";
-import { DashboardStats } from "../dashboard/dashboard-stats";
+import { FC, memo } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DashboardHeader } from '../dashboard/dashboard-header';
+import { DashboardStats } from '../dashboard/dashboard-stats';
 
 interface HeaderCardProps {
   totalProducts: number;
@@ -28,7 +28,7 @@ export const HeaderCard: FC<HeaderCardProps> = memo(function HeaderCard({
   onShare,
   onSettings,
   onCreateProduct,
-  className = "",
+  className = '',
 }) {
   return (
     <Card className={className}>

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useCallback, useMemo, useState } from "react";
-import { useProductsAdvanced } from "@/contexts/products-context-advanced";
-import { Product } from "@/app/types/product";
+import { useCallback, useMemo, useState } from 'react';
+import { useProductsAdvanced } from '@/contexts/products-context-advanced';
+import { Product } from '@/app/types/product';
 
 /**
  * Custom hook that handles dashboard business logic and data transformations
@@ -60,7 +60,7 @@ export const useDashboardLogic = () => {
     // 2. Invalidate and refetch the products query
     // 3. Show success notification
 
-    console.log("Product created:", newProduct);
+    console.log('Product created:', newProduct);
 
     // For now, we'll just close the dialog
     // In real implementation, the context would handle adding to the list
@@ -72,17 +72,17 @@ export const useDashboardLogic = () => {
 
   const handleExport = useCallback(() => {
     // TODO: Implement export functionality
-    console.log("Export functionality to be implemented");
+    console.log('Export functionality to be implemented');
   }, []);
 
   const handleShare = useCallback(() => {
     // TODO: Implement share functionality
-    console.log("Share functionality to be implemented");
+    console.log('Share functionality to be implemented');
   }, []);
 
   const handleSettings = useCallback(() => {
     // TODO: Implement settings functionality
-    console.log("Settings functionality to be implemented");
+    console.log('Settings functionality to be implemented');
   }, []);
 
   const handleRetry = useCallback(() => {

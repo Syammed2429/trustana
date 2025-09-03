@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   IconEye,
@@ -8,10 +8,10 @@ import {
   IconX,
   IconCheck,
   IconColumns,
-} from "@tabler/icons-react";
-import { Column } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@tabler/icons-react';
+import { Column } from '@tanstack/react-table';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -20,19 +20,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Product } from "@/app/types/product";
-import { ChangeEvent, FC, SetStateAction, useEffect, useState } from "react";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Product } from '@/app/types/product';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 
 interface ColumnCustomizationProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,7 +41,7 @@ interface ColumnState {
   visible: boolean;
   sortable: boolean;
   resizable: boolean;
-  dataType: "string" | "number" | "date" | "boolean" | "object";
+  dataType: 'string' | 'number' | 'date' | 'boolean' | 'object';
 }
 
 interface ColumnItemProps {
@@ -57,12 +52,9 @@ interface ColumnItemProps {
 const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
   return (
     <div
-      className={`
-        flex items-center justify-between p-3 border rounded-lg bg-card hover:bg-muted/50 transition-colors
-        ${column.visible ? "border-border" : "border-muted"}
-      `}
+      className={`bg-card hover:bg-muted/50 flex items-center justify-between rounded-lg border p-3 transition-colors ${column.visible ? 'border-border' : 'border-muted'} `}
     >
-      <div className='flex items-center space-x-3 min-w-0 flex-1'>
+      <div className='flex min-w-0 flex-1 items-center space-x-3'>
         <Checkbox
           checked={column.visible}
           onCheckedChange={() => onToggleVisibility(column.id)}
@@ -70,11 +62,9 @@ const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
         />
         <div className='min-w-0 flex-1'>
           <div className='flex items-center gap-2'>
-            <Label className='font-medium text-sm truncate'>
-              {column.label}
-            </Label>
+            <Label className='truncate text-sm font-medium'>{column.label}</Label>
           </div>
-          <div className='flex items-center gap-2 mt-1'>
+          <div className='mt-1 flex items-center gap-2'>
             <Badge variant='outline' className='text-xs'>
               {column.dataType}
             </Badge>
@@ -82,7 +72,7 @@ const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
         </div>
       </div>
 
-      <div className='flex items-center space-x-2 shrink-0'>
+      <div className='flex shrink-0 items-center space-x-2'>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -99,9 +89,7 @@ const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
                 )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
-              {column.visible ? "Hide column" : "Show column"}
-            </TooltipContent>
+            <TooltipContent>{column.visible ? 'Hide column' : 'Show column'}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
@@ -112,31 +100,23 @@ const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
 const formatColumnName = (columnId: string): string => {
   // Enhanced column name formatting
   return columnId
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/[_-]/g, " ")
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[_-]/g, ' ')
     .replace(/\b\w/g, (l) => l.toUpperCase())
-    .replace(/\bid\b/gi, "ID")
-    .replace(/\bsku\b/gi, "SKU")
-    .replace(/\burl\b/gi, "URL")
-    .replace(/\bapi\b/gi, "API");
+    .replace(/\bid\b/gi, 'ID')
+    .replace(/\bsku\b/gi, 'SKU')
+    .replace(/\burl\b/gi, 'URL')
+    .replace(/\bapi\b/gi, 'API');
 };
 
-const getColumnDataType = (
-  column: Column<Product, unknown>
-): ColumnState["dataType"] => {
+const getColumnDataType = (column: Column<Product, unknown>): ColumnState['dataType'] => {
   // Determine data type based on column ID and sample data
-  if (column.id.includes("date") || column.id.includes("time")) return "date";
-  if (
-    column.id.includes("count") ||
-    column.id.includes("amount") ||
-    column.id.includes("price")
-  )
-    return "number";
-  if (column.id.includes("active") || column.id.includes("enabled"))
-    return "boolean";
-  if (column.id.includes("attributes") || column.id.includes("media"))
-    return "object";
-  return "string";
+  if (column.id.includes('date') || column.id.includes('time')) return 'date';
+  if (column.id.includes('count') || column.id.includes('amount') || column.id.includes('price'))
+    return 'number';
+  if (column.id.includes('active') || column.id.includes('enabled')) return 'boolean';
+  if (column.id.includes('attributes') || column.id.includes('media')) return 'object';
+  return 'string';
 };
 
 export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
@@ -144,7 +124,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
   onColumnVisibilityChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [columns, setColumns] = useState<ColumnState[]>([]);
   const [originalColumns, setOriginalColumns] = useState<ColumnState[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
@@ -223,7 +203,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
   const handleHideAll = () => {
     setColumns((prev) =>
       prev.map((col) =>
-        col.id === "id" || col.id === "drag" || col.id === "select"
+        col.id === 'id' || col.id === 'drag' || col.id === 'select'
           ? col
           : { ...col, visible: false }
       )
@@ -233,7 +213,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
 
   const handleReset = () => {
     setColumns([...originalColumns]);
-    setSearchTerm("");
+    setSearchTerm('');
     setHasChanges(false);
   };
 
@@ -250,28 +230,25 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='max-w-4xl max-h-[85vh] overflow-hidden flex flex-col'>
+      <DialogContent className='flex max-h-[85vh] max-w-4xl flex-col overflow-hidden'>
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <IconColumns className='h-5 w-5' />
             Customize Table Columns
           </DialogTitle>
           <DialogDescription>
-            Toggle visibility, pin columns, and adjust widths. Click Apply to
-            save your changes.
+            Toggle visibility, pin columns, and adjust widths. Click Apply to save your changes.
           </DialogDescription>
         </DialogHeader>
 
-        <div className='flex-1 flex flex-col space-y-4 min-h-0'>
+        <div className='flex min-h-0 flex-1 flex-col space-y-4'>
           {/* Quick Actions */}
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2'>
               <Input
                 placeholder='Search columns...'
                 value={searchTerm}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setSearchTerm(e.target.value)
-                }
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                 className='w-64'
               />
               <Badge variant='outline'>
@@ -281,17 +258,17 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
 
             <div className='flex items-center gap-2'>
               <Button variant='outline' size='sm' onClick={handleShowAll}>
-                <IconEye className='h-4 w-4 mr-1' />
+                <IconEye className='mr-1 h-4 w-4' />
                 Show All
               </Button>
 
               <Button variant='outline' size='sm' onClick={handleHideAll}>
-                <IconEyeOff className='h-4 w-4 mr-1' />
+                <IconEyeOff className='mr-1 h-4 w-4' />
                 Hide All
               </Button>
 
               <Button variant='outline' size='sm' onClick={handleReset}>
-                <IconRefresh className='h-4 w-4 mr-1' />
+                <IconRefresh className='mr-1 h-4 w-4' />
                 Reset
               </Button>
             </div>
@@ -300,7 +277,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
           <Separator />
 
           {/* Column List */}
-          <div className='flex-1 overflow-y-auto space-y-2 min-h-0'>
+          <div className='min-h-0 flex-1 space-y-2 overflow-y-auto'>
             {filteredColumns.map((column) => (
               <ColumnItem
                 key={column.id}
@@ -311,8 +288,8 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
           </div>
 
           {/* Summary */}
-          <div className='flex items-center justify-between p-3 bg-muted/50 rounded-lg'>
-            <div className='flex items-center gap-4 text-sm text-muted-foreground'>
+          <div className='bg-muted/50 flex items-center justify-between rounded-lg p-3'>
+            <div className='text-muted-foreground flex items-center gap-4 text-sm'>
               <span>
                 <strong>{visibleCount}</strong> visible columns
               </span>
@@ -322,16 +299,12 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
               {hasChanges ? (
                 <>
                   <IconRefresh className='h-4 w-4 text-orange-600' />
-                  <span className='text-sm text-orange-600'>
-                    Changes pending
-                  </span>
+                  <span className='text-sm text-orange-600'>Changes pending</span>
                 </>
               ) : (
                 <>
                   <IconCheck className='h-4 w-4 text-green-600' />
-                  <span className='text-sm text-green-600'>
-                    Changes applied
-                  </span>
+                  <span className='text-sm text-green-600'>Changes applied</span>
                 </>
               )}
             </div>
@@ -339,16 +312,12 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
         </div>
 
         <DialogFooter className='flex-row justify-end gap-2'>
-          <Button
-            variant='outline'
-            onClick={handleClearChanges}
-            disabled={!hasChanges}
-          >
-            <IconX className='h-4 w-4 mr-1' />
+          <Button variant='outline' onClick={handleClearChanges} disabled={!hasChanges}>
+            <IconX className='mr-1 h-4 w-4' />
             Clear Changes
           </Button>
           <Button onClick={handleApplyChanges} disabled={!hasChanges}>
-            <IconCheck className='h-4 w-4 mr-1' />
+            <IconCheck className='mr-1 h-4 w-4' />
             Apply Changes
           </Button>
           <Button variant='outline' onClick={() => setIsOpen(false)}>

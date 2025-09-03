@@ -1,18 +1,18 @@
-import { InternalFilterValue } from "@/app/types/query-engine/common";
+import { InternalFilterValue } from '@/app/types/query-engine/common';
 
 export interface FilterCondition {
   id: string;
   attribute: string;
   operator: keyof InternalFilterValue;
   value: string | number | boolean;
-  dataType: "string" | "number" | "boolean" | "date" | "price" | "url";
+  dataType: 'string' | 'number' | 'boolean' | 'date' | 'price' | 'url';
 }
 
 export interface FilterGroup {
   id: string;
   name: string;
   conditions: FilterCondition[];
-  logicalOperator: "AND" | "OR";
+  logicalOperator: 'AND' | 'OR';
 }
 
 export interface SavedFilter {
@@ -28,14 +28,14 @@ export interface SavedFilter {
  * Core product attributes that are most commonly used for filtering
  */
 export const CORE_ATTRIBUTES = [
-  "attributes.name",
-  "attributes.brand",
-  "attributes.category",
-  "attributes.price",
-  "attributes.description",
-  "attributes.sku",
-  "attributes.status",
-  "attributes.type",
+  'attributes.name',
+  'attributes.brand',
+  'attributes.category',
+  'attributes.price',
+  'attributes.description',
+  'attributes.sku',
+  'attributes.status',
+  'attributes.type',
 ] as const;
 
 /**
@@ -43,33 +43,33 @@ export const CORE_ATTRIBUTES = [
  */
 export const OPERATORS = {
   string: [
-    { value: "$eq", label: "Equals" },
-    { value: "$ne", label: "Not Equals" },
-    { value: "$regex", label: "Contains" },
-    { value: "$exists", label: "Exists" },
+    { value: '$eq', label: 'Equals' },
+    { value: '$ne', label: 'Not Equals' },
+    { value: '$regex', label: 'Contains' },
+    { value: '$exists', label: 'Exists' },
   ],
   number: [
-    { value: "$eq", label: "Equals" },
-    { value: "$ne", label: "Not Equals" },
-    { value: "$gt", label: "Greater Than" },
-    { value: "$gte", label: "Greater Than or Equal" },
-    { value: "$lt", label: "Less Than" },
-    { value: "$lte", label: "Less Than or Equal" },
-    { value: "$exists", label: "Exists" },
+    { value: '$eq', label: 'Equals' },
+    { value: '$ne', label: 'Not Equals' },
+    { value: '$gt', label: 'Greater Than' },
+    { value: '$gte', label: 'Greater Than or Equal' },
+    { value: '$lt', label: 'Less Than' },
+    { value: '$lte', label: 'Less Than or Equal' },
+    { value: '$exists', label: 'Exists' },
   ],
   boolean: [
-    { value: "$eq", label: "Equals" },
-    { value: "$ne", label: "Not Equals" },
-    { value: "$exists", label: "Exists" },
+    { value: '$eq', label: 'Equals' },
+    { value: '$ne', label: 'Not Equals' },
+    { value: '$exists', label: 'Exists' },
   ],
   date: [
-    { value: "$eq", label: "Equals" },
-    { value: "$ne", label: "Not Equals" },
-    { value: "$gt", label: "After" },
-    { value: "$gte", label: "After or Equal" },
-    { value: "$lt", label: "Before" },
-    { value: "$lte", label: "Before or Equal" },
-    { value: "$exists", label: "Exists" },
+    { value: '$eq', label: 'Equals' },
+    { value: '$ne', label: 'Not Equals' },
+    { value: '$gt', label: 'After' },
+    { value: '$gte', label: 'After or Equal' },
+    { value: '$lt', label: 'Before' },
+    { value: '$lte', label: 'Before or Equal' },
+    { value: '$exists', label: 'Exists' },
   ],
 } as const;
 
@@ -86,60 +86,56 @@ export const generateFilterId = (): string => {
 export const getDefaultAttribute = (availableAttributes: string[]): string => {
   // Prefer core attributes if available, otherwise use the first available
   for (const coreAttr of CORE_ATTRIBUTES) {
-    const attrName = coreAttr.replace("attributes.", "");
+    const attrName = coreAttr.replace('attributes.', '');
     if (availableAttributes.includes(attrName)) {
       return coreAttr;
     }
   }
-  return availableAttributes.length > 0
-    ? `attributes.${availableAttributes[0]}`
-    : "";
+  return availableAttributes.length > 0 ? `attributes.${availableAttributes[0]}` : '';
 };
 
 /**
  * Auto-detect data type based on attribute name
  */
-export const detectDataType = (
-  attributeName: string
-): "string" | "number" | "boolean" | "date" => {
+export const detectDataType = (attributeName: string): 'string' | 'number' | 'boolean' | 'date' => {
   const lowerName = attributeName.toLowerCase();
 
   // Number types
   if (
-    lowerName.includes("price") ||
-    lowerName.includes("cost") ||
-    lowerName.includes("amount") ||
-    lowerName.includes("quantity") ||
-    lowerName.includes("weight") ||
-    lowerName.includes("count")
+    lowerName.includes('price') ||
+    lowerName.includes('cost') ||
+    lowerName.includes('amount') ||
+    lowerName.includes('quantity') ||
+    lowerName.includes('weight') ||
+    lowerName.includes('count')
   ) {
-    return "number";
+    return 'number';
   }
 
   // Date types
   if (
-    lowerName.includes("date") ||
-    lowerName.includes("created") ||
-    lowerName.includes("updated") ||
-    lowerName.includes("modified") ||
-    lowerName.includes("time")
+    lowerName.includes('date') ||
+    lowerName.includes('created') ||
+    lowerName.includes('updated') ||
+    lowerName.includes('modified') ||
+    lowerName.includes('time')
   ) {
-    return "date";
+    return 'date';
   }
 
   // Boolean types
   if (
-    lowerName.includes("active") ||
-    lowerName.includes("enabled") ||
-    lowerName.includes("visible") ||
-    lowerName.includes("published") ||
-    lowerName.includes("available")
+    lowerName.includes('active') ||
+    lowerName.includes('enabled') ||
+    lowerName.includes('visible') ||
+    lowerName.includes('published') ||
+    lowerName.includes('available')
   ) {
-    return "boolean";
+    return 'boolean';
   }
 
   // Default to string
-  return "string";
+  return 'string';
 };
 
 /**
@@ -147,18 +143,18 @@ export const detectDataType = (
  */
 export const convertFilterValue = (
   value: string | number | boolean,
-  dataType: "string" | "number" | "boolean" | "date" | "price" | "url"
+  dataType: 'string' | 'number' | 'boolean' | 'date' | 'price' | 'url'
 ): string | number | boolean => {
   switch (dataType) {
-    case "number":
-    case "price":
+    case 'number':
+    case 'price':
       return parseFloat(value.toString());
-    case "boolean":
-      return value === "true" || value === true;
-    case "date":
+    case 'boolean':
+      return value === 'true' || value === true;
+    case 'date':
       return new Date(value.toString()).getTime();
-    case "url":
-    case "string":
+    case 'url':
+    case 'string':
     default:
       return value;
   }
@@ -172,18 +168,18 @@ export const buildFilterCondition = (condition: FilterCondition) => {
   const convertedValue = convertFilterValue(value, dataType);
 
   // Special handling for exists operator
-  if (operator === "$exists") {
+  if (operator === '$exists') {
     return {
       [attribute]: { [operator]: convertedValue },
     };
   }
 
   // For attributes, use full dot notation format
-  if (attribute.startsWith("attributes.")) {
+  if (attribute.startsWith('attributes.')) {
     return {
       [attribute]: {
         [operator]: convertedValue,
-        ...(operator === "$regex" ? { $options: "i" } : {}),
+        ...(operator === '$regex' ? { $options: 'i' } : {}),
       },
     };
   }
@@ -196,9 +192,7 @@ export const buildFilterCondition = (condition: FilterCondition) => {
 /**
  * Convert filter groups to API format
  */
-export const convertToAPIFormat = (
-  groups: FilterGroup[]
-): Record<string, unknown> => {
+export const convertToAPIFormat = (groups: FilterGroup[]): Record<string, unknown> => {
   if (groups.length === 0 || groups.every((g) => g.conditions.length === 0)) {
     return {};
   }
@@ -212,14 +206,10 @@ export const convertToAPIFormat = (
       return conditions[0];
     }
 
-    return group.logicalOperator === "AND"
-      ? { $and: conditions }
-      : { $or: conditions };
+    return group.logicalOperator === 'AND' ? { $and: conditions } : { $or: conditions };
   };
 
-  const groupFilters = groups
-    .map(buildGroupFilter)
-    .filter((filter) => filter !== null);
+  const groupFilters = groups.map(buildGroupFilter).filter((filter) => filter !== null);
 
   if (groupFilters.length === 0) return {};
   if (groupFilters.length === 1) return groupFilters[0];
@@ -230,21 +220,19 @@ export const convertToAPIFormat = (
 /**
  * Create search filter for quick search
  */
-export const createSearchFilter = (
-  searchTerm: string
-): Record<string, unknown> => {
+export const createSearchFilter = (searchTerm: string): Record<string, unknown> => {
   if (!searchTerm?.trim()) return {};
 
   return {
     $or: [
       // Direct product fields
-      { id: { $regex: searchTerm.trim(), $options: "i" } },
-      { skuId: { $regex: searchTerm.trim(), $options: "i" } },
+      { id: { $regex: searchTerm.trim(), $options: 'i' } },
+      { skuId: { $regex: searchTerm.trim(), $options: 'i' } },
       // Attribute fields - Brand and Name only for focused search
       {
-        "attributes.brand": { $regex: searchTerm.trim(), $options: "i" },
+        'attributes.brand': { $regex: searchTerm.trim(), $options: 'i' },
       },
-      { "attributes.name": { $regex: searchTerm.trim(), $options: "i" } },
+      { 'attributes.name': { $regex: searchTerm.trim(), $options: 'i' } },
     ],
   };
 };
@@ -264,7 +252,7 @@ export const composeFilters = (
   }
 
   // Add search filter if search term exists
-  const searchFilter = createSearchFilter(searchTerm || "");
+  const searchFilter = createSearchFilter(searchTerm || '');
   if (Object.keys(searchFilter).length > 0) {
     filters.push(searchFilter);
   }

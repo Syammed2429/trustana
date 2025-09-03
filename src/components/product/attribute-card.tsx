@@ -1,9 +1,9 @@
-import { ComponentType, FC } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RichContentRenderer } from "@/components/rich-content-renderer";
-import { ProductAttribute } from "@/app/types/product";
-import { formatAttributeKey } from "@/app/utils/product-utils";
+import { ComponentType, FC } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { RichContentRenderer } from '@/components/rich-content-renderer';
+import { ProductAttribute } from '@/app/types/product';
+import { formatAttributeKey } from '@/app/utils/product-utils';
 
 interface AttributeCardProps {
   title: string;
@@ -19,7 +19,7 @@ export const AttributeCard: FC<AttributeCardProps> = ({
   title,
   attributes,
   icon: Icon,
-  className = "",
+  className = '',
 }) => {
   if (attributes.length === 0) return null;
 
@@ -34,20 +34,20 @@ export const AttributeCard: FC<AttributeCardProps> = ({
       <CardContent className='space-y-4'>
         {attributes.map((attr) => (
           <div key={attr.key} className='space-y-2'>
-            <div className='flex items-start gap-2 flex-wrap'>
+            <div className='flex flex-wrap items-start gap-2'>
               <Badge
                 variant='outline'
-                className='text-xs max-w-full break-words whitespace-normal leading-relaxed'
+                className='max-w-full text-xs leading-relaxed break-words whitespace-normal'
               >
                 {formatAttributeKey(attr.key)}
               </Badge>
             </div>
-            <div className='pl-2 border-l-2 border-muted'>
+            <div className='border-muted border-l-2 pl-2'>
               <RichContentRenderer
-                content={String(attr.value || "—")}
+                content={String(attr.value || '—')}
                 maxLength={-1}
                 allowWrap={true}
-                className='text-sm text-muted-foreground break-words'
+                className='text-muted-foreground text-sm break-words'
               />
             </div>
           </div>

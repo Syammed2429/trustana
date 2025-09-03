@@ -1,6 +1,6 @@
-import { SavedFilter } from "./filter-utils";
+import { SavedFilter } from './filter-utils';
 
-const STORAGE_KEY = "trustana-saved-filters";
+const STORAGE_KEY = 'trustana-saved-filters';
 
 /**
  * Save filters to local storage
@@ -10,8 +10,8 @@ export const saveFiltersToStorage = (filters: SavedFilter[]): void => {
     const serialized = JSON.stringify(filters);
     localStorage.setItem(STORAGE_KEY, serialized);
   } catch (error) {
-    console.error("Failed to save filters to storage:", error);
-    throw new Error("Failed to save filters to local storage");
+    console.error('Failed to save filters to storage:', error);
+    throw new Error('Failed to save filters to local storage');
   }
 };
 
@@ -33,7 +33,7 @@ export const loadFiltersFromStorage = (): SavedFilter[] => {
         }))
       : [];
   } catch (error) {
-    console.error("Failed to load filters from storage:", error);
+    console.error('Failed to load filters from storage:', error);
     return [];
   }
 };
@@ -45,8 +45,8 @@ export const clearFiltersFromStorage = (): void => {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {
-    console.error("Failed to clear filters from storage:", error);
-    throw new Error("Failed to clear filters from local storage");
+    console.error('Failed to clear filters from storage:', error);
+    throw new Error('Failed to clear filters from local storage');
   }
 };
 
@@ -73,9 +73,7 @@ export const removeFilterFromStorage = (filterId: string): SavedFilter[] => {
 /**
  * Update a filter in storage
  */
-export const updateFilterInStorage = (
-  updatedFilter: SavedFilter
-): SavedFilter[] => {
+export const updateFilterInStorage = (updatedFilter: SavedFilter): SavedFilter[] => {
   const existingFilters = loadFiltersFromStorage();
   const updatedFilters = existingFilters.map((f) =>
     f.id === updatedFilter.id ? updatedFilter : f

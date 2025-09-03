@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,16 +6,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Save, X } from "lucide-react";
-import { Product } from "@/app/types/product";
-import { formatAttributeKey } from "@/lib/text-utils";
-import { RichContentRenderer } from "@/components/rich-content-renderer";
-import { toast } from "sonner";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Save, X } from 'lucide-react';
+import { Product } from '@/app/types/product';
+import { formatAttributeKey } from '@/lib/text-utils';
+import { RichContentRenderer } from '@/components/rich-content-renderer';
+import { toast } from 'sonner';
 
 interface EditProductDialogProps {
   open: boolean;
@@ -56,13 +56,13 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
       onUpdate(editedProduct);
       onOpenChange(false);
 
-      toast.success("Product Updated", {
-        description: "Product information has been successfully updated.",
+      toast.success('Product Updated', {
+        description: 'Product information has been successfully updated.',
       });
     } catch (error) {
-      console.error("Update error:", error);
-      toast.error("Update Failed", {
-        description: "Failed to update product. Please try again.",
+      console.error('Update error:', error);
+      toast.error('Update Failed', {
+        description: 'Failed to update product. Please try again.',
       });
     } finally {
       setIsUpdating(false);
@@ -73,9 +73,7 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
   const updateAttribute = (key: string, value: string) => {
     setEditedProduct((prev) => ({
       ...prev,
-      attributes: prev.attributes?.map((attr) =>
-        attr.key === key ? { ...attr, value } : attr
-      ),
+      attributes: prev.attributes?.map((attr) => (attr.key === key ? { ...attr, value } : attr)),
     }));
   };
 
@@ -84,8 +82,8 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-2xl h-[80vh] flex flex-col p-0'>
-        <DialogHeader className='px-6 py-4 border-b'>
+      <DialogContent className='flex h-[80vh] max-w-2xl flex-col p-0'>
+        <DialogHeader className='border-b px-6 py-4'>
           <DialogTitle>Edit Product</DialogTitle>
           <DialogDescription>
             Update product information. Changes will be saved to the database.
@@ -98,12 +96,7 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
                 <Label htmlFor='productId'>Product ID</Label>
-                <Input
-                  id='productId'
-                  value={editedProduct.id}
-                  disabled
-                  className='bg-muted'
-                />
+                <Input id='productId' value={editedProduct.id} disabled className='bg-muted' />
               </div>
               <div className='space-y-2'>
                 <Label htmlFor='skuId'>SKU ID</Label>
@@ -130,10 +123,8 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
 
                   {/* Show HTML preview if content contains HTML */}
                   {containsHTML(String(attr.value)) && (
-                    <div className='p-3 border rounded-md bg-muted/50'>
-                      <div className='text-xs text-muted-foreground mb-2'>
-                        Preview:
-                      </div>
+                    <div className='bg-muted/50 rounded-md border p-3'>
+                      <div className='text-muted-foreground mb-2 text-xs'>Preview:</div>
                       <RichContentRenderer
                         content={String(attr.value)}
                         maxLength={500}
@@ -154,7 +145,7 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
                       rows={containsHTML(String(attr.value)) ? 6 : 3}
                       placeholder={
                         containsHTML(String(attr.value))
-                          ? "HTML content (tags will be preserved)"
+                          ? 'HTML content (tags will be preserved)'
                           : undefined
                       }
                     />
@@ -165,37 +156,27 @@ export const EditProductDialog: FC<EditProductDialogProps> = ({
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         updateAttribute(attr.key, e.target.value)
                       }
-                      placeholder={
-                        containsHTML(String(attr.value))
-                          ? "HTML content"
-                          : undefined
-                      }
+                      placeholder={containsHTML(String(attr.value)) ? 'HTML content' : undefined}
                     />
                   )}
                 </div>
               ))}
               {(editedProduct.attributes?.length || 0) > 10 && (
-                <p className='text-sm text-muted-foreground'>
-                  Showing first 10 attributes.
-                </p>
+                <p className='text-muted-foreground text-sm'>Showing first 10 attributes.</p>
               )}
             </div>
           </div>
         </div>
 
         {/* Sticky Footer */}
-        <DialogFooter className='px-6 py-4 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-          <Button
-            variant='outline'
-            onClick={() => onOpenChange(false)}
-            disabled={isUpdating}
-          >
+        <DialogFooter className='bg-background/95 supports-[backdrop-filter]:bg-background/60 border-t px-6 py-4 backdrop-blur'>
+          <Button variant='outline' onClick={() => onOpenChange(false)} disabled={isUpdating}>
             <X className='mr-2 h-4 w-4' />
             Cancel
           </Button>
           <Button onClick={handleUpdate} disabled={isUpdating}>
             <Save className='mr-2 h-4 w-4' />
-            {isUpdating ? "Saving..." : "Save Changes"}
+            {isUpdating ? 'Saving...' : 'Save Changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

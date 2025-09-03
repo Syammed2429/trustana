@@ -1,11 +1,11 @@
-import { Product } from "../../types/product";
+import { Product } from '../../types/product';
 import {
   InternalFilterValue,
   InternalQueryFilter,
   InternalQueryPagination,
   InternalQueryResponse,
   InternalQuerySort,
-} from "../../types/query-engine/common";
+} from '../../types/query-engine/common';
 
 export class ProductQueryEngine {
   private products: Product[];
@@ -74,39 +74,29 @@ export class ProductQueryEngine {
     };
   }
 
-  private applyFilters(
-    products: Product[],
-    filter: InternalQueryFilter
-  ): Product[] {
+  private applyFilters(products: Product[], filter: InternalQueryFilter): Product[] {
     return products.filter((product) => {
       return this.evaluateFilterGroup(product, filter);
     });
   }
 
-  private evaluateFilterGroup(
-    product: Product,
-    filter: InternalQueryFilter
-  ): boolean {
+  private evaluateFilterGroup(product: Product, filter: InternalQueryFilter): boolean {
     // Handle $or operator
-    if ("$or" in filter) {
+    if ('$or' in filter) {
       const orConditions = filter.$or as InternalQueryFilter[];
-      return orConditions.some((condition) =>
-        this.evaluateFilterGroup(product, condition)
-      );
+      return orConditions.some((condition) => this.evaluateFilterGroup(product, condition));
     }
 
     // Handle $and operator (explicit)
-    if ("$and" in filter) {
+    if ('$and' in filter) {
       const andConditions = filter.$and as InternalQueryFilter[];
-      return andConditions.every((condition) =>
-        this.evaluateFilterGroup(product, condition)
-      );
+      return andConditions.every((condition) => this.evaluateFilterGroup(product, condition));
     }
 
     // Handle regular field filters (implicit AND)
     return Object.entries(filter).every(([field, filterValue]) => {
       // Skip logical operators
-      if (field === "$or" || field === "$and") {
+      if (field === '$or' || field === '$and') {
         return true;
       }
 
@@ -115,11 +105,7 @@ export class ProductQueryEngine {
         return false;
       }
 
-      return this.matchesFilter(
-        product,
-        field,
-        filterValue as InternalFilterValue
-      );
+      return this.matchesFilter(product, field, filterValue as InternalFilterValue);
     });
   }
 
@@ -129,28 +115,26 @@ export class ProductQueryEngine {
     filterValue: InternalFilterValue
   ): boolean {
     // For fixed product fields
-    if (["id", "skuId", "updatedAt", "createdAt"].includes(field)) {
+    if (['id', 'skuId', 'updatedAt', 'createdAt'].includes(field)) {
       const productValue = product[field as keyof Product];
       return this.evaluateCondition(productValue, filterValue);
     }
 
     // Handle sku field (alias for skuId)
-    if (field === "sku") {
+    if (field === 'sku') {
       return this.evaluateCondition(product.skuId, filterValue);
     }
 
     // For specific attributes filtering
-    if (field === "attributes") {
+    if (field === 'attributes') {
       return this.matchesAttributesFilter(product, filterValue);
     }
 
     // Handle attributes.* field pattern (e.g., attributes.brand, attributes.name)
-    if (field.startsWith("attributes.")) {
-      const attributeKey = field.substring("attributes.".length);
+    if (field.startsWith('attributes.')) {
+      const attributeKey = field.substring('attributes.'.length);
 
-      const attribute = product.attributes.find(
-        (attr) => attr.key === attributeKey
-      );
+      const attribute = product.attributes.find((attr) => attr.key === attributeKey);
 
       if (attribute) {
         return this.evaluateCondition(attribute.value, filterValue);
@@ -174,7 +158,7 @@ export class ProductQueryEngine {
   ): boolean {
     // Check if attributesFilter is an object
     if (
-      typeof attributesFilter !== "object" ||
+      typeof attributesFilter !== 'object' ||
       attributesFilter === null ||
       Array.isArray(attributesFilter)
     ) {
@@ -183,53 +167,40 @@ export class ProductQueryEngine {
 
     // Check if it's a comparison operator object
     if (
-      "$eq" in attributesFilter ||
-      "$ne" in attributesFilter ||
-      "$gt" in attributesFilter ||
-      "$gte" in attributesFilter ||
-      "$lt" in attributesFilter ||
-      "$lte" in attributesFilter ||
-      "$in" in attributesFilter ||
-      "$exists" in attributesFilter ||
-      "$regex" in attributesFilter
+      '$eq' in attributesFilter ||
+      '$ne' in attributesFilter ||
+      '$gt' in attributesFilter ||
+      '$gte' in attributesFilter ||
+      '$lt' in attributesFilter ||
+      '$lte' in attributesFilter ||
+      '$in' in attributesFilter ||
+      '$exists' in attributesFilter ||
+      '$regex' in attributesFilter
     ) {
       return false; // Attributes filter should be a plain object, not a comparison object
     }
 
     // Treat as attributes object: { brand: "value", name: { $regex: "pattern" } }
-    const attributesObj = attributesFilter as Record<
-      string,
-      InternalFilterValue
-    >;
+    const attributesObj = attributesFilter as Record<string, InternalFilterValue>;
 
-    return Object.entries(attributesObj).every(
-      ([attributeKey, attributeFilterValue]) => {
-        return this.matchesAttributeFilter(
-          product,
-          attributeKey,
-          attributeFilterValue
-        );
-      }
-    );
+    return Object.entries(attributesObj).every(([attributeKey, attributeFilterValue]) => {
+      return this.matchesAttributeFilter(product, attributeKey, attributeFilterValue);
+    });
   }
 
   private matchesAttributeFilter(
     product: Product,
     attributeKey: string,
-    filterValue:
-      | InternalFilterValue
-      | { value?: InternalFilterValue; unit?: InternalFilterValue }
+    filterValue: InternalFilterValue | { value?: InternalFilterValue; unit?: InternalFilterValue }
   ): boolean {
-    const attribute = product.attributes.find(
-      (attr) => attr.key === attributeKey
-    );
+    const attribute = product.attributes.find((attr) => attr.key === attributeKey);
 
     if (!attribute) {
       if (
-        typeof filterValue === "object" &&
+        typeof filterValue === 'object' &&
         filterValue !== null &&
         !Array.isArray(filterValue) &&
-        "$exists" in filterValue
+        '$exists' in filterValue
       ) {
         return !filterValue.$exists;
       }
@@ -240,20 +211,20 @@ export class ProductQueryEngine {
 
     // Check if filterValue is a nested object with value/unit filters
     if (
-      typeof filterValue === "object" &&
+      typeof filterValue === 'object' &&
       filterValue !== null &&
       !Array.isArray(filterValue) &&
-      ("value" in filterValue || "unit" in filterValue) &&
+      ('value' in filterValue || 'unit' in filterValue) &&
       !(
-        "$eq" in filterValue ||
-        "$ne" in filterValue ||
-        "$gt" in filterValue ||
-        "$gte" in filterValue ||
-        "$lt" in filterValue ||
-        "$lte" in filterValue ||
-        "$in" in filterValue ||
-        "$exists" in filterValue ||
-        "$regex" in filterValue
+        '$eq' in filterValue ||
+        '$ne' in filterValue ||
+        '$gt' in filterValue ||
+        '$gte' in filterValue ||
+        '$lt' in filterValue ||
+        '$lte' in filterValue ||
+        '$in' in filterValue ||
+        '$exists' in filterValue ||
+        '$regex' in filterValue
       )
     ) {
       const nestedFilter = filterValue as {
@@ -262,11 +233,7 @@ export class ProductQueryEngine {
       };
 
       // Check if value is an object with value/unit properties
-      if (
-        typeof value === "object" &&
-        value !== null &&
-        !Array.isArray(value)
-      ) {
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
         const valueObj = value as Record<string, unknown>;
 
         // Check value.value if specified
@@ -297,35 +264,15 @@ export class ProductQueryEngine {
     }
 
     // Check value.value (if value is an object)
-    if (
-      typeof value === "object" &&
-      value !== null &&
-      !Array.isArray(value) &&
-      "value" in value
-    ) {
-      if (
-        this.evaluateCondition(
-          (value as Record<string, unknown>).value,
-          simpleFilterValue
-        )
-      ) {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value) && 'value' in value) {
+      if (this.evaluateCondition((value as Record<string, unknown>).value, simpleFilterValue)) {
         return true;
       }
     }
 
     // Check value.unit (if value is an object)
-    if (
-      typeof value === "object" &&
-      value !== null &&
-      !Array.isArray(value) &&
-      "unit" in value
-    ) {
-      if (
-        this.evaluateCondition(
-          (value as Record<string, unknown>).unit,
-          simpleFilterValue
-        )
-      ) {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value) && 'unit' in value) {
+      if (this.evaluateCondition((value as Record<string, unknown>).unit, simpleFilterValue)) {
         return true;
       }
     }
@@ -333,28 +280,20 @@ export class ProductQueryEngine {
     return false;
   }
 
-  private evaluateCondition(
-    targetValue: unknown,
-    filterValue: InternalFilterValue
-  ): boolean {
+  private evaluateCondition(targetValue: unknown, filterValue: InternalFilterValue): boolean {
     // Handle null/undefined filterValue
-    if (!filterValue || typeof filterValue !== "object") {
+    if (!filterValue || typeof filterValue !== 'object') {
       return false;
     }
 
     // FilterValue is now always an object with operators
     return Object.entries(filterValue).every(([operator, operatorValue]) => {
       // Skip $options as it's not an operator, just a parameter for $regex
-      if (operator === "$options") {
+      if (operator === '$options') {
         return true;
       }
 
-      return this.compareValues(
-        targetValue,
-        operatorValue,
-        operator,
-        filterValue
-      );
+      return this.compareValues(targetValue, operatorValue, operator, filterValue);
     });
   }
 
@@ -365,62 +304,55 @@ export class ProductQueryEngine {
     fullCondition?: InternalFilterValue
   ): boolean {
     switch (operator) {
-      case "$eq":
+      case '$eq':
         return targetValue === filterValue;
 
-      case "$ne":
+      case '$ne':
         return targetValue !== filterValue;
 
-      case "$gt":
+      case '$gt':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue > filterValue
         );
 
-      case "$gte":
+      case '$gte':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue >= filterValue
         );
 
-      case "$lt":
+      case '$lt':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue < filterValue
         );
 
-      case "$lte":
+      case '$lte':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue <= filterValue
         );
 
-      case "$in":
+      case '$in':
         return Array.isArray(filterValue) && filterValue.includes(targetValue);
 
-      case "$exists":
+      case '$exists':
         return (
-          typeof filterValue === "boolean" &&
+          typeof filterValue === 'boolean' &&
           (targetValue !== null && targetValue !== undefined) === filterValue
         );
 
-      case "$regex":
-        if (
-          typeof targetValue === "string" &&
-          typeof filterValue === "string"
-        ) {
+      case '$regex':
+        if (typeof targetValue === 'string' && typeof filterValue === 'string') {
           try {
             // Handle $options parameter for regex flags
-            let options = "i"; // Default to case-insensitive
-            if (
-              fullCondition &&
-              typeof fullCondition === "object" &&
-              "$options" in fullCondition
-            ) {
+            let options = 'i'; // Default to case-insensitive
+            if (fullCondition && typeof fullCondition === 'object' && '$options' in fullCondition) {
               options = fullCondition.$options as string;
             }
             const regex = new RegExp(filterValue, options);
@@ -436,26 +368,18 @@ export class ProductQueryEngine {
     }
   }
 
-  private applySorting(
-    products: Product[],
-    sort: InternalQuerySort
-  ): Product[] {
+  private applySorting(products: Product[], sort: InternalQuerySort): Product[] {
     const { field, order } = sort;
 
     return products.sort((a, b) => {
       let aValue: unknown;
       let bValue: unknown;
 
-      if (
-        field === "id" ||
-        field === "skuId" ||
-        field === "updatedAt" ||
-        field === "createdAt"
-      ) {
+      if (field === 'id' || field === 'skuId' || field === 'updatedAt' || field === 'createdAt') {
         aValue = a[field as keyof Product];
         bValue = b[field as keyof Product];
-      } else if (field.startsWith("attributes.")) {
-        const attributeKey = field.replace("attributes.", "");
+      } else if (field.startsWith('attributes.')) {
+        const attributeKey = field.replace('attributes.', '');
         const aAttr = a.attributes.find((attr) => attr.key === attributeKey);
         const bAttr = b.attributes.find((attr) => attr.key === attributeKey);
 
@@ -466,14 +390,14 @@ export class ProductQueryEngine {
       }
 
       if (aValue == null && bValue == null) return 0;
-      if (aValue == null) return order === "ASC" ? -1 : 1;
-      if (bValue == null) return order === "ASC" ? 1 : -1;
+      if (aValue == null) return order === 'ASC' ? -1 : 1;
+      if (bValue == null) return order === 'ASC' ? 1 : -1;
 
       let comparison = 0;
       if (aValue < bValue) comparison = -1;
       else if (aValue > bValue) comparison = 1;
 
-      return order === "ASC" ? comparison : -comparison;
+      return order === 'ASC' ? comparison : -comparison;
     });
   }
 }

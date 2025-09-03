@@ -1,2 +1,2 @@
 // Filter hooks
-export { useAdvancedFilters } from "./use-advanced-filters";
+export { useAdvancedFilters } from './use-advanced-filters';

@@ -1,10 +1,10 @@
-import { Product } from "@/app/types/product";
+import { Product } from '@/app/types/product';
 
 /**
  * Server-side product data fetching utilities
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 /**
  * Fetch a single product by ID (server-side)
@@ -14,15 +14,15 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 export async function fetchProductById(id: string): Promise<Product | null> {
   try {
     const response = await fetch(`${BASE_URL}/api/products`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         filter: { id: { $eq: id } },
         pagination: { offset: 0, limit: 1 },
       }),
-      cache: "force-cache", // Enable caching for better performance
+      cache: 'force-cache', // Enable caching for better performance
     });
 
     if (!response.ok) {
@@ -34,7 +34,7 @@ export async function fetchProductById(id: string): Promise<Product | null> {
 
     return products.length > 0 ? products[0] : null;
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error('Error fetching product:', error);
     return null;
   }
 }

@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 interface WebVitalMetric {
   id: string;
   name: string;
   value: number;
-  rating: "good" | "needs-improvement" | "poor";
+  rating: 'good' | 'needs-improvement' | 'poor';
 }
 
 export function WebVitals() {
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // Import web-vitals dynamically to avoid SSR issues
-      import("web-vitals").then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
+      import('web-vitals').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
         const reportWebVital = (metric: WebVitalMetric) => {
-          console.log("Web Vital:", metric);
+          console.log('Web Vital:', metric);
 
           // In a real application, you would send this to your analytics service
           // Example: gtag('event', metric.name, { value: metric.value })
           // Or: analytics.track('Web Vital', metric)
 
           // For now, we'll just log to console and could send to an endpoint
-          if (process.env.NODE_ENV === "production") {
-            fetch("/api/analytics/web-vitals", {
-              method: "POST",
+          if (process.env.NODE_ENV === 'production') {
+            fetch('/api/analytics/web-vitals', {
+              method: 'POST',
               headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               },
               body: JSON.stringify(metric),
             }).catch(console.error);
@@ -62,14 +62,14 @@ export function useCustomMetrics() {
       ...additionalData,
     };
 
-    console.log("Custom Metric:", metric);
+    console.log('Custom Metric:', metric);
 
     // Send to analytics service
-    if (process.env.NODE_ENV === "production") {
-      fetch("/api/analytics/custom-metrics", {
-        method: "POST",
+    if (process.env.NODE_ENV === 'production') {
+      fetch('/api/analytics/custom-metrics', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(metric),
       }).catch(console.error);

@@ -1,32 +1,25 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Filter, X, Search } from "lucide-react";
-import { AttributeFieldType, AttributeGroup } from "@/app/enums/attribute";
-import { SupplierAttribute } from "@/app/types/attribute";
-import { Product } from "@/app/types/product";
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Filter, X, Search } from 'lucide-react';
+import { AttributeFieldType, AttributeGroup } from '@/app/enums/attribute';
+import { SupplierAttribute } from '@/app/types/attribute';
+import { Product } from '@/app/types/product';
 import {
   getFieldTypeDisplayName,
   groupAttributesByGroup,
   getOperatorsForFieldType,
-} from "@/utils/attribute-utils";
-import {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-  FC,
-  ChangeEvent,
-} from "react";
+} from '@/utils/attribute-utils';
+import { useState, useMemo, useCallback, useEffect, FC, ChangeEvent } from 'react';
 
 interface EnhancedProductFiltersProps {
   products: Product[];
@@ -51,18 +44,12 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
   products,
   availableAttributes,
   onFiltersChange,
-  className = "",
+  className = '',
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedGroup, setSelectedGroup] = useState<AttributeGroup | "all">(
-    "all"
-  );
-  const [selectedFieldType, setSelectedFieldType] = useState<
-    AttributeFieldType | "all"
-  >("all");
-  const [attributeFilters, setAttributeFilters] = useState<AttributeFilter[]>(
-    []
-  );
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState<AttributeGroup | 'all'>('all');
+  const [selectedFieldType, setSelectedFieldType] = useState<AttributeFieldType | 'all'>('all');
+  const [attributeFilters, setAttributeFilters] = useState<AttributeFilter[]>([]);
 
   // Group attributes using enum-based utility
   const groupedAttributes = groupAttributesByGroup(availableAttributes);
@@ -80,14 +67,14 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
   const filteredAttributes = useMemo(() => {
     let filtered = availableAttributes;
 
-    if (selectedGroup !== "all") {
+    if (selectedGroup !== 'all') {
       const groupAttrs = groupedAttributes[selectedGroup] || [];
       filtered = filtered.filter((attr) =>
         groupAttrs.some((groupAttr) => groupAttr.id === attr.id)
       );
     }
 
-    if (selectedFieldType !== "all") {
+    if (selectedFieldType !== 'all') {
       filtered = filtered.filter((attr) => attr.type === selectedFieldType);
     }
 
@@ -100,13 +87,7 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
     }
 
     return filtered;
-  }, [
-    availableAttributes,
-    groupedAttributes,
-    selectedGroup,
-    selectedFieldType,
-    searchTerm,
-  ]);
+  }, [availableAttributes, groupedAttributes, selectedGroup, selectedFieldType, searchTerm]);
 
   // Simple validation function for field values
   const validateFieldValue = (
@@ -121,29 +102,23 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
     const filterString = filterValue.toLowerCase();
 
     switch (operator) {
-      case "$eq":
+      case '$eq':
         return stringValue === filterString;
-      case "$ne":
+      case '$ne':
         return stringValue !== filterString;
-      case "$regex":
+      case '$regex':
         return stringValue.includes(filterString);
-      case "$gt":
-        if (
-          fieldType === AttributeFieldType.NUMBER ||
-          fieldType === AttributeFieldType.PRICE
-        ) {
+      case '$gt':
+        if (fieldType === AttributeFieldType.NUMBER || fieldType === AttributeFieldType.PRICE) {
           return parseFloat(String(value)) > parseFloat(filterValue);
         }
         return stringValue > filterString;
-      case "$lt":
-        if (
-          fieldType === AttributeFieldType.NUMBER ||
-          fieldType === AttributeFieldType.PRICE
-        ) {
+      case '$lt':
+        if (fieldType === AttributeFieldType.NUMBER || fieldType === AttributeFieldType.PRICE) {
           return parseFloat(String(value)) < parseFloat(filterValue);
         }
         return stringValue < filterString;
-      case "$exists":
+      case '$exists':
         return Boolean(value);
       default:
         return true;
@@ -157,9 +132,7 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
     // Apply attribute filters
     attributeFilters.forEach((filter) => {
       filtered = filtered.filter((product) => {
-        const attr = product.attributes.find(
-          (a) => a.key === filter.attributeKey
-        );
+        const attr = product.attributes.find((a) => a.key === filter.attributeKey);
         if (!attr || attr.value === null) return false;
 
         // Use our validation function
@@ -190,17 +163,14 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
       id: Math.random().toString(36).substr(2, 9),
       attributeKey: firstAttribute.key,
       operator: operators[0].value,
-      value: "",
+      value: '',
       fieldType: firstAttribute.type,
     };
 
     setAttributeFilters((prev) => [...prev, newFilter]);
   };
 
-  const updateAttributeFilter = (
-    id: string,
-    updates: Partial<AttributeFilter>
-  ) => {
+  const updateAttributeFilter = (id: string, updates: Partial<AttributeFilter>) => {
     setAttributeFilters((prev) =>
       prev.map((filter) => {
         if (filter.id === id) {
@@ -208,14 +178,12 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
 
           // If attribute changed, update field type and reset operator
           if (updates.attributeKey) {
-            const attr = availableAttributes.find(
-              (a) => a.key === updates.attributeKey
-            );
+            const attr = availableAttributes.find((a) => a.key === updates.attributeKey);
             if (attr) {
               const operators = getOperatorsForFieldType(attr.type);
               updated.fieldType = attr.type;
               updated.operator = operators[0].value;
-              updated.value = "";
+              updated.value = '';
             }
           }
 
@@ -232,9 +200,9 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
 
   const clearAllFilters = () => {
     setAttributeFilters([]);
-    setSearchTerm("");
-    setSelectedGroup("all");
-    setSelectedFieldType("all");
+    setSearchTerm('');
+    setSelectedGroup('all');
+    setSelectedFieldType('all');
   };
 
   return (
@@ -247,10 +215,10 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
           </div>
           {(attributeFilters.length > 0 ||
             searchTerm ||
-            selectedGroup !== "all" ||
-            selectedFieldType !== "all") && (
+            selectedGroup !== 'all' ||
+            selectedFieldType !== 'all') && (
             <Button variant='outline' size='sm' onClick={clearAllFilters}>
-              <X className='h-4 w-4 mr-1' />
+              <X className='mr-1 h-4 w-4' />
               Clear All
             </Button>
           )}
@@ -261,27 +229,23 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
         <div className='space-y-2'>
           <label className='text-sm font-medium'>Search Attributes</label>
           <div className='relative'>
-            <Search className='absolute left-2 top-2.5 h-4 w-4 text-muted-foreground' />
+            <Search className='text-muted-foreground absolute top-2.5 left-2 h-4 w-4' />
             <Input
               placeholder='Search by attribute name...'
               value={searchTerm}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSearchTerm(e.target.value)
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               className='pl-8'
             />
           </div>
         </div>
 
         {/* Group and Type Filters */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <div className='space-y-2'>
             <label className='text-sm font-medium'>Group</label>
             <Select
               value={selectedGroup}
-              onValueChange={(value: string) =>
-                setSelectedGroup(value as AttributeGroup | "all")
-              }
+              onValueChange={(value: string) => setSelectedGroup(value as AttributeGroup | 'all')}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -302,7 +266,7 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
             <Select
               value={selectedFieldType}
               onValueChange={(value: string) =>
-                setSelectedFieldType(value as AttributeFieldType | "all")
+                setSelectedFieldType(value as AttributeFieldType | 'all')
               }
             >
               <SelectTrigger>
@@ -337,9 +301,7 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
           </div>
 
           {attributeFilters.length === 0 ? (
-            <p className='text-sm text-muted-foreground'>
-              No attribute filters applied
-            </p>
+            <p className='text-muted-foreground text-sm'>No attribute filters applied</p>
           ) : (
             <div className='space-y-3'>
               {attributeFilters.map((filter) => {
@@ -347,7 +309,7 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
 
                 return (
                   <Card key={filter.id} className='p-3'>
-                    <div className='flex items-center gap-2 flex-wrap'>
+                    <div className='flex flex-wrap items-center gap-2'>
                       <Select
                         value={filter.attributeKey}
                         onValueChange={(value: string) =>
@@ -401,7 +363,7 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
                             value: e.target.value,
                           })
                         }
-                        className='flex-1 min-w-[150px]'
+                        className='min-w-[150px] flex-1'
                       />
 
                       <Button
@@ -421,10 +383,9 @@ export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
 
         {/* Summary */}
         <Separator />
-        <div className='text-sm text-muted-foreground'>
+        <div className='text-muted-foreground text-sm'>
           <p>
-            Showing {filteredAttributes.length} of {availableAttributes.length}{" "}
-            attributes
+            Showing {filteredAttributes.length} of {availableAttributes.length} attributes
           </p>
           <p>Active filters: {attributeFilters.length}</p>
         </div>

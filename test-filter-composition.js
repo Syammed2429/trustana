@@ -9,7 +9,7 @@
  * 3. Search operates on the already-filtered dataset when both are active
  */
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = 'http://localhost:3000';
 
 async function makeRequest(description, filter) {
   console.log(`\n🧪 ${description}`);
@@ -17,8 +17,8 @@ async function makeRequest(description, filter) {
 
   try {
     const response = await fetch(`${baseUrl}/api/products`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         filter,
         pagination: { offset: 0, limit: 5 },
@@ -34,8 +34,8 @@ async function makeRequest(description, filter) {
       const first = data.data[0];
       console.log(
         `   Example: ${first.id} - ${
-          first.attributes?.name || "No name"
-        } (Brand: ${first.attributes?.brand || "N/A"})`
+          first.attributes?.name || 'No name'
+        } (Brand: ${first.attributes?.brand || 'N/A'})`
       );
     }
 
@@ -47,16 +47,16 @@ async function makeRequest(description, filter) {
 }
 
 async function runTests() {
-  console.log("🚀 Testing Filter Composition Fix");
-  console.log("===================================");
+  console.log('🚀 Testing Filter Composition Fix');
+  console.log('===================================');
 
   // Test 1: Search only (no advanced filters)
   const searchOnlyFilter = {
     $or: [
-      { id: { $regex: "apple", $options: "i" } },
-      { skuId: { $regex: "apple", $options: "i" } },
-      { "attributes.brand": { $regex: "apple", $options: "i" } },
-      { "attributes.name": { $regex: "apple", $options: "i" } },
+      { id: { $regex: 'apple', $options: 'i' } },
+      { skuId: { $regex: 'apple', $options: 'i' } },
+      { 'attributes.brand': { $regex: 'apple', $options: 'i' } },
+      { 'attributes.name': { $regex: 'apple', $options: 'i' } },
     ],
   };
 
@@ -67,7 +67,7 @@ async function runTests() {
 
   // Test 2: Advanced filter only (no search)
   const advancedOnlyFilter = {
-    "attributes.category": { $regex: "electronics", $options: "i" },
+    'attributes.category': { $regex: 'electronics', $options: 'i' },
   };
 
   const advancedOnlyResult = await makeRequest(
@@ -78,27 +78,27 @@ async function runTests() {
   // Test 3: Composed filter (advanced + search) - THIS IS THE KEY TEST
   const composedFilter = {
     $and: [
-      { "attributes.category": { $regex: "electronics", $options: "i" } }, // Advanced filter
+      { 'attributes.category': { $regex: 'electronics', $options: 'i' } }, // Advanced filter
       {
         $or: [
           // Search filter
-          { id: { $regex: "apple", $options: "i" } },
-          { skuId: { $regex: "apple", $options: "i" } },
-          { "attributes.brand": { $regex: "apple", $options: "i" } },
-          { "attributes.name": { $regex: "apple", $options: "i" } },
+          { id: { $regex: 'apple', $options: 'i' } },
+          { skuId: { $regex: 'apple', $options: 'i' } },
+          { 'attributes.brand': { $regex: 'apple', $options: 'i' } },
+          { 'attributes.name': { $regex: 'apple', $options: 'i' } },
         ],
       },
     ],
   };
 
   const composedResult = await makeRequest(
-    "Test 3: 🎯 COMPOSED FILTER - Electronics category AND apple search",
+    'Test 3: 🎯 COMPOSED FILTER - Electronics category AND apple search',
     composedFilter
   );
 
   // Analysis
-  console.log("\n📊 Analysis");
-  console.log("============");
+  console.log('\n📊 Analysis');
+  console.log('============');
   console.log(`Search only results: ${searchOnlyResult.count}`);
   console.log(`Advanced filter only: ${advancedOnlyResult.count}`);
   console.log(`Composed filter results: ${composedResult.count}`);
@@ -109,17 +109,13 @@ async function runTests() {
     composedResult.count <= searchOnlyResult.count &&
     composedResult.count <= advancedOnlyResult.count
   ) {
-    console.log(
-      "✅ SUCCESS: Composed filter correctly returns subset of individual filters"
-    );
-    console.log("✅ Search is now operating on the already-filtered dataset!");
+    console.log('✅ SUCCESS: Composed filter correctly returns subset of individual filters');
+    console.log('✅ Search is now operating on the already-filtered dataset!');
   } else {
-    console.log(
-      "❌ ISSUE: Composed filter returned more results than individual filters"
-    );
+    console.log('❌ ISSUE: Composed filter returned more results than individual filters');
   }
 
-  console.log("\n🎉 Filter composition fix verification complete!");
+  console.log('\n🎉 Filter composition fix verification complete!');
 }
 
 // Run the tests

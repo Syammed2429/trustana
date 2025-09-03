@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FC, ReactNode } from "react";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { FC, ReactNode } from 'react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 interface ProvidersProps {
   children: ReactNode;

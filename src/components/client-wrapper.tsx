@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Providers } from "@/providers/providers";
-import { FC, ReactNode } from "react";
+import { Providers } from '@/providers/providers';
+import { FC, ReactNode } from 'react';
 
 interface ClientWrapperProps {
   children: ReactNode;

@@ -23,7 +23,7 @@ export interface InternalQueryFilter {
 
 export interface InternalQuerySort {
   field: string;
-  order: "ASC" | "DESC";
+  order: 'ASC' | 'DESC';
 }
 
 export interface InternalQueryPagination {

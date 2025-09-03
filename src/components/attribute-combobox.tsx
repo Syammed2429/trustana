@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -10,15 +10,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { formatAttributeHeaderSimple } from "@/utils/attribute-formatting";
-import { AttributeGroup } from "@/app/enums/attribute";
-import { useMemo, useState, FC } from "react";
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { formatAttributeHeaderSimple } from '@/utils/attribute-formatting';
+import { AttributeGroup } from '@/app/enums/attribute';
+import { useMemo, useState, FC } from 'react';
 
 interface AttributeComboboxProps {
   value?: string;
@@ -40,7 +36,7 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
   value,
   onValueChange,
   availableAttributes,
-  placeholder = "Select attribute...",
+  placeholder = 'Select attribute...',
   className,
   disabled = false,
 }) => {
@@ -49,52 +45,52 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
   // Create attribute options with system attributes and custom attributes
   const attributeOptions = useMemo((): AttributeOption[] => {
     const systemAttributes: AttributeOption[] = [
-      { value: "id", label: "ID", group: "System" },
-      { value: "skuId", label: "SKU ID", group: "System" },
-      { value: "createdAt", label: "Created At", group: "System" },
-      { value: "updatedAt", label: "Updated At", group: "System" },
+      { value: 'id', label: 'ID', group: 'System' },
+      { value: 'skuId', label: 'SKU ID', group: 'System' },
+      { value: 'createdAt', label: 'Created At', group: 'System' },
+      { value: 'updatedAt', label: 'Updated At', group: 'System' },
     ];
 
     // Core product attributes that are most commonly used
     const coreAttributes: AttributeOption[] = [
       {
-        value: "attributes.name",
-        label: "Product Name",
+        value: 'attributes.name',
+        label: 'Product Name',
         group: AttributeGroup.BASIC_INFO,
       },
       {
-        value: "attributes.brand",
-        label: "Brand",
+        value: 'attributes.brand',
+        label: 'Brand',
         group: AttributeGroup.BASIC_INFO,
       },
       {
-        value: "attributes.category",
-        label: "Category",
+        value: 'attributes.category',
+        label: 'Category',
         group: AttributeGroup.BASIC_INFO,
       },
       {
-        value: "attributes.price",
-        label: "Price",
+        value: 'attributes.price',
+        label: 'Price',
         group: AttributeGroup.PRICING_AND_INVENTORY,
       },
       {
-        value: "attributes.description",
-        label: "Description",
+        value: 'attributes.description',
+        label: 'Description',
         group: AttributeGroup.DESCRIPTIONS,
       },
       {
-        value: "attributes.sku",
-        label: "SKU",
+        value: 'attributes.sku',
+        label: 'SKU',
         group: AttributeGroup.BASIC_INFO,
       },
       {
-        value: "attributes.status",
-        label: "Status",
+        value: 'attributes.status',
+        label: 'Status',
         group: AttributeGroup.BASIC_INFO,
       },
       {
-        value: "attributes.type",
-        label: "Type",
+        value: 'attributes.type',
+        label: 'Type',
         group: AttributeGroup.SPECIFICATIONS,
       },
     ];
@@ -102,21 +98,14 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
     const customAttributes: AttributeOption[] = availableAttributes
       .filter(
         (attr) =>
-          ![
-            "name",
-            "brand",
-            "category",
-            "price",
-            "description",
-            "sku",
-            "status",
-            "type",
-          ].includes(attr)
+          !['name', 'brand', 'category', 'price', 'description', 'sku', 'status', 'type'].includes(
+            attr
+          )
       )
       .map((attr) => ({
         value: `attributes.${attr}`,
         label: formatAttributeHeaderSimple(attr),
-        group: "Other Attributes",
+        group: 'Other Attributes',
         originalKey: attr,
       }));
 
@@ -135,9 +124,7 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
     return groups;
   }, [attributeOptions]);
 
-  const selectedAttribute = attributeOptions.find(
-    (attr) => attr.value === value
-  );
+  const selectedAttribute = attributeOptions.find((attr) => attr.value === value);
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
@@ -146,7 +133,7 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className={cn("w-48 justify-between", className)}
+          className={cn('w-48 justify-between', className)}
           disabled={disabled}
         >
           {selectedAttribute ? selectedAttribute.label : placeholder}
@@ -166,43 +153,35 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
           <CommandInput placeholder='Search attributes...' />
           <CommandEmpty>No attribute found.</CommandEmpty>
           <CommandList className='max-h-72 overflow-y-auto'>
-            {Object.entries(groupedAttributes).map(
-              ([groupName, attributes]) => (
-                <CommandGroup key={groupName} heading={groupName}>
-                  {attributes.map((attribute) => (
-                    <CommandItem
-                      key={attribute.value}
-                      value={`${attribute.label} ${
-                        attribute.originalKey || ""
-                      }`}
-                      onSelect={() => {
-                        onValueChange(
-                          value === attribute.value ? "" : attribute.value
-                        );
-                        setOpen(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          value === attribute.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                      <div className='flex flex-col'>
-                        <span className='font-medium'>{attribute.label}</span>
-                        {/* {attribute.originalKey && (
+            {Object.entries(groupedAttributes).map(([groupName, attributes]) => (
+              <CommandGroup key={groupName} heading={groupName}>
+                {attributes.map((attribute) => (
+                  <CommandItem
+                    key={attribute.value}
+                    value={`${attribute.label} ${attribute.originalKey || ''}`}
+                    onSelect={() => {
+                      onValueChange(value === attribute.value ? '' : attribute.value);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        'mr-2 h-4 w-4',
+                        value === attribute.value ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                    <div className='flex flex-col'>
+                      <span className='font-medium'>{attribute.label}</span>
+                      {/* {attribute.originalKey && (
                             <span className='text-xs text-muted-foreground'>
                               {attribute.originalKey}
                             </span>
                           )} */}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )
-            )}
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            ))}
           </CommandList>
         </Command>
       </PopoverContent>

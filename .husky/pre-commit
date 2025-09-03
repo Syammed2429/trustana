@@ -1,0 +1,35 @@
+echo "🚀 Pre-commit hook running..."
+
+# Run type checking
+echo "🔍 Running TypeScript type check..."
+if ! pnpm run type-check; then
+    echo "❌ TypeScript type check failed!"
+    echo "🚫 Commit blocked - please fix type errors before committing"
+    exit 1
+fi
+
+# Run linting with strict error checking
+echo "🔍 Running ESLint..."
+if ! pnpm run lint; then
+    echo "❌ ESLint check failed!"
+    echo "🚫 Commit blocked - please fix all linting errors and warnings before committing"
+    exit 1
+fi
+
+# Run lint-staged (this will format and fix auto-fixable issues)
+echo "🎨 Running lint-staged..."
+if ! npx lint-staged; then
+    echo "❌ Lint-staged failed!"
+    echo "🚫 Commit blocked - please fix formatting issues before committing"
+    exit 1
+fi
+
+# Final verification - run lint again to ensure no issues remain after lint-staged
+echo "🔍 Final ESLint verification..."
+if ! pnpm run lint; then
+    echo "❌ Final ESLint check failed after formatting!"
+    echo "🚫 Commit blocked - there are still linting issues that need manual attention"
+    exit 1
+fi
+
+echo "✅ All pre-commit checks passed! Proceeding with commit..."

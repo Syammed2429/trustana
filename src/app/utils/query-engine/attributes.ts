@@ -1,11 +1,11 @@
-import { SupplierAttribute } from "../../types/attribute";
+import { SupplierAttribute } from '../../types/attribute';
 import {
   InternalFilterValue,
   InternalQueryFilter,
   InternalQueryPagination,
   InternalQueryResponse,
   InternalQuerySort,
-} from "../../types/query-engine/common";
+} from '../../types/query-engine/common';
 
 export class SupplierAttributeQueryEngine {
   private attributes: SupplierAttribute[];
@@ -81,18 +81,10 @@ export class SupplierAttributeQueryEngine {
     return attributes.filter((attribute) => {
       return Object.entries(filter).every(([field, filterValue]) => {
         // Type guard to ensure filterValue is InternalFilterValue
-        if (
-          !filterValue ||
-          typeof filterValue !== "object" ||
-          Array.isArray(filterValue)
-        ) {
+        if (!filterValue || typeof filterValue !== 'object' || Array.isArray(filterValue)) {
           return true; // Skip invalid filter values
         }
-        return this.matchesFilter(
-          attribute,
-          field,
-          filterValue as InternalFilterValue
-        );
+        return this.matchesFilter(attribute, field, filterValue as InternalFilterValue);
       });
     });
   }
@@ -104,15 +96,15 @@ export class SupplierAttributeQueryEngine {
   ): boolean {
     // Handle all SupplierAttribute fields
     const validFields = [
-      "id",
-      "key",
-      "name",
-      "type",
-      "group",
-      "placeHolder",
-      "description",
-      "createdAt",
-      "updatedAt",
+      'id',
+      'key',
+      'name',
+      'type',
+      'group',
+      'placeHolder',
+      'description',
+      'createdAt',
+      'updatedAt',
     ];
 
     if (validFields.includes(field)) {
@@ -123,72 +115,62 @@ export class SupplierAttributeQueryEngine {
     return false;
   }
 
-  private evaluateCondition(
-    targetValue: unknown,
-    filterValue: InternalFilterValue
-  ): boolean {
+  private evaluateCondition(targetValue: unknown, filterValue: InternalFilterValue): boolean {
     // FilterValue is always an object with operators
     return Object.entries(filterValue).every(([operator, operatorValue]) => {
       return this.compareValues(targetValue, operatorValue, operator);
     });
   }
 
-  private compareValues(
-    targetValue: unknown,
-    filterValue: unknown,
-    operator: string
-  ): boolean {
+  private compareValues(targetValue: unknown, filterValue: unknown, operator: string): boolean {
     switch (operator) {
-      case "$eq":
+      case '$eq':
         return targetValue === filterValue;
 
-      case "$ne":
+      case '$ne':
         return targetValue !== filterValue;
 
-      case "$gt":
+      case '$gt':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue > filterValue
         );
 
-      case "$gte":
+      case '$gte':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue >= filterValue
         );
 
-      case "$lt":
+      case '$lt':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue < filterValue
         );
 
-      case "$lte":
+      case '$lte':
         return (
-          typeof targetValue === "number" &&
-          typeof filterValue === "number" &&
+          typeof targetValue === 'number' &&
+          typeof filterValue === 'number' &&
           targetValue <= filterValue
         );
 
-      case "$in":
+      case '$in':
         return Array.isArray(filterValue) && filterValue.includes(targetValue);
 
-      case "$exists":
+      case '$exists':
         return (
-          typeof filterValue === "boolean" &&
+          typeof filterValue === 'boolean' &&
           (targetValue !== null && targetValue !== undefined) === filterValue
         );
 
-      case "$regex":
-        if (
-          typeof targetValue === "string" &&
-          typeof filterValue === "string"
-        ) {
+      case '$regex':
+        if (typeof targetValue === 'string' && typeof filterValue === 'string') {
           try {
-            const regex = new RegExp(filterValue, "i");
+            const regex = new RegExp(filterValue, 'i');
             return regex.test(targetValue);
           } catch {
             return false;
@@ -213,15 +195,15 @@ export class SupplierAttributeQueryEngine {
 
       // Handle direct SupplierAttribute fields
       const validFields = [
-        "id",
-        "key",
-        "name",
-        "type",
-        "group",
-        "placeHolder",
-        "description",
-        "createdAt",
-        "updatedAt",
+        'id',
+        'key',
+        'name',
+        'type',
+        'group',
+        'placeHolder',
+        'description',
+        'createdAt',
+        'updatedAt',
       ];
 
       if (validFields.includes(field)) {
@@ -233,15 +215,15 @@ export class SupplierAttributeQueryEngine {
 
       // Handle null/undefined values
       if (aValue == null && bValue == null) return 0;
-      if (aValue == null) return order === "ASC" ? -1 : 1;
-      if (bValue == null) return order === "ASC" ? 1 : -1;
+      if (aValue == null) return order === 'ASC' ? -1 : 1;
+      if (bValue == null) return order === 'ASC' ? 1 : -1;
 
       // Compare values
       let comparison = 0;
       if (aValue < bValue) comparison = -1;
       else if (aValue > bValue) comparison = 1;
 
-      return order === "ASC" ? comparison : -comparison;
+      return order === 'ASC' ? comparison : -comparison;
     });
   }
 }

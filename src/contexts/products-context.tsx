@@ -1,18 +1,10 @@
-"use client";
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-  FC,
-  useEffect,
-} from "react";
-import { useInfiniteQuery, InfiniteData } from "@tanstack/react-query";
-import { Product } from "@/app/types/product";
-import { SupplierAttribute } from "@/app/types/attribute";
-import { apiClient } from "@/lib/api-client";
+import { createContext, useContext, useState, useCallback, ReactNode, FC, useEffect } from 'react';
+import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
+import { Product } from '@/app/types/product';
+import { SupplierAttribute } from '@/app/types/attribute';
+import { apiClient } from '@/lib/api-client';
 
 interface ProductPage {
   items: Product[];
@@ -30,23 +22,18 @@ interface ProductsContextType {
   availableAttributes: string[];
   searchTerm: string;
   attributeFilters: Record<string, string>;
-  setSearchAndFilters: (
-    search: string,
-    attributes: Record<string, string>
-  ) => void;
+  setSearchAndFilters: (search: string, attributes: Record<string, string>) => void;
   setAdvancedFilters: (filters: Record<string, unknown>) => void;
   clearFilters: () => void;
   currentFilters: Record<string, unknown>;
 }
 
-const ProductsContext = createContext<ProductsContextType | undefined>(
-  undefined
-);
+const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
 
 export function useProducts() {
   const context = useContext(ProductsContext);
   if (!context) {
-    throw new Error("useProducts must be used within a ProductsProvider");
+    throw new Error('useProducts must be used within a ProductsProvider');
   }
   return context;
 }
@@ -58,7 +45,7 @@ interface ProductsProviderProps {
 // Fetch products with pagination
 async function fetchProducts({
   pageParam = 0,
-  searchTerm = "",
+  searchTerm = '',
   attributeFilters = {},
   advancedFilters = {},
 }: {
@@ -77,9 +64,9 @@ async function fetchProducts({
     } else {
       // Otherwise, use simple attribute filters
       Object.entries(attributeFilters).forEach(([key, value]) => {
-        if (value === "has-value") {
+        if (value === 'has-value') {
           combinedFilter[key] = { $ne: null };
-        } else if (value === "empty") {
+        } else if (value === 'empty') {
           combinedFilter[key] = { $eq: null };
         }
       });
@@ -89,24 +76,24 @@ async function fetchProducts({
     if (searchTerm) {
       const searchFilter = {
         $or: [
-          { id: { $regex: searchTerm, $options: "i" } },
-          { skuId: { $regex: searchTerm, $options: "i" } },
-          { "attributes.name": { $regex: searchTerm, $options: "i" } },
-          { "attributes.brand": { $regex: searchTerm, $options: "i" } },
+          { id: { $regex: searchTerm, $options: 'i' } },
+          { skuId: { $regex: searchTerm, $options: 'i' } },
+          { 'attributes.name': { $regex: searchTerm, $options: 'i' } },
+          { 'attributes.brand': { $regex: searchTerm, $options: 'i' } },
           {
-            "attributes.smartProductTitle": {
+            'attributes.smartProductTitle': {
               $regex: searchTerm,
-              $options: "i",
+              $options: 'i',
             },
           },
           {
-            "attributes._basicInfoAboutThisItem2": {
+            'attributes._basicInfoAboutThisItem2': {
               $regex: searchTerm,
-              $options: "i",
+              $options: 'i',
             },
           },
-          { "attributes.category": { $regex: searchTerm, $options: "i" } },
-          { "attributes.description": { $regex: searchTerm, $options: "i" } },
+          { 'attributes.category': { $regex: searchTerm, $options: 'i' } },
+          { 'attributes.description': { $regex: searchTerm, $options: 'i' } },
         ],
       };
 
@@ -120,7 +107,7 @@ async function fetchProducts({
       }
     }
 
-    const response = await apiClient.post("/api/products", {
+    const response = await apiClient.post('/api/products', {
       filter: combinedFilter,
       pagination: {
         offset: pageParam * 100,
@@ -130,42 +117,34 @@ async function fetchProducts({
 
     return {
       items: response.data?.data || [],
-      nextCursor: response.data?.pagination?.hasMore
-        ? pageParam + 1
-        : undefined,
+      nextCursor: response.data?.pagination?.hasMore ? pageParam + 1 : undefined,
     };
   } catch (error) {
-    console.error("Error fetching products:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Failed to fetch products"
-    );
+    console.error('Error fetching products:', error);
+    throw new Error(error instanceof Error ? error.message : 'Failed to fetch products');
   }
 }
 
 // Fetch attributes
 async function fetchAttributes(): Promise<SupplierAttribute[]> {
   try {
-    const response = await apiClient.post("/api/attributes");
+    const response = await apiClient.post('/api/attributes');
     return response.data?.data || [];
   } catch (error) {
-    console.error("Error fetching attributes:", error);
+    console.error('Error fetching attributes:', error);
 
     // Return empty array instead of throwing to prevent app crash
     // The app should work even if attributes fail to load
-    console.warn("Falling back to empty attributes list");
+    console.warn('Falling back to empty attributes list');
     return [];
   }
 }
 
 export const ProductsProvider: FC<ProductsProviderProps> = ({ children }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [attributeFilters, setAttributeFilters] = useState<
-    Record<string, string>
-  >({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [attributeFilters, setAttributeFilters] = useState<Record<string, string>>({});
   const [availableAttributes, setAvailableAttributes] = useState<string[]>([]);
-  const [currentFilters, setCurrentFilters] = useState<Record<string, unknown>>(
-    {}
-  );
+  const [currentFilters, setCurrentFilters] = useState<Record<string, unknown>>({});
 
   // Advanced filters methods
   const setAdvancedFilters = useCallback((filters: Record<string, unknown>) => {
@@ -176,22 +155,21 @@ export const ProductsProvider: FC<ProductsProviderProps> = ({ children }) => {
 
   const clearFilters = useCallback(() => {
     setCurrentFilters({});
-    setSearchTerm("");
+    setSearchTerm('');
     setAttributeFilters({});
   }, []);
 
   // Load filters from URL on mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const urlFilters = urlParams.get("filters");
+    const urlFilters = urlParams.get('filters');
     if (urlFilters) {
       try {
         const parsedFilters = JSON.parse(urlFilters);
         if (parsedFilters.search) setSearchTerm(parsedFilters.search);
-        if (parsedFilters.attributes)
-          setAttributeFilters(parsedFilters.attributes);
+        if (parsedFilters.attributes) setAttributeFilters(parsedFilters.attributes);
       } catch (error) {
-        console.error("Error parsing URL filters:", error);
+        console.error('Error parsing URL filters:', error);
       }
     }
   }, []);
@@ -205,7 +183,7 @@ export const ProductsProvider: FC<ProductsProviderProps> = ({ children }) => {
         setAvailableAttributes(attrKeys);
         console.log(`[Attributes] Loaded ${attrKeys.length} attributes`);
       } catch (error) {
-        console.error("[Attributes] Failed to load attributes:", error);
+        console.error('[Attributes] Failed to load attributes:', error);
         // Continue with empty attributes - don't crash the app
         setAvailableAttributes([]);
       }
@@ -214,44 +192,34 @@ export const ProductsProvider: FC<ProductsProviderProps> = ({ children }) => {
     loadAttributes();
   }, []);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["products", searchTerm, attributeFilters, currentFilters],
-    queryFn: ({ pageParam }) =>
-      fetchProducts({
-        pageParam,
-        searchTerm,
-        attributeFilters,
-        advancedFilters: currentFilters,
-      }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    initialPageParam: 0,
-    retry: (failureCount, error) => {
-      // Retry up to 2 times for network errors, but not for 404s
-      if (failureCount >= 2) return false;
-      if (error?.message?.includes("404")) return false;
-      return true;
-    },
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    refetchOnWindowFocus: false,
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes (formerly cacheTime)
-  });
+  const { data, isLoading, isError, error, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['products', searchTerm, attributeFilters, currentFilters],
+      queryFn: ({ pageParam }) =>
+        fetchProducts({
+          pageParam,
+          searchTerm,
+          attributeFilters,
+          advancedFilters: currentFilters,
+        }),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialPageParam: 0,
+      retry: (failureCount, error) => {
+        // Retry up to 2 times for network errors, but not for 404s
+        if (failureCount >= 2) return false;
+        if (error?.message?.includes('404')) return false;
+        return true;
+      },
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      refetchOnWindowFocus: false,
+      staleTime: 2 * 60 * 1000, // 2 minutes
+      gcTime: 5 * 60 * 1000, // 5 minutes (formerly cacheTime)
+    });
 
-  const setSearchAndFilters = useCallback(
-    (search: string, attributes: Record<string, string>) => {
-      setSearchTerm(search);
-      setAttributeFilters(attributes);
-    },
-    []
-  );
+  const setSearchAndFilters = useCallback((search: string, attributes: Record<string, string>) => {
+    setSearchTerm(search);
+    setAttributeFilters(attributes);
+  }, []);
 
   const contextValue: ProductsContextType = {
     data,
@@ -270,9 +238,5 @@ export const ProductsProvider: FC<ProductsProviderProps> = ({ children }) => {
     currentFilters,
   };
 
-  return (
-    <ProductsContext.Provider value={contextValue}>
-      {children}
-    </ProductsContext.Provider>
-  );
+  return <ProductsContext.Provider value={contextValue}>{children}</ProductsContext.Provider>;
 };

@@ -1300,9 +1300,7 @@
                       }
                     ],
                     "content": {
-                      "enum": [
-                        "Please list the product ingredient information in table format"
-                      ]
+                      "enum": ["Please list the product ingredient information in table format"]
                     },
                     "children": null
                   }
@@ -1600,12 +1598,7 @@
       "group": "Basic Info",
       "googleCategories": [412],
       "option": {
-        "selection": [
-          "Wheat flavor",
-          "Classic flavor",
-          "Strawberry flavor",
-          "Dasheen flavor"
-        ],
+        "selection": ["Wheat flavor", "Classic flavor", "Strawberry flavor", "Dasheen flavor"],
         "variantable": true,
         "disabled": false
       },
@@ -2428,9 +2421,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Nutritional Information:{{Basic Info//Nutritional Information}}"
-                      ]
+                      "enum": ["Nutritional Information:{{Basic Info//Nutritional Information}}"]
                     },
                     "children": null
                   }
@@ -2441,9 +2432,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Package Contents{{Basic Info//Package Contents}}"
-                      ]
+                      "enum": ["Package Contents{{Basic Info//Package Contents}}"]
                     },
                     "children": null
                   }
@@ -2465,9 +2454,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Long Description:{{Descriptions//Long Description}}"
-                      ]
+                      "enum": ["Long Description:{{Descriptions//Long Description}}"]
                     },
                     "children": null
                   }
@@ -3947,15 +3934,7 @@
       "key": "itemPackagingItemPackageType",
       "option": {
         "variantable": true,
-        "selection": [
-          "EACH",
-          "BUNDLE",
-          "BOX",
-          "PACKAGE",
-          "CARTON",
-          "PALLET",
-          "SET"
-        ]
+        "selection": ["EACH", "BUNDLE", "BOX", "PACKAGE", "CARTON", "PALLET", "SET"]
       },
       "placeHolder": "Enter the correct value as per the product.",
       "tags": ["VARIANTABLE"],
@@ -3983,54 +3962,22 @@
         {
           "locale": "BI",
           "name": "Jenis Paket Barang",
-          "selection": [
-            "EACH",
-            "BUNDLE",
-            "BOX",
-            "PACKAGE",
-            "CARTON",
-            "PALLET",
-            "SET"
-          ]
+          "selection": ["EACH", "BUNDLE", "BOX", "PACKAGE", "CARTON", "PALLET", "SET"]
         },
         {
           "locale": "ZH_TW",
           "name": "商品包裝類型",
-          "selection": [
-            "EACH",
-            "BUNDLE",
-            "BOX",
-            "PACKAGE",
-            "CARTON",
-            "PALLET",
-            "SET"
-          ]
+          "selection": ["EACH", "BUNDLE", "BOX", "PACKAGE", "CARTON", "PALLET", "SET"]
         },
         {
           "locale": "AR_AE",
           "name": "نوع حزمة العنصر",
-          "selection": [
-            "EACH",
-            "BUNDLE",
-            "BOX",
-            "PACKAGE",
-            "CARTON",
-            "PALLET",
-            "SET"
-          ]
+          "selection": ["EACH", "BUNDLE", "BOX", "PACKAGE", "CARTON", "PALLET", "SET"]
         },
         {
           "locale": "MS_MY",
           "name": "Jenis Pakej Item",
-          "selection": [
-            "EACH",
-            "BUNDLE",
-            "BOX",
-            "PACKAGE",
-            "CARTON",
-            "PALLET",
-            "SET"
-          ]
+          "selection": ["EACH", "BUNDLE", "BOX", "PACKAGE", "CARTON", "PALLET", "SET"]
         }
       ],
       "type": "DROPDOWN",
@@ -4058,9 +4005,7 @@
                       "enum": ["h3"]
                     },
                     "content": {
-                      "enum": [
-                        "Please generate the product overview in 500 words"
-                      ]
+                      "enum": ["Please generate the product overview in 500 words"]
                     },
                     "children": null
                   }
@@ -4071,9 +4016,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "key benefits of the product {{Basic Info//Key Benefits}}"
-                      ]
+                      "enum": ["key benefits of the product {{Basic Info//Key Benefits}}"]
                     },
                     "children": null
                   }
@@ -4095,9 +4038,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Nutritional Information {{Basic Info//Nutritional Information}}"
-                      ]
+                      "enum": ["Nutritional Information {{Basic Info//Nutritional Information}}"]
                     },
                     "children": null
                   }
@@ -4119,9 +4060,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Long Description {{Descriptions//Long Description}}"
-                      ]
+                      "enum": ["Long Description {{Descriptions//Long Description}}"]
                     },
                     "children": null
                   }
@@ -4736,14 +4675,7 @@
       "key": "basicInfoProductApprovalStatus",
       "option": {
         "variantable": false,
-        "selection": [
-          "Draft",
-          "Pending Review",
-          "Rejected",
-          "Approved",
-          "Published",
-          "Archived"
-        ]
+        "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
       },
       "placeHolder": "Select approval status.",
       "tags": [],
@@ -4753,86 +4685,37 @@
         {
           "locale": "ZH_CN",
           "name": "产品审批状态",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         },
         {
           "locale": "AR_AE",
           "name": "حالة موافقة المنتج",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         },
         {
           "locale": "JA_JP",
           "name": "製品承認状況",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         },
         {
           "locale": "TH_TH",
           "name": "สถานะการอนุมัติผลิตภัณฑ์",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         },
         {
           "locale": "BI",
           "name": "Status Persetujuan Produk",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         },
         {
           "locale": "KO_KR",
           "name": "제품 승인 상태",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         },
         {
           "locale": "MS_MY",
           "name": "Status Kelulusan Produk",
-          "selection": [
-            "Draft",
-            "Pending Review",
-            "Rejected",
-            "Approved",
-            "Published",
-            "Archived"
-          ]
+          "selection": ["Draft", "Pending Review", "Rejected", "Approved", "Published", "Archived"]
         }
       ],
       "id": "6743f0ede4a9909eea778258",
@@ -5296,9 +5179,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Nutritional Information: {{Basic Info//Nutritional Information}}"
-                      ]
+                      "enum": ["Nutritional Information: {{Basic Info//Nutritional Information}}"]
                     },
                     "children": null
                   }
@@ -5309,9 +5190,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "date and time test {{Basic Info//date and time test}}"
-                      ]
+                      "enum": ["date and time test {{Basic Info//date and time test}}"]
                     },
                     "children": null
                   }
@@ -5322,9 +5201,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Item Net Weight: {{ISpecifications//tem Net Weight}}"
-                      ]
+                      "enum": ["Item Net Weight: {{ISpecifications//tem Net Weight}}"]
                     },
                     "children": null
                   }
@@ -5335,9 +5212,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Product Ingredient: {{Basic Info//Product Ingredient}}"
-                      ]
+                      "enum": ["Product Ingredient: {{Basic Info//Product Ingredient}}"]
                     },
                     "children": null
                   }
@@ -5729,9 +5604,7 @@
                             },
                             "content": {
                               "description": "Repeat Style//Ingredients Inexistent Attribute thrice",
-                              "enum": [
-                                "{{Style//Ingredients Inexistent Attribute}}"
-                              ]
+                              "enum": ["{{Style//Ingredients Inexistent Attribute}}"]
                             },
                             "children": null
                           }
@@ -5758,9 +5631,7 @@
                             },
                             "content": {
                               "description": "Repeat Style//Ingredients Inexistent Attribute twice",
-                              "enum": [
-                                "{{Basic Info//Items Per Package Inexistent Attribute}}"
-                              ]
+                              "enum": ["{{Basic Info//Items Per Package Inexistent Attribute}}"]
                             },
                             "children": null
                           }
@@ -5783,9 +5654,7 @@
                 {
                   "properties": {
                     "content": {
-                      "enum": [
-                        "{{Basic Info//Brewery or Vineyard Info Inexistent Attribute}}"
-                      ]
+                      "enum": ["{{Basic Info//Brewery or Vineyard Info Inexistent Attribute}}"]
                     },
                     "children": null
                   }
@@ -5910,9 +5779,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "New element {{Basic Info//add from basic section on pdp}}"
-                      ]
+                      "enum": ["New element {{Basic Info//add from basic section on pdp}}"]
                     },
                     "children": null
                   }
@@ -5923,9 +5790,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Long Description {{Descriptions//Long Description}}"
-                      ]
+                      "enum": ["Long Description {{Descriptions//Long Description}}"]
                     },
                     "children": null
                   }
@@ -6267,9 +6132,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "product country {{Basic Info//Country of Origin}}"
-                      ]
+                      "enum": ["product country {{Basic Info//Country of Origin}}"]
                     },
                     "children": null
                   }
@@ -6370,9 +6233,7 @@
                       "enum": ["h1"]
                     },
                     "content": {
-                      "enum": [
-                        "Serving quantity:{{Specifications//Item Net Weight}}"
-                      ]
+                      "enum": ["Serving quantity:{{Specifications//Item Net Weight}}"]
                     },
                     "children": null
                   }
@@ -6939,9 +6800,7 @@
                             "enum": ["li"]
                           },
                           "content": {
-                            "enum": [
-                              " {{Basic Info//Food Product Description3}}"
-                            ]
+                            "enum": [" {{Basic Info//Food Product Description3}}"]
                           },
                           "children": null
                         }
@@ -7166,9 +7025,7 @@
                       "enum": ["h1"]
                     },
                     "content": {
-                      "enum": [
-                        "Serving quantity:{{Specifications//Item Net Weight}}"
-                      ]
+                      "enum": ["Serving quantity:{{Specifications//Item Net Weight}}"]
                     },
                     "children": null
                   }
@@ -7381,9 +7238,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Please generate the product description in 500 words"
-                      ]
+                      "enum": ["Please generate the product description in 500 words"]
                     },
                     "children": null
                   }
@@ -7482,9 +7337,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "Item Net Weight: {{Specifications//Item Net Weight}}"
-                      ]
+                      "enum": ["Item Net Weight: {{Specifications//Item Net Weight}}"]
                     },
                     "children": null
                   }
@@ -7951,9 +7804,7 @@
                       "enum": ["p"]
                     },
                     "content": {
-                      "enum": [
-                        "This  Product {{Product Name}} belongs to  {{Brand}}"
-                      ]
+                      "enum": ["This  Product {{Product Name}} belongs to  {{Brand}}"]
                     },
                     "children": null
                   }
@@ -8203,9 +8054,7 @@
                             "enum": ["li"]
                           },
                           "content": {
-                            "enum": [
-                              "GraphicsCard: {{Basic Info//GraphicsCard}}"
-                            ]
+                            "enum": ["GraphicsCard: {{Basic Info//GraphicsCard}}"]
                           },
                           "children": null
                         }
@@ -8217,9 +8066,7 @@
                             "enum": ["li"]
                           },
                           "content": {
-                            "enum": [
-                              "Display Size :  {{Basic Info//Display Size}}"
-                            ]
+                            "enum": ["Display Size :  {{Basic Info//Display Size}}"]
                           },
                           "children": null
                         }
@@ -11277,16 +11124,7 @@
       "group": "Amazon",
       "name": "Diet Type",
       "option": {
-        "selection": [
-          "Gluten Free",
-          "Halal",
-          "Keto",
-          "Kosher",
-          "Paleo",
-          "Plant Based",
-          "Vegan",
-          "Vegetarian"
-        ],
+        "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"],
         "order": 1053
       },
       "type": "MULTI_SELECT",
@@ -11295,114 +11133,42 @@
         {
           "locale": "ZH_CN",
           "name": "饮食类型",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "ZH_HK",
           "name": "飲食類型",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "ZH_TW",
           "name": "飲食類型",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "TH_TH",
           "name": "ประเภทอาหาร",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "KO_KR",
           "name": "식이 유형",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "JA_JP",
           "name": "食事タイプ",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "BI",
           "name": "Jenis Diet",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         },
         {
           "locale": "MS_MY",
           "name": "Jenis Diet",
-          "selection": [
-            "Gluten Free",
-            "Halal",
-            "Keto",
-            "Kosher",
-            "Paleo",
-            "Plant Based",
-            "Vegan",
-            "Vegetarian"
-          ]
+          "selection": ["Gluten Free", "Halal", "Keto", "Kosher", "Paleo", "Plant Based", "Vegan", "Vegetarian"]
         }
       ],
       "placeHolder": "Enter the correct value as per the product.",
@@ -16590,15 +16356,7 @@
       "group": "Amazon",
       "name": "Dangerous Goods",
       "option": {
-        "selection": [
-          "GHS",
-          "Storage",
-          "Transportation",
-          "Waste",
-          "Other",
-          "Not Applicable",
-          "Unknown"
-        ],
+        "selection": ["GHS", "Storage", "Transportation", "Waste", "Other", "Not Applicable", "Unknown"],
         "order": 1077
       },
       "translations": [
@@ -18008,17 +17766,7 @@
       "group": "Pricing & Inventory",
       "name": "RRP (Country of Origin)",
       "option": {
-        "unitList": [
-          "USD",
-          "SGD",
-          "MYR",
-          "THB",
-          "CNY",
-          "JPY",
-          "KRW",
-          "EUR",
-          "INR"
-        ]
+        "unitList": ["USD", "SGD", "MYR", "THB", "CNY", "JPY", "KRW", "EUR", "INR"]
       },
       "placeHolder": "Input price per unit with currency e.g. 8",
       "type": "MEASURE",
@@ -20808,14 +20556,7 @@
       "key": "_generalSpecificationsNeckType",
       "type": "DROPDOWN",
       "option": {
-        "selection": [
-          "Round neck",
-          "V-neck",
-          "Open neck",
-          "Collar",
-          "Mandarin Collar",
-          "Button"
-        ]
+        "selection": ["Round neck", "V-neck", "Open neck", "Collar", "Mandarin Collar", "Button"]
       },
       "translations": [
         {
@@ -20826,74 +20567,32 @@
         {
           "locale": "JA_JP",
           "name": "ネックタイプ",
-          "selection": [
-            "ラウンドネック",
-            "Vネック",
-            "オープンネック",
-            "カラー",
-            "マンダリンカラー",
-            "ボタン"
-          ]
+          "selection": ["ラウンドネック", "Vネック", "オープンネック", "カラー", "マンダリンカラー", "ボタン"]
         },
         {
           "locale": "TH_TH",
           "name": "ประเภทคอ",
-          "selection": [
-            "คอกลม",
-            "คอวี",
-            "คอเปิด",
-            "คอเสื้อ",
-            "คอมัณฑริก",
-            "กระดุม"
-          ]
+          "selection": ["คอกลม", "คอวี", "คอเปิด", "คอเสื้อ", "คอมัณฑริก", "กระดุม"]
         },
         {
           "locale": "BI",
           "name": "Tipe Leher",
-          "selection": [
-            "Leher Bulat",
-            "Leher V",
-            "Leher Terbuka",
-            "Kerah",
-            "Kerah Mandarin",
-            "Kancing"
-          ]
+          "selection": ["Leher Bulat", "Leher V", "Leher Terbuka", "Kerah", "Kerah Mandarin", "Kancing"]
         },
         {
           "locale": "KO_KR",
           "name": "넥 타입",
-          "selection": [
-            "라운드 넥",
-            "브이 넥",
-            "오픈 넥",
-            "칼라",
-            "만다린 칼라",
-            "버튼"
-          ]
+          "selection": ["라운드 넥", "브이 넥", "오픈 넥", "칼라", "만다린 칼라", "버튼"]
         },
         {
           "locale": "EN_SG",
           "name": "Neck type",
-          "selection": [
-            "Round neck",
-            "V-neck",
-            "Open neck",
-            "Collar",
-            "Mandarin Collar",
-            "Button"
-          ]
+          "selection": ["Round neck", "V-neck", "Open neck", "Collar", "Mandarin Collar", "Button"]
         },
         {
           "locale": "ZH_TW",
           "name": "領型",
-          "selection": [
-            "Round neck",
-            "V-neck",
-            "Open neck",
-            "Collar",
-            "Mandarin Collar",
-            "Button"
-          ]
+          "selection": ["Round neck", "V-neck", "Open neck", "Collar", "Mandarin Collar", "Button"]
         }
       ],
       "class": "CUSTOM",

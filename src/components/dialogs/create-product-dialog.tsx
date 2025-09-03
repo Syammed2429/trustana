@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { FC, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -9,42 +9,33 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Save, X } from "lucide-react";
-import { Product } from "@/app/types/product";
-import { toast } from "sonner";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Save, X } from 'lucide-react';
+import { Product } from '@/app/types/product';
+import { toast } from 'sonner';
 
 // Zod validation schema
 const createProductSchema = z.object({
   name: z
     .string()
-    .min(1, "Product name is required")
-    .max(100, "Product name must be less than 100 characters"),
-  brand: z
-    .string()
-    .max(50, "Brand name must be less than 50 characters")
-    .optional(),
-  category: z
-    .string()
-    .max(50, "Category must be less than 50 characters")
-    .optional(),
-  description: z
-    .string()
-    .max(500, "Description must be less than 500 characters")
-    .optional(),
+    .min(1, 'Product name is required')
+    .max(100, 'Product name must be less than 100 characters'),
+  brand: z.string().max(50, 'Brand name must be less than 50 characters').optional(),
+  category: z.string().max(50, 'Category must be less than 50 characters').optional(),
+  description: z.string().max(500, 'Description must be less than 500 characters').optional(),
   price: z
     .string()
     .refine((val) => {
       if (!val) return true; // Allow empty string
       const num = parseFloat(val);
       return !isNaN(num) && num >= 0;
-    }, "Price must be a valid positive number")
+    }, 'Price must be a valid positive number')
     .optional(),
-  sku: z.string().max(50, "SKU must be less than 50 characters").optional(),
+  sku: z.string().max(50, 'SKU must be less than 50 characters').optional(),
 });
 
 type CreateProductFormData = z.infer<typeof createProductSchema>;
@@ -70,14 +61,14 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
     formState: { errors, isValid },
   } = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      name: "",
-      brand: "",
-      category: "",
-      description: "",
-      price: "",
-      sku: "",
+      name: '',
+      brand: '',
+      category: '',
+      description: '',
+      price: '',
+      sku: '',
     },
   });
 
@@ -106,16 +97,16 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
         createdAt: Date.now(),
         updatedAt: Date.now(),
         attributes: [
-          { key: "name", value: data.name },
-          { key: "brand", value: data.brand || "Unknown Brand" },
-          { key: "category", value: data.category || "General" },
+          { key: 'name', value: data.name },
+          { key: 'brand', value: data.brand || 'Unknown Brand' },
+          { key: 'category', value: data.category || 'General' },
           {
-            key: "description",
-            value: data.description || "No description provided",
+            key: 'description',
+            value: data.description || 'No description provided',
           },
-          { key: "price", value: data.price || "0" },
-          { key: "created_date", value: new Date().toISOString() },
-          { key: "status", value: "active" },
+          { key: 'price', value: data.price || '0' },
+          { key: 'created_date', value: new Date().toISOString() },
+          { key: 'status', value: 'active' },
         ].filter((attr) => attr.value), // Remove empty values
       };
 
@@ -124,13 +115,13 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
       onProductCreated(createdProduct);
       onOpenChange(false);
 
-      toast.success("Product Created", {
+      toast.success('Product Created', {
         description: `Product "${data.name}" has been successfully created.`,
       });
     } catch (error) {
-      console.error("Create error:", error);
-      toast.error("Creation Failed", {
-        description: "Failed to create product. Please try again.",
+      console.error('Create error:', error);
+      toast.error('Creation Failed', {
+        description: 'Failed to create product. Please try again.',
       });
     } finally {
       setIsCreating(false);
@@ -139,12 +130,11 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-2xl h-[80vh] flex flex-col p-0'>
-        <DialogHeader className='px-6 py-4 border-b'>
+      <DialogContent className='flex h-[80vh] max-w-2xl flex-col p-0'>
+        <DialogHeader className='border-b px-6 py-4'>
           <DialogTitle>Create New Product</DialogTitle>
           <DialogDescription>
-            Add a new product to the catalog. Fill in the basic information
-            below.
+            Add a new product to the catalog. Fill in the basic information below.
           </DialogDescription>
         </DialogHeader>
 
@@ -157,28 +147,24 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
                   <Label htmlFor='name'>Product Name *</Label>
                   <Input
                     id='name'
-                    {...register("name")}
+                    {...register('name')}
                     placeholder='Enter product name'
-                    className={errors.name ? "border-destructive" : ""}
+                    className={errors.name ? 'border-destructive' : ''}
                   />
                   {errors.name && (
-                    <p className='text-sm text-destructive mt-1'>
-                      {errors.name.message}
-                    </p>
+                    <p className='text-destructive mt-1 text-sm'>{errors.name.message}</p>
                   )}
                 </div>
                 <div className='space-y-2'>
                   <Label htmlFor='brand'>Brand</Label>
                   <Input
                     id='brand'
-                    {...register("brand")}
+                    {...register('brand')}
                     placeholder='Enter brand name'
-                    className={errors.brand ? "border-destructive" : ""}
+                    className={errors.brand ? 'border-destructive' : ''}
                   />
                   {errors.brand && (
-                    <p className='text-sm text-destructive mt-1'>
-                      {errors.brand.message}
-                    </p>
+                    <p className='text-destructive mt-1 text-sm'>{errors.brand.message}</p>
                   )}
                 </div>
               </div>
@@ -188,28 +174,24 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
                   <Label htmlFor='category'>Category</Label>
                   <Input
                     id='category'
-                    {...register("category")}
+                    {...register('category')}
                     placeholder='Enter category'
-                    className={errors.category ? "border-destructive" : ""}
+                    className={errors.category ? 'border-destructive' : ''}
                   />
                   {errors.category && (
-                    <p className='text-sm text-destructive mt-1'>
-                      {errors.category.message}
-                    </p>
+                    <p className='text-destructive mt-1 text-sm'>{errors.category.message}</p>
                   )}
                 </div>
                 <div className='space-y-2'>
                   <Label htmlFor='sku'>SKU (Optional)</Label>
                   <Input
                     id='sku'
-                    {...register("sku")}
+                    {...register('sku')}
                     placeholder='Auto-generated if empty'
-                    className={errors.sku ? "border-destructive" : ""}
+                    className={errors.sku ? 'border-destructive' : ''}
                   />
                   {errors.sku && (
-                    <p className='text-sm text-destructive mt-1'>
-                      {errors.sku.message}
-                    </p>
+                    <p className='text-destructive mt-1 text-sm'>{errors.sku.message}</p>
                   )}
                 </div>
               </div>
@@ -219,16 +201,14 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
                 <Input
                   id='price'
                   type='number'
-                  {...register("price")}
+                  {...register('price')}
                   placeholder='0.00'
                   min='0'
                   step='0.01'
-                  className={errors.price ? "border-destructive" : ""}
+                  className={errors.price ? 'border-destructive' : ''}
                 />
                 {errors.price && (
-                  <p className='text-sm text-destructive mt-1'>
-                    {errors.price.message}
-                  </p>
+                  <p className='text-destructive mt-1 text-sm'>{errors.price.message}</p>
                 )}
               </div>
 
@@ -236,23 +216,20 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
                 <Label htmlFor='description'>Description</Label>
                 <Textarea
                   id='description'
-                  {...register("description")}
+                  {...register('description')}
                   placeholder='Enter product description'
                   rows={4}
-                  className={errors.description ? "border-destructive" : ""}
+                  className={errors.description ? 'border-destructive' : ''}
                 />
                 {errors.description && (
-                  <p className='text-sm text-destructive mt-1'>
-                    {errors.description.message}
-                  </p>
+                  <p className='text-destructive mt-1 text-sm'>{errors.description.message}</p>
                 )}
               </div>
 
-              <div className='bg-muted p-4 rounded-lg'>
-                <p className='text-sm text-muted-foreground'>
-                  <strong>Note:</strong> This is a demo implementation. In a
-                  real application, this would create a new product in the
-                  database and refresh the product list.
+              <div className='bg-muted rounded-lg p-4'>
+                <p className='text-muted-foreground text-sm'>
+                  <strong>Note:</strong> This is a demo implementation. In a real application, this
+                  would create a new product in the database and refresh the product list.
                 </p>
               </div>
             </div>
@@ -260,22 +237,14 @@ export const CreateProductDialog: FC<CreateProductDialogProps> = ({
         </div>
 
         {/* Sticky Footer */}
-        <DialogFooter className='px-6 py-4 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-          <Button
-            variant='outline'
-            onClick={() => onOpenChange(false)}
-            disabled={isCreating}
-          >
+        <DialogFooter className='bg-background/95 supports-[backdrop-filter]:bg-background/60 border-t px-6 py-4 backdrop-blur'>
+          <Button variant='outline' onClick={() => onOpenChange(false)} disabled={isCreating}>
             <X className='mr-2 h-4 w-4' />
             Cancel
           </Button>
-          <Button
-            type='submit'
-            form='create-product-form'
-            disabled={isCreating || !isValid}
-          >
+          <Button type='submit' form='create-product-form' disabled={isCreating || !isValid}>
             <Save className='mr-2 h-4 w-4' />
-            {isCreating ? "Creating..." : "Create Product"}
+            {isCreating ? 'Creating...' : 'Create Product'}
           </Button>
         </DialogFooter>
       </DialogContent>

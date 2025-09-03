@@ -1,11 +1,6 @@
-import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FC } from "react";
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { FC } from 'react';
 
 interface RichContentRendererProps {
   content: string;
@@ -20,19 +15,19 @@ const HTML_TAG_REGEX = /<\/?[a-z][\s\S]*>/i;
 
 // Safe HTML tags that we allow for rendering
 const SAFE_HTML_TAGS = [
-  "p",
-  "br",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "strong",
-  "em",
-  "u",
-  "span",
-  "div",
+  'p',
+  'br',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'strong',
+  'em',
+  'u',
+  'span',
+  'div',
 ];
 
 /**
@@ -40,25 +35,22 @@ const SAFE_HTML_TAGS = [
  */
 const sanitizeHTML = (html: string): string => {
   // Remove script tags and their content
-  let sanitized = html.replace(
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    ""
-  );
+  let sanitized = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
 
   // Remove on* event handlers
-  sanitized = sanitized.replace(/\s*on\w+\s*=\s*['"'][^'"]*['"']/gi, "");
+  sanitized = sanitized.replace(/\s*on\w+\s*=\s*['"'][^'"]*['"']/gi, '');
 
   // Remove javascript: protocols
-  sanitized = sanitized.replace(/javascript:/gi, "");
+  sanitized = sanitized.replace(/javascript:/gi, '');
 
   // Keep only safe HTML tags
   const tagRegex = /<\/?(\w+)[^>]*>/g;
   sanitized = sanitized.replace(tagRegex, (match, tagName) => {
     if (SAFE_HTML_TAGS.includes(tagName.toLowerCase())) {
       // For safe tags, remove any remaining dangerous attributes
-      return match.replace(/\s*(style|class)\s*=\s*['"'][^'"]*['"']/gi, "");
+      return match.replace(/\s*(style|class)\s*=\s*['"'][^'"]*['"']/gi, '');
     }
-    return ""; // Remove unsafe tags
+    return ''; // Remove unsafe tags
   });
 
   return sanitized;
@@ -72,11 +64,11 @@ const parseHTMLElements = (html: string): string[] => {
   const elements: string[] = [];
 
   // Create a temporary DOM element to parse HTML
-  const tempDiv = document.createElement("div");
+  const tempDiv = document.createElement('div');
   tempDiv.innerHTML = sanitized;
 
   // Extract meaningful elements (paragraphs, headings, divs with text content)
-  const meaningfulTags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"];
+  const meaningfulTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div'];
 
   meaningfulTags.forEach((tag) => {
     const elementsOfType = tempDiv.querySelectorAll(tag);
@@ -102,8 +94,7 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
   showElementsLimit,
 }) => {
   const isHTML = HTML_TAG_REGEX.test(content);
-  const shouldTruncate =
-    maxLength > 0 && !allowWrap && content.length > maxLength;
+  const shouldTruncate = maxLength > 0 && !allowWrap && content.length > maxLength;
 
   if (!isHTML) {
     // Plain text content
@@ -111,10 +102,10 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
       return (
         <div
           className={cn(
-            "text-sm leading-relaxed break-words overflow-wrap-anywhere max-w-full hyphens-auto",
+            'overflow-wrap-anywhere max-w-full text-sm leading-relaxed break-words hyphens-auto',
             className
           )}
-          style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+          style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
         >
           {content}
         </div>
@@ -123,9 +114,7 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
 
     // Use truncation with ellipsis
     const displayContent =
-      content.length > maxLength
-        ? `${content.substring(0, maxLength)}...`
-        : content;
+      content.length > maxLength ? `${content.substring(0, maxLength)}...` : content;
 
     if (shouldTruncate) {
       return (
@@ -134,7 +123,7 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
             <TooltipTrigger asChild>
               <div
                 className={cn(
-                  "text-sm cursor-help overflow-hidden text-ellipsis whitespace-nowrap",
+                  'cursor-help overflow-hidden text-sm text-ellipsis whitespace-nowrap',
                   className
                 )}
               >
@@ -150,12 +139,7 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
     }
 
     return (
-      <div
-        className={cn(
-          "text-sm overflow-hidden text-ellipsis whitespace-nowrap",
-          className
-        )}
-      >
+      <div className={cn('overflow-hidden text-sm text-ellipsis whitespace-nowrap', className)}>
         {displayContent}
       </div>
     );
@@ -172,24 +156,24 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className='w-full max-w-full overflow-hidden cursor-help'>
-                <div className='flex items-start min-w-0'>
-                  <div className='flex-1 min-w-0'>
+              <div className='w-full max-w-full cursor-help overflow-hidden'>
+                <div className='flex min-w-0 items-start'>
+                  <div className='min-w-0 flex-1'>
                     <div
                       className={cn(
-                        "rich-content text-sm leading-relaxed break-words overflow-wrap-anywhere max-w-full hyphens-auto [&>h1]:text-sm [&>h1]:font-bold [&>h1]:mb-1 [&>h1]:break-words [&>h2]:text-sm [&>h2]:font-semibold [&>h2]:mb-1 [&>h2]:break-words [&>h3]:text-sm [&>h3]:font-medium [&>h3]:mb-1 [&>h3]:break-words [&>p]:text-xs [&>p]:mb-1 [&>p]:leading-relaxed [&>p]:break-words [&>br]:block [&>br]:content-[''] [&>br]:mt-1",
+                        "rich-content overflow-wrap-anywhere max-w-full text-sm leading-relaxed break-words hyphens-auto [&>br]:mt-1 [&>br]:block [&>br]:content-[''] [&>h1]:mb-1 [&>h1]:text-sm [&>h1]:font-bold [&>h1]:break-words [&>h2]:mb-1 [&>h2]:text-sm [&>h2]:font-semibold [&>h2]:break-words [&>h3]:mb-1 [&>h3]:text-sm [&>h3]:font-medium [&>h3]:break-words [&>p]:mb-1 [&>p]:text-xs [&>p]:leading-relaxed [&>p]:break-words",
                         className
                       )}
                       style={{
-                        wordBreak: "break-word",
-                        overflowWrap: "anywhere",
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
                       }}
                       dangerouslySetInnerHTML={{
-                        __html: displayElements.join(""),
+                        __html: displayElements.join(''),
                       }}
                     />
                   </div>
-                  <span className='text-muted-foreground ml-2 text-xs flex-shrink-0 self-start mt-1'>
+                  <span className='text-muted-foreground mt-1 ml-2 flex-shrink-0 self-start text-xs'>
                     +{elements.length - showElementsLimit} more
                   </span>
                 </div>
@@ -197,23 +181,21 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
             </TooltipTrigger>
             <TooltipContent className='max-w-md'>
               <div className='space-y-2'>
-                <div className='font-medium text-sm'>
-                  All Content ({elements.length} items)
-                </div>
+                <div className='text-sm font-medium'>All Content ({elements.length} items)</div>
                 <div
-                  className='text-xs p-2 bg-gray-50 rounded max-h-60 overflow-y-auto'
+                  className='max-h-60 overflow-y-auto rounded bg-gray-50 p-2 text-xs'
                   style={{
-                    wordBreak: "break-all",
-                    overflowWrap: "anywhere",
-                    hyphens: "auto",
-                    whiteSpace: "normal",
+                    wordBreak: 'break-all',
+                    overflowWrap: 'anywhere',
+                    hyphens: 'auto',
+                    whiteSpace: 'normal',
                   }}
                 >
                   <div
-                    className="rich-content text-sm leading-relaxed break-words overflow-wrap-anywhere max-w-full hyphens-auto [&>h1]:text-sm [&>h1]:font-bold [&>h1]:mb-1 [&>h1]:break-words [&>h2]:text-sm [&>h2]:font-semibold [&>h2]:mb-1 [&>h2]:break-words [&>h3]:text-sm [&>h3]:font-medium [&>h3]:mb-1 [&>h3]:break-words [&>p]:text-xs [&>p]:mb-1 [&>p]:leading-relaxed [&>p]:break-words [&>br]:block [&>br]:content-[''] [&>br]:mt-1"
+                    className="rich-content overflow-wrap-anywhere max-w-full text-sm leading-relaxed break-words hyphens-auto [&>br]:mt-1 [&>br]:block [&>br]:content-[''] [&>h1]:mb-1 [&>h1]:text-sm [&>h1]:font-bold [&>h1]:break-words [&>h2]:mb-1 [&>h2]:text-sm [&>h2]:font-semibold [&>h2]:break-words [&>h3]:mb-1 [&>h3]:text-sm [&>h3]:font-medium [&>h3]:break-words [&>p]:mb-1 [&>p]:text-xs [&>p]:leading-relaxed [&>p]:break-words"
                     style={{
-                      wordBreak: "break-word",
-                      overflowWrap: "anywhere",
+                      wordBreak: 'break-word',
+                      overflowWrap: 'anywhere',
                     }}
                     dangerouslySetInnerHTML={{ __html: sanitizeHTML(content) }}
                   />
@@ -230,10 +212,10 @@ export const RichContentRenderer: FC<RichContentRendererProps> = ({
   const processedHTML = sanitizeHTML(content);
 
   return (
-    <div className={cn("w-full max-w-full", className)}>
+    <div className={cn('w-full max-w-full', className)}>
       <div
-        className="rich-content text-sm leading-relaxed break-words overflow-wrap-anywhere max-w-full hyphens-auto [&>h1]:text-sm [&>h1]:font-bold [&>h1]:mb-1 [&>h1]:break-words [&>h2]:text-sm [&>h2]:font-semibold [&>h2]:mb-1 [&>h2]:break-words [&>h3]:text-sm [&>h3]:font-medium [&>h3]:mb-1 [&>h3]:break-words [&>p]:text-xs [&>p]:mb-1 [&>p]:leading-relaxed [&>p]:break-words [&>br]:block [&>br]:content-[''] [&>br]:mt-1"
-        style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+        className="rich-content overflow-wrap-anywhere max-w-full text-sm leading-relaxed break-words hyphens-auto [&>br]:mt-1 [&>br]:block [&>br]:content-[''] [&>h1]:mb-1 [&>h1]:text-sm [&>h1]:font-bold [&>h1]:break-words [&>h2]:mb-1 [&>h2]:text-sm [&>h2]:font-semibold [&>h2]:break-words [&>h3]:mb-1 [&>h3]:text-sm [&>h3]:font-medium [&>h3]:break-words [&>p]:mb-1 [&>p]:text-xs [&>p]:leading-relaxed [&>p]:break-words"
+        style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
         dangerouslySetInnerHTML={{ __html: processedHTML }}
       />
     </div>

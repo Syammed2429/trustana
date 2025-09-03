@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FC, memo } from "react";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+import { FC, memo } from 'react';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 
 interface ErrorStateProps {
   error: Error;
@@ -13,24 +13,19 @@ interface ErrorStateProps {
 export const ErrorState: FC<ErrorStateProps> = memo(function ErrorState({
   error,
   onRetry,
-  className = "",
+  className = '',
 }) {
   return (
-    <div
-      className={`flex items-center justify-center h-64 text-center ${className}`}
-    >
-      <div className='flex flex-col items-center gap-4 max-w-md'>
-        <div className='flex items-center justify-center w-16 h-16 rounded-full bg-destructive/10'>
-          <AlertTriangle className='h-8 w-8 text-destructive' />
+    <div className={`flex h-64 items-center justify-center text-center ${className}`}>
+      <div className='flex max-w-md flex-col items-center gap-4'>
+        <div className='bg-destructive/10 flex h-16 w-16 items-center justify-center rounded-full'>
+          <AlertTriangle className='text-destructive h-8 w-8' />
         </div>
 
         <div className='space-y-2'>
-          <h3 className='text-lg font-semibold text-destructive'>
-            Error Loading Products
-          </h3>
-          <p className='text-sm text-muted-foreground'>
-            {error.message ||
-              "Something went wrong while fetching the product data."}
+          <h3 className='text-destructive text-lg font-semibold'>Error Loading Products</h3>
+          <p className='text-muted-foreground text-sm'>
+            {error.message || 'Something went wrong while fetching the product data.'}
           </p>
         </div>
 

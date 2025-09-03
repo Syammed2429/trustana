@@ -1,18 +1,10 @@
-"use client";
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-  FC,
-  useEffect,
-} from "react";
-import { useInfiniteQuery, InfiniteData } from "@tanstack/react-query";
-import { Product } from "@/app/types/product";
-import { SupplierAttribute } from "@/app/types/attribute";
-import { apiClient } from "@/lib/api-client";
+import { createContext, useContext, useState, useCallback, ReactNode, FC, useEffect } from 'react';
+import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
+import { Product } from '@/app/types/product';
+import { SupplierAttribute } from '@/app/types/attribute';
+import { apiClient } from '@/lib/api-client';
 
 interface ProductPage {
   items: Product[];
@@ -34,16 +26,12 @@ interface ProductsContextType {
   currentFilters: Record<string, unknown>;
 }
 
-const ProductsContext = createContext<ProductsContextType | undefined>(
-  undefined
-);
+const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
 
 export function useProductsAdvanced() {
   const context = useContext(ProductsContext);
   if (!context) {
-    throw new Error(
-      "useProductsAdvanced must be used within a ProductsProviderAdvanced"
-    );
+    throw new Error('useProductsAdvanced must be used within a ProductsProviderAdvanced');
   }
   return context;
 }
@@ -61,7 +49,7 @@ async function fetchProducts({
   advancedFilters?: Record<string, unknown>;
 }): Promise<ProductPage> {
   try {
-    const response = await apiClient.post("/api/products", {
+    const response = await apiClient.post('/api/products', {
       filter: advancedFilters,
       pagination: {
         offset: pageParam * 100,
@@ -71,15 +59,11 @@ async function fetchProducts({
 
     return {
       items: response.data?.data || [],
-      nextCursor: response.data?.pagination?.hasMore
-        ? pageParam + 1
-        : undefined,
+      nextCursor: response.data?.pagination?.hasMore ? pageParam + 1 : undefined,
     };
   } catch (error) {
-    console.error("Error fetching products:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Failed to fetch products"
-    );
+    console.error('Error fetching products:', error);
+    throw new Error(error instanceof Error ? error.message : 'Failed to fetch products');
   }
 }
 
@@ -89,7 +73,7 @@ async function fetchAttributes(): Promise<{
   attributes: SupplierAttribute[];
 }> {
   try {
-    const response = await apiClient.post("/api/attributes", {
+    const response = await apiClient.post('/api/attributes', {
       filter: {},
       pagination: { offset: 0, limit: 1000 },
     });
@@ -100,43 +84,31 @@ async function fetchAttributes(): Promise<{
       attributes: attributes,
     };
   } catch (error) {
-    console.error("Error fetching attributes:", error);
+    console.error('Error fetching attributes:', error);
     return { keys: [], attributes: [] };
   }
 }
 
-export const ProductsProviderAdvanced: FC<ProductsProviderProps> = ({
-  children,
-}) => {
-  const [currentFilters, setCurrentFilters] = useState<Record<string, unknown>>(
-    {}
-  );
+export const ProductsProviderAdvanced: FC<ProductsProviderProps> = ({ children }) => {
+  const [currentFilters, setCurrentFilters] = useState<Record<string, unknown>>({});
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    error,
-  } = useInfiniteQuery({
-    queryKey: ["products-advanced", currentFilters],
-    queryFn: ({ pageParam = 0 }) =>
-      fetchProducts({
-        pageParam,
-        advancedFilters: currentFilters,
-      }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    initialPageParam: 0,
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
+    useInfiniteQuery({
+      queryKey: ['products-advanced', currentFilters],
+      queryFn: ({ pageParam = 0 }) =>
+        fetchProducts({
+          pageParam,
+          advancedFilters: currentFilters,
+        }),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialPageParam: 0,
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    });
 
   // Fetch attributes separately
   const [availableAttributes, setAvailableAttributes] = useState<string[]>([]);
-  const [supplierAttributes, setSupplierAttributes] = useState<
-    SupplierAttribute[]
-  >([]);
+  const [supplierAttributes, setSupplierAttributes] = useState<SupplierAttribute[]>([]);
 
   useEffect(() => {
     fetchAttributes().then(({ keys, attributes }) => {
@@ -146,7 +118,7 @@ export const ProductsProviderAdvanced: FC<ProductsProviderProps> = ({
   }, []);
 
   const setAdvancedFilters = useCallback((filters: Record<string, unknown>) => {
-    console.log("Setting advanced filters:", filters);
+    console.log('Setting advanced filters:', filters);
     setCurrentFilters(filters);
   }, []);
 

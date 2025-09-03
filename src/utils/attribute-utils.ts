@@ -1,5 +1,5 @@
-import { AttributeFieldType, AttributeGroup } from "@/app/enums/attribute";
-import { SupplierAttribute } from "@/app/types/attribute";
+import { AttributeFieldType, AttributeGroup } from '@/app/enums/attribute';
+import { SupplierAttribute } from '@/app/types/attribute';
 
 /**
  * Utility functions for working with attributes using the provided enums
@@ -9,25 +9,23 @@ import { SupplierAttribute } from "@/app/types/attribute";
 /**
  * Get appropriate input type for HTML based on AttributeFieldType enum
  */
-export function getInputTypeForFieldType(
-  fieldType: AttributeFieldType
-): string {
+export function getInputTypeForFieldType(fieldType: AttributeFieldType): string {
   switch (fieldType) {
     case AttributeFieldType.NUMBER:
     case AttributeFieldType.PRICE:
     case AttributeFieldType.MEASURE:
-      return "number";
+      return 'number';
     case AttributeFieldType.DATE:
-      return "date";
+      return 'date';
     case AttributeFieldType.DATETIME:
-      return "datetime-local";
+      return 'datetime-local';
     case AttributeFieldType.URL:
-      return "url";
+      return 'url';
     case AttributeFieldType.TEXT:
     case AttributeFieldType.RICH_TEXT:
     case AttributeFieldType.LONG_TEXT:
     default:
-      return "text";
+      return 'text';
   }
 }
 
@@ -35,9 +33,7 @@ export function getInputTypeForFieldType(
  * Determine if a field type should use textarea instead of input
  */
 export function shouldUseTextarea(fieldType: AttributeFieldType): boolean {
-  return [AttributeFieldType.LONG_TEXT, AttributeFieldType.RICH_TEXT].includes(
-    fieldType
-  );
+  return [AttributeFieldType.LONG_TEXT, AttributeFieldType.RICH_TEXT].includes(fieldType);
 }
 
 /**
@@ -50,18 +46,18 @@ export function getValidationForFieldType(fieldType: AttributeFieldType) {
     case AttributeFieldType.MEASURE:
       return {
         pattern: /^-?\d*\.?\d+$/,
-        errorMessage: "Must be a valid number",
+        errorMessage: 'Must be a valid number',
       };
     case AttributeFieldType.URL:
       return {
         pattern: /^https?:\/\/.+/,
-        errorMessage: "Must be a valid URL starting with http:// or https://",
+        errorMessage: 'Must be a valid URL starting with http:// or https://',
       };
     case AttributeFieldType.DATE:
     case AttributeFieldType.DATETIME:
       return {
         pattern: /^\d{4}-\d{2}-\d{2}/,
-        errorMessage: "Must be a valid date",
+        errorMessage: 'Must be a valid date',
       };
     default:
       return null;
@@ -79,22 +75,22 @@ export function getOperatorsForFieldType(fieldType: AttributeFieldType) {
     case AttributeFieldType.DATE:
     case AttributeFieldType.DATETIME:
       return [
-        { value: "$eq", label: "Equals" },
-        { value: "$ne", label: "Not Equals" },
-        { value: "$gt", label: "Greater Than" },
-        { value: "$gte", label: "Greater Than or Equal" },
-        { value: "$lt", label: "Less Than" },
-        { value: "$lte", label: "Less Than or Equal" },
-        { value: "$exists", label: "Exists" },
+        { value: '$eq', label: 'Equals' },
+        { value: '$ne', label: 'Not Equals' },
+        { value: '$gt', label: 'Greater Than' },
+        { value: '$gte', label: 'Greater Than or Equal' },
+        { value: '$lt', label: 'Less Than' },
+        { value: '$lte', label: 'Less Than or Equal' },
+        { value: '$exists', label: 'Exists' },
       ];
     case AttributeFieldType.MULTI_SELECT:
     case AttributeFieldType.DROPDOWN:
       return [
-        { value: "$eq", label: "Equals" },
-        { value: "$ne", label: "Not Equals" },
-        { value: "$in", label: "In List" },
-        { value: "$nin", label: "Not In List" },
-        { value: "$exists", label: "Exists" },
+        { value: '$eq', label: 'Equals' },
+        { value: '$ne', label: 'Not Equals' },
+        { value: '$in', label: 'In List' },
+        { value: '$nin', label: 'Not In List' },
+        { value: '$exists', label: 'Exists' },
       ];
     case AttributeFieldType.TEXT:
     case AttributeFieldType.RICH_TEXT:
@@ -102,10 +98,10 @@ export function getOperatorsForFieldType(fieldType: AttributeFieldType) {
     case AttributeFieldType.URL:
     default:
       return [
-        { value: "$eq", label: "Equals" },
-        { value: "$ne", label: "Not Equals" },
-        { value: "$regex", label: "Contains" },
-        { value: "$exists", label: "Exists" },
+        { value: '$eq', label: 'Equals' },
+        { value: '$ne', label: 'Not Equals' },
+        { value: '$regex', label: 'Contains' },
+        { value: '$exists', label: 'Exists' },
       ];
   }
 }
@@ -124,11 +120,11 @@ export function groupAttributesByGroup(
   });
 
   // Add "Other" group for attributes without a group
-  grouped["Other"] = [];
+  grouped['Other'] = [];
 
   // Group attributes
   attributes.forEach((attr) => {
-    const group = attr.group || "Other";
+    const group = attr.group || 'Other';
     if (!grouped[group]) {
       grouped[group] = [];
     }
@@ -151,31 +147,31 @@ export function groupAttributesByGroup(
 export function getFieldTypeDisplayName(fieldType: AttributeFieldType): string {
   switch (fieldType) {
     case AttributeFieldType.TEXT:
-      return "Text";
+      return 'Text';
     case AttributeFieldType.DATE:
-      return "Date";
+      return 'Date';
     case AttributeFieldType.DATETIME:
-      return "Date & Time";
+      return 'Date & Time';
     case AttributeFieldType.NUMBER:
-      return "Number";
+      return 'Number';
     case AttributeFieldType.PRICE:
-      return "Price";
+      return 'Price';
     case AttributeFieldType.URL:
-      return "URL";
+      return 'URL';
     case AttributeFieldType.MEASURE:
-      return "Measurement";
+      return 'Measurement';
     case AttributeFieldType.RICH_TEXT:
-      return "Rich Text";
+      return 'Rich Text';
     case AttributeFieldType.LONG_TEXT:
-      return "Long Text";
+      return 'Long Text';
     case AttributeFieldType.MULTI_SELECT:
-      return "Multi Select";
+      return 'Multi Select';
     case AttributeFieldType.DROPDOWN:
-      return "Dropdown";
+      return 'Dropdown';
     case AttributeFieldType.MEDIA_GALLERY:
-      return "Media Gallery";
+      return 'Media Gallery';
     case AttributeFieldType.TREE_NODE:
-      return "Tree Node";
+      return 'Tree Node';
     default:
       return fieldType;
   }
@@ -187,35 +183,32 @@ export function getFieldTypeDisplayName(fieldType: AttributeFieldType): string {
 export function getFieldTypeStyles(fieldType: AttributeFieldType): string {
   switch (fieldType) {
     case AttributeFieldType.PRICE:
-      return "text-green-600 bg-green-50 border-green-200";
+      return 'text-green-600 bg-green-50 border-green-200';
     case AttributeFieldType.NUMBER:
     case AttributeFieldType.MEASURE:
-      return "text-blue-600 bg-blue-50 border-blue-200";
+      return 'text-blue-600 bg-blue-50 border-blue-200';
     case AttributeFieldType.DATE:
     case AttributeFieldType.DATETIME:
-      return "text-purple-600 bg-purple-50 border-purple-200";
+      return 'text-purple-600 bg-purple-50 border-purple-200';
     case AttributeFieldType.URL:
-      return "text-cyan-600 bg-cyan-50 border-cyan-200";
+      return 'text-cyan-600 bg-cyan-50 border-cyan-200';
     case AttributeFieldType.RICH_TEXT:
     case AttributeFieldType.LONG_TEXT:
-      return "text-orange-600 bg-orange-50 border-orange-200";
+      return 'text-orange-600 bg-orange-50 border-orange-200';
     case AttributeFieldType.MULTI_SELECT:
     case AttributeFieldType.DROPDOWN:
-      return "text-indigo-600 bg-indigo-50 border-indigo-200";
+      return 'text-indigo-600 bg-indigo-50 border-indigo-200';
     case AttributeFieldType.MEDIA_GALLERY:
-      return "text-pink-600 bg-pink-50 border-pink-200";
+      return 'text-pink-600 bg-pink-50 border-pink-200';
     default:
-      return "text-gray-600 bg-gray-50 border-gray-200";
+      return 'text-gray-600 bg-gray-50 border-gray-200';
   }
 }
 
 /**
  * Convert value based on field type for proper data handling
  */
-export function convertValueForFieldType(
-  value: string,
-  fieldType: AttributeFieldType
-): unknown {
+export function convertValueForFieldType(value: string, fieldType: AttributeFieldType): unknown {
   switch (fieldType) {
     case AttributeFieldType.NUMBER:
     case AttributeFieldType.PRICE:
@@ -227,7 +220,7 @@ export function convertValueForFieldType(
       return value ? new Date(value).getTime() : value;
     case AttributeFieldType.MULTI_SELECT:
       return value
-        .split(",")
+        .split(',')
         .map((v) => v.trim())
         .filter((v) => v);
     default:

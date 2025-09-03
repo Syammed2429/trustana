@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FC, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { FC, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -10,13 +10,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Filter, Plus } from "lucide-react";
-import { useAdvancedFilters } from "./hooks/use-advanced-filters";
-import { QuickSearch } from "./components/quick-search";
-import { SavedFiltersCard } from "./components/saved-filters-card";
-import { FilterGroupCard } from "./components/filter-group-card";
-import { SavedFilter } from "@/utils/filters/filter-utils";
+} from '@/components/ui/dialog';
+import { Filter, Plus } from 'lucide-react';
+import { useAdvancedFilters } from './hooks/use-advanced-filters';
+import { QuickSearch } from './components/quick-search';
+import { SavedFiltersCard } from './components/saved-filters-card';
+import { FilterGroupCard } from './components/filter-group-card';
+import { SavedFilter } from '@/utils/filters/filter-utils';
 
 interface AdvancedFiltersProps {
   onFiltersChange: (filters: Record<string, unknown>) => void;
@@ -40,7 +40,7 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
   onFiltersChange,
   availableAttributes,
   isDisabled = false,
-  className = "",
+  className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -97,7 +97,7 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
 
   return (
     <div className={className}>
-      <div className='flex items-center justify-between mb-4'>
+      <div className='mb-4 flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <QuickSearch
             value={quickSearchTerm}
@@ -108,25 +108,22 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
 
         <div className='flex items-center gap-2'>
           {hasActiveFilters && (
-            <Badge variant='secondary'>
-              {totalConditionsCount} filters active
-            </Badge>
+            <Badge variant='secondary'>{totalConditionsCount} filters active</Badge>
           )}
 
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button variant='outline' disabled={isDisabled}>
-                <Filter className='h-4 w-4 mr-2' />
+                <Filter className='mr-2 h-4 w-4' />
                 Advanced Filters
               </Button>
             </DialogTrigger>
 
-            <DialogContent className='sm:max-w-4xl max-h-[90vh] overflow-y-auto'>
+            <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-4xl'>
               <DialogHeader>
                 <DialogTitle>Advanced Filter Builder</DialogTitle>
                 <DialogDescription>
-                  Create complex filters with multiple conditions and logical
-                  operators
+                  Create complex filters with multiple conditions and logical operators
                 </DialogDescription>
               </DialogHeader>
 
@@ -158,9 +155,7 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
                       onConditionChange={(conditionId, updates) =>
                         updateCondition(group.id, conditionId, updates)
                       }
-                      onRemoveCondition={(conditionId) =>
-                        removeCondition(group.id, conditionId)
-                      }
+                      onRemoveCondition={(conditionId) => removeCondition(group.id, conditionId)}
                       onAttributeChange={(conditionId, attribute) =>
                         handleAttributeChange(group.id, conditionId, attribute)
                       }
@@ -169,14 +164,14 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
 
                   <div className='flex justify-center'>
                     <Button variant='outline' onClick={addGroup}>
-                      <Plus className='h-4 w-4 mr-2' />
+                      <Plus className='mr-2 h-4 w-4' />
                       Add Filter Group
                     </Button>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className='flex justify-between pt-4 border-t'>
+                <div className='flex justify-between border-t pt-4'>
                   <Button variant='outline' onClick={clearAllFilters}>
                     Clear All Filters
                   </Button>
