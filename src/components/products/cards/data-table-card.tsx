@@ -2,8 +2,8 @@
 
 import { FC, memo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { SimpleDataTable } from '@/components/advanced-data-table';
 import { Product } from '@/app/types/product';
+import { ModularDataTable } from '@/components/data-table/ModularDataTable';
 
 interface DataTableCardProps {
   data: Product[];
@@ -40,7 +40,7 @@ export const DataTableCard: FC<DataTableCardProps> = memo(function DataTableCard
         <CardDescription>{getDescription()}</CardDescription>
       </CardHeader>
       <CardContent className='p-0'>
-        <SimpleDataTable
+        <ModularDataTable
           data={data}
           hasNextPage={hasNextPage ?? false}
           fetchNextPage={fetchNextPage}

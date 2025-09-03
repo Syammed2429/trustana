@@ -17,7 +17,7 @@ export const QuickSearch: FC<QuickSearchProps> = memo(function QuickSearch({
   onChange,
   isDisabled = false,
   placeholder = 'Quick search... (auto-debounced)',
-  className = 'w-64',
+  className = 'w-68',
 }) {
   return (
     <div className={`relative ${className}`}>
@@ -26,7 +26,7 @@ export const QuickSearch: FC<QuickSearchProps> = memo(function QuickSearch({
         placeholder={placeholder}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
-        className='pl-10'
+        className='w-full pl-10'
         disabled={isDisabled}
       />
     </div>

@@ -43,9 +43,6 @@ export const AdvancedProductsDashboard = () => {
     // Handlers
     handleFiltersChange,
     handleClearFilters,
-    handleExport,
-    handleShare,
-    handleSettings,
     handleRetry,
     handleCreateProduct,
     handleProductCreated,
@@ -65,9 +62,6 @@ export const AdvancedProductsDashboard = () => {
         activeFiltersCount={activeFiltersCount}
         hasActiveFilters={hasActiveFilters}
         onClearFilters={handleClearFilters}
-        onExport={handleExport}
-        onShare={handleShare}
-        onSettings={handleSettings}
         onCreateProduct={handleCreateProduct}
       />
 

@@ -35,9 +35,6 @@ export const ModularDataTable: FC<DataTableProps> = ({
 
   return (
     <div className='w-full flex-col justify-start gap-6'>
-      {/* Table Toolbar */}
-      {/* <TableToolbar table={table} /> */}
-
       {/* Table Container */}
       <div className='relative flex flex-col gap-4 px-2 sm:px-4 lg:px-6'>
         <div className='overflow-hidden rounded-lg border'>

@@ -11,9 +11,6 @@ interface HeaderCardProps {
   activeFiltersCount: number;
   hasActiveFilters: boolean;
   onClearFilters: () => void;
-  onExport?: () => void;
-  onShare?: () => void;
-  onSettings?: () => void;
   onCreateProduct?: () => void;
   className?: string;
 }
@@ -24,21 +21,13 @@ export const HeaderCard: FC<HeaderCardProps> = memo(function HeaderCard({
   activeFiltersCount,
   hasActiveFilters,
   onClearFilters,
-  onExport,
-  onShare,
-  onSettings,
   onCreateProduct,
   className = '',
 }) {
   return (
     <Card className={className}>
       <CardHeader className='px-3'>
-        <DashboardHeader
-          onExport={onExport}
-          onShare={onShare}
-          onSettings={onSettings}
-          onCreateProduct={onCreateProduct}
-        />
+        <DashboardHeader onCreateProduct={onCreateProduct} />
       </CardHeader>
       <CardContent className='px-3'>
         <DashboardStats
