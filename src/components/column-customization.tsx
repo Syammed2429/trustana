@@ -7,7 +7,7 @@ import {
   IconCheck,
   IconColumns,
 } from '@tabler/icons-react';
-import { Column } from '@tanstack/react-table';
+import { Column, Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -28,8 +28,7 @@ import { Product } from '@/app/types/product';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 
 interface ColumnCustomizationProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  table: any; // Table instance from react-table
+  table: Table<Product>; // Table instance from react-table
   onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void;
 }
 
@@ -48,22 +47,28 @@ interface ColumnItemProps {
 }
 
 const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
+  const handleCardClick = () => {
+    onToggleVisibility(column.id);
+  };
+
   return (
     <div
-      className={`bg-card hover:bg-muted/50 flex items-center justify-between rounded-lg border p-3 transition-colors ${column.visible ? 'border-border' : 'border-muted'} `}
+      className={`bg-card hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-colors ${column.visible ? 'border-border' : 'border-muted'} `}
+      onClick={handleCardClick}
     >
       <div className='flex min-w-0 flex-1 items-center space-x-3'>
         <Checkbox
           checked={column.visible}
           onCheckedChange={() => onToggleVisibility(column.id)}
           className='shrink-0'
+          onClick={(e) => e.stopPropagation()} // Prevent double triggering
         />
         <div className='min-w-0 flex-1'>
           <div className='flex items-center gap-2'>
-            <Label className='truncate text-sm font-medium'>{column.label}</Label>
+            <Label className='cursor-pointer truncate text-sm font-medium'>{column.label}</Label>
           </div>
           <div className='mt-1 flex items-center gap-2'>
-            <Badge variant='outline' className='text-xs'>
+            <Badge variant='outline' className='pointer-events-none text-xs'>
               {column.dataType}
             </Badge>
           </div>
@@ -77,7 +82,10 @@ const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
               <Button
                 variant='ghost'
                 size='sm'
-                onClick={() => onToggleVisibility(column.id)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent card click when button is clicked
+                  onToggleVisibility(column.id);
+                }}
                 className='h-8 w-8 p-0'
               >
                 {column.visible ? (
@@ -129,6 +137,13 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
 
   // Initialize columns state
   useEffect(() => {
+    if (!table) {
+      console.log('Table not available yet');
+      return;
+    }
+
+    console.log('Initializing columns from table:', table);
+
     const tableColumns = table
       .getAllColumns()
       .filter((column: Column<Product, unknown>) => column.getCanHide())
@@ -141,6 +156,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
         dataType: getColumnDataType(column),
       }));
 
+    console.log('Table columns initialized:', tableColumns);
     setColumns(tableColumns);
     setOriginalColumns(tableColumns);
   }, [table]);
@@ -165,7 +181,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
   };
 
   const handleApplyChanges = () => {
-    // Apply column visibility
+    // Apply column visibility to table state
     const visibility = columns.reduce(
       (acc, col) => ({
         ...acc,
@@ -173,15 +189,31 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
       }),
       {}
     );
-    onColumnVisibilityChange?.(visibility);
 
-    // Apply to table
-    columns.forEach((col) => {
-      const tableColumn = table.getColumn(col.id);
-      if (tableColumn) {
-        tableColumn.toggleVisibility(col.visible);
-      }
-    });
+    console.log('Applying column visibility:', visibility);
+    console.log(
+      'Current table columns before:',
+      table.getAllColumns().map((c) => ({ id: c.id, isVisible: c.getIsVisible() }))
+    );
+    console.log('Current table state before:', table.getState().columnVisibility);
+
+    // Use the provided callback to update table state properly
+    if (onColumnVisibilityChange) {
+      onColumnVisibilityChange(visibility);
+    } else {
+      // Fallback to direct table method if no callback provided
+      table.setColumnVisibility(visibility);
+    }
+
+    // Check state after update with a slight delay
+    setTimeout(() => {
+      console.log('Table state after update:', table.getState().columnVisibility);
+      console.log(
+        'Table columns after:',
+        table.getAllColumns().map((c) => ({ id: c.id, isVisible: c.getIsVisible() }))
+      );
+      console.log('Visible columns count:', table.getVisibleLeafColumns().length);
+    }, 100);
 
     setHasChanges(false);
     setOriginalColumns([...columns]);
@@ -235,7 +267,7 @@ export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
             Customize Table Columns
           </DialogTitle>
           <DialogDescription>
-            Toggle visibility, pin columns, and adjust widths. Click Apply to save your changes.
+            Toggle visibility. Click Apply to save your changes.
           </DialogDescription>
         </DialogHeader>
 

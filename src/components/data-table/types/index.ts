@@ -1,4 +1,5 @@
 import { Product } from '@/app/types/product';
+import { Table } from '@tanstack/react-table';
 
 export interface ColumnMeta {
   sticky?: 'left';
@@ -12,6 +13,8 @@ export interface DataTableProps {
   fetchNextPage: () => void;
   isFetchingNextPage: boolean;
   isLoading: boolean;
+  showColumnCustomization?: boolean;
+  onTableReady?: (table: Table<Product>) => void;
 }
 
 export interface TableStates {

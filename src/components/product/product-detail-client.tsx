@@ -10,7 +10,6 @@ import { ProductHeaderWithCRUD } from '@/components/product/product-header-with-
 import { ProductOverview } from '@/components/product/product-overview';
 import { AttributeCard } from '@/components/product/attribute-card';
 import { ProductMetadata } from '@/components/product/product-metadata';
-import { ToastProvider } from '@/hooks/use-toast';
 import { containerVariants, fadeInUpVariants, fadeInLeftVariants } from '@/lib/animation-variants';
 
 interface ProductDetailClientProps {
@@ -58,69 +57,120 @@ export const ProductDetailClient: FC<ProductDetailClientProps> = ({ product: ini
     transition: { type: 'spring' as const, stiffness: 400, damping: 25 },
   };
   return (
-    <ToastProvider>
+    <motion.div
+      className='container mx-auto space-y-6 p-6'
+      variants={containerVariants}
+      initial='hidden'
+      animate='visible'
+    >
+      {/* Header with CRUD Operations */}
+      <motion.div variants={fadeInUpVariants}>
+        <ProductHeaderWithCRUD
+          productName={name}
+          productBrand={brand}
+          productCategory={category}
+          product={product}
+          onBack={handleBack}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+          onDuplicate={handleDuplicate}
+        />
+      </motion.div>
+
+      {/* Bento Grid Layout */}
       <motion.div
-        className='container mx-auto space-y-6 p-6'
-        variants={containerVariants}
-        initial='hidden'
-        animate='visible'
+        className='grid grid-cols-1 gap-6 lg:grid-cols-12'
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.2,
+              delayChildren: 0.3,
+            },
+          },
+        }}
       >
-        {/* Header with CRUD Operations */}
-        <motion.div variants={fadeInUpVariants}>
-          <ProductHeaderWithCRUD
-            productName={name}
-            productBrand={brand}
-            productCategory={category}
-            product={product}
-            onBack={handleBack}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-            onDuplicate={handleDuplicate}
-          />
+        {/* Main Info - Large Card */}
+        <motion.div
+          className='lg:col-span-8'
+          variants={fadeInLeftVariants}
+          whileHover={cardHoverEffect}
+        >
+          <ProductOverview product={product} categorizedAttributes={categorizedAttributes} />
         </motion.div>
 
-        {/* Bento Grid Layout */}
+        {/* Sidebar */}
         <motion.div
-          className='grid grid-cols-1 gap-6 lg:grid-cols-12'
+          className='space-y-6 lg:col-span-4'
           variants={{
-            hidden: { opacity: 0 },
+            hidden: { opacity: 0, x: 20 },
             visible: {
               opacity: 1,
+              x: 0,
               transition: {
-                staggerChildren: 0.2,
-                delayChildren: 0.3,
+                type: 'spring',
+                stiffness: 200,
+                damping: 25,
+                staggerChildren: 0.15,
+                delayChildren: 0.2,
               },
             },
           }}
         >
-          {/* Main Info - Large Card */}
+          {/* Technical Specs */}
           <motion.div
-            className='lg:col-span-8'
-            variants={fadeInLeftVariants}
-            whileHover={cardHoverEffect}
-          >
-            <ProductOverview product={product} categorizedAttributes={categorizedAttributes} />
-          </motion.div>
-
-          {/* Sidebar */}
-          <motion.div
-            className='space-y-6 lg:col-span-4'
             variants={{
-              hidden: { opacity: 0, x: 20 },
+              hidden: { opacity: 0, y: 20, scale: 0.95 },
               visible: {
                 opacity: 1,
-                x: 0,
+                y: 0,
+                scale: 1,
                 transition: {
                   type: 'spring',
                   stiffness: 200,
-                  damping: 25,
-                  staggerChildren: 0.15,
-                  delayChildren: 0.2,
+                  damping: 20,
                 },
               },
             }}
+            whileHover={cardHoverEffect}
           >
-            {/* Technical Specs */}
+            <AttributeCard
+              title='Technical Specs'
+              attributes={categorizedAttributes.technical}
+              icon={Star}
+              className='border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50'
+            />
+          </motion.div>
+
+          {/* Media & Assets */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20, scale: 0.95 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: {
+                  type: 'spring',
+                  stiffness: 200,
+                  damping: 20,
+                  delay: 0.1,
+                },
+              },
+            }}
+            whileHover={cardHoverEffect}
+          >
+            <AttributeCard
+              title='Media & Assets'
+              attributes={categorizedAttributes.media}
+              icon={Image}
+              className='border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50'
+            />
+          </motion.div>
+
+          {/* Additional Information */}
+          {categorizedAttributes.other.length > 0 && (
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20, scale: 0.95 },
@@ -132,96 +182,43 @@ export const ProductDetailClient: FC<ProductDetailClientProps> = ({ product: ini
                     type: 'spring',
                     stiffness: 200,
                     damping: 20,
+                    delay: 0.2,
                   },
                 },
               }}
               whileHover={cardHoverEffect}
             >
               <AttributeCard
-                title='Technical Specs'
-                attributes={categorizedAttributes.technical}
-                icon={Star}
-                className='border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50'
+                title='Additional Info'
+                attributes={categorizedAttributes.other}
+                icon={Globe}
+                className='border-green-200 bg-gradient-to-br from-green-50 to-emerald-50'
               />
             </motion.div>
+          )}
 
-            {/* Media & Assets */}
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20, scale: 0.95 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  transition: {
-                    type: 'spring',
-                    stiffness: 200,
-                    damping: 20,
-                    delay: 0.1,
-                  },
+          {/* Metadata Card */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20, scale: 0.95 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: {
+                  type: 'spring',
+                  stiffness: 200,
+                  damping: 20,
+                  delay: 0.3,
                 },
-              }}
-              whileHover={cardHoverEffect}
-            >
-              <AttributeCard
-                title='Media & Assets'
-                attributes={categorizedAttributes.media}
-                icon={Image}
-                className='border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50'
-              />
-            </motion.div>
-
-            {/* Additional Information */}
-            {categorizedAttributes.other.length > 0 && (
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0, y: 20, scale: 0.95 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    transition: {
-                      type: 'spring',
-                      stiffness: 200,
-                      damping: 20,
-                      delay: 0.2,
-                    },
-                  },
-                }}
-                whileHover={cardHoverEffect}
-              >
-                <AttributeCard
-                  title='Additional Info'
-                  attributes={categorizedAttributes.other}
-                  icon={Globe}
-                  className='border-green-200 bg-gradient-to-br from-green-50 to-emerald-50'
-                />
-              </motion.div>
-            )}
-
-            {/* Metadata Card */}
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20, scale: 0.95 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  transition: {
-                    type: 'spring',
-                    stiffness: 200,
-                    damping: 20,
-                    delay: 0.3,
-                  },
-                },
-              }}
-              whileHover={cardHoverEffect}
-            >
-              <ProductMetadata product={product} />
-            </motion.div>
+              },
+            }}
+            whileHover={cardHoverEffect}
+          >
+            <ProductMetadata product={product} />
           </motion.div>
         </motion.div>
       </motion.div>
-    </ToastProvider>
+    </motion.div>
   );
 };

@@ -6,6 +6,7 @@ import { useDataTable } from './hooks/useDataTable';
 import { TableHeaderComponent } from './components/TableHeader';
 import { TableBodyComponent } from './components/TableBody';
 import { LoadingState, EmptyState } from './components/LoadingStates';
+import { ColumnCustomization } from '../column-customization';
 
 export const ModularDataTable: FC<DataTableProps> = ({
   data: initialData,
@@ -13,6 +14,8 @@ export const ModularDataTable: FC<DataTableProps> = ({
   fetchNextPage,
   isFetchingNextPage,
   isLoading,
+  showColumnCustomization = false,
+  onTableReady,
 }) => {
   const [data, setData] = useState(() => initialData);
 
@@ -21,7 +24,17 @@ export const ModularDataTable: FC<DataTableProps> = ({
     setData(initialData);
   }, [initialData]);
 
-  const { table, columns } = useDataTable({ data });
+  const { table, columns, actions, states } = useDataTable({ data });
+
+  // Notify parent component when table is ready
+  useEffect(() => {
+    if (onTableReady && table) {
+      onTableReady(table);
+    }
+  }, [onTableReady, table]);
+
+  // Add a key to force re-render when column visibility changes
+  const tableKey = JSON.stringify(states.columnVisibility);
 
   // Loading state
   if (isLoading) {
@@ -37,6 +50,16 @@ export const ModularDataTable: FC<DataTableProps> = ({
     <div className='w-full flex-col justify-start gap-6'>
       {/* Table Container */}
       <div className='relative flex flex-col gap-4 px-2 sm:px-4 lg:px-6'>
+        {/* Column Customization */}
+        {showColumnCustomization && (
+          <div className='flex justify-end'>
+            <ColumnCustomization
+              table={table}
+              onColumnVisibilityChange={actions.setColumnVisibility}
+            />
+          </div>
+        )}
+
         <div className='overflow-hidden rounded-lg border'>
           <div className='overflow-x-auto'>
             <InfiniteScroll
@@ -55,6 +78,7 @@ export const ModularDataTable: FC<DataTableProps> = ({
             >
               <div id='scrollableDiv' style={{ height: '600px', overflow: 'auto' }}>
                 <Table
+                  key={tableKey}
                   data-testid='products-table'
                   className='w-full min-w-[800px] table-fixed border-separate border-spacing-0'
                 >

@@ -46,6 +46,7 @@ export const DataTableCard: FC<DataTableCardProps> = memo(function DataTableCard
           fetchNextPage={fetchNextPage}
           isFetchingNextPage={isFetchingNextPage}
           isLoading={isLoading}
+          showColumnCustomization={true}
         />
       </CardContent>
     </Card>
