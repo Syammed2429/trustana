@@ -10,10 +10,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ArrowLeft, Edit, Trash2, Copy, MoreVertical } from 'lucide-react';
 import { Product } from '@/app/types/product';
-import { EditProductDialog } from '@/components/dialogs/edit-product-dialog';
-import { DeleteProductDialog } from '@/components/dialogs/delete-product-dialog';
+import dynamic from 'next/dynamic';
 import { toast } from 'sonner';
 
+const EditProductDialog = dynamic(
+  () => import('@/components/dialogs/edit-product-dialog').then((mod) => mod.EditProductDialog),
+  {}
+);
+
+const DeleteProductDialog = dynamic(
+  () => import('@/components/dialogs/delete-product-dialog').then((mod) => mod.DeleteProductDialog),
+  {}
+);
 interface ProductHeaderWithCRUDProps {
   productName: string;
   productBrand?: string | number | object | string[] | null;
