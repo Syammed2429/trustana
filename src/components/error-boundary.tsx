@@ -1,6 +1,12 @@
 "use client";
 
-import React from "react";
+import {
+  Component,
+  ComponentType,
+  ErrorInfo,
+  ReactNode,
+  useCallback,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
 
@@ -10,11 +16,11 @@ interface ErrorBoundaryState {
 }
 
 interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<{ error?: Error; resetError: () => void }>;
+  children: ReactNode;
+  fallback?: ComponentType<{ error?: Error; resetError: () => void }>;
 }
 
-export class ErrorBoundary extends React.Component<
+export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
@@ -27,7 +33,7 @@ export class ErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Error caught by boundary:", error, errorInfo);
 
     // In a real application, you would send this to your error reporting service
@@ -67,7 +73,7 @@ interface ErrorFallbackProps {
   resetError: () => void;
 }
 
-function DefaultErrorFallback({ error, resetError }: ErrorFallbackProps) {
+const DefaultErrorFallback = ({ error, resetError }: ErrorFallbackProps) => {
   return (
     <div className='flex min-h-[400px] flex-col items-center justify-center p-8 text-center'>
       <div className='rounded-full bg-destructive/10 p-4 mb-4'>
@@ -95,15 +101,12 @@ function DefaultErrorFallback({ error, resetError }: ErrorFallbackProps) {
       </Button>
     </div>
   );
-}
+};
 
 // Hook for functional components
-export function useErrorHandler() {
-  return React.useCallback(
-    (error: Error, errorInfo?: { componentStack: string }) => {
-      console.error("Error caught by handler:", error, errorInfo);
-      // In a real application, you would send this to your error reporting service
-    },
-    []
-  );
-}
+export const useErrorHandler = () => {
+  return useCallback((error: Error, errorInfo?: { componentStack: string }) => {
+    console.error("Error caught by handler:", error, errorInfo);
+    // In a real application, you would send this to your error reporting service
+  }, []);
+};

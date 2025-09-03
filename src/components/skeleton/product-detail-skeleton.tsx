@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 /**
  * Loading skeleton for product detail page
  */
-export function ProductDetailSkeleton() {
+export const ProductDetailSkeleton = () => {
   return (
     <div className='container mx-auto p-6 space-y-6'>
       {/* Header Skeleton */}
@@ -34,4 +34,4 @@ export function ProductDetailSkeleton() {
       </div>
     </div>
   );
-}
+};

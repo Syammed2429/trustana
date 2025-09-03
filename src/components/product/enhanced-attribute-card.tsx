@@ -1,4 +1,3 @@
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RichContentRenderer } from "@/components/rich-content-renderer";
@@ -10,12 +9,13 @@ import {
   getFieldTypeStyles,
   shouldUseTextarea,
 } from "@/utils/attribute-utils";
+import { ComponentType, FC } from "react";
 
 interface EnhancedAttributeCardProps {
   title: string;
   attributes: ProductAttribute[];
   supplierAttributes?: SupplierAttribute[];
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   className?: string;
   showFieldTypes?: boolean;
 }
@@ -27,14 +27,14 @@ interface EnhancedAttributeCardProps {
  * - Type-aware rendering
  * - Visual indicators based on attribute types
  */
-export function EnhancedAttributeCard({
+export const EnhancedAttributeCard: FC<EnhancedAttributeCardProps> = ({
   title,
   attributes,
   supplierAttributes = [],
   icon: Icon,
   className = "",
   showFieldTypes = true,
-}: EnhancedAttributeCardProps) {
+}) => {
   if (attributes.length === 0) return null;
 
   // Create a map of supplier attributes for type information
@@ -109,4 +109,4 @@ export function EnhancedAttributeCard({
       </CardContent>
     </Card>
   );
-}
+};

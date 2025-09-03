@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -24,16 +24,16 @@ interface EditProductDialogProps {
   onUpdate: (product: Product) => void;
 }
 
-export const EditProductDialog = ({
+export const EditProductDialog: FC<EditProductDialogProps> = ({
   open,
   onOpenChange,
   product,
   onUpdate,
-}: EditProductDialogProps) => {
+}) => {
   const [editedProduct, setEditedProduct] = useState<Product>(product);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setEditedProduct(product);
   }, [product]);
 
@@ -110,7 +110,7 @@ export const EditProductDialog = ({
                 <Input
                   id='skuId'
                   value={editedProduct.skuId}
-                  onChange={(e) =>
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setEditedProduct((prev) => ({
                       ...prev,
                       skuId: e.target.value,
@@ -148,7 +148,7 @@ export const EditProductDialog = ({
                     <Textarea
                       id={attr.key}
                       value={String(attr.value)}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                      onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                         updateAttribute(attr.key, e.target.value)
                       }
                       rows={containsHTML(String(attr.value)) ? 6 : 3}
@@ -162,7 +162,7 @@ export const EditProductDialog = ({
                     <Input
                       id={attr.key}
                       value={String(attr.value)}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         updateAttribute(attr.key, e.target.value)
                       }
                       placeholder={

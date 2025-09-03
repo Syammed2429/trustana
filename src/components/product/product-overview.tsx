@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -24,10 +24,10 @@ interface ProductOverviewProps {
 /**
  * Main product overview card component
  */
-export const ProductOverview = ({
+export const ProductOverview: FC<ProductOverviewProps> = ({
   product,
   categorizedAttributes,
-}: ProductOverviewProps) => {
+}) => {
   return (
     <Card data-testid='product-overview' className='lg:col-span-8 h-fit'>
       <CardHeader>

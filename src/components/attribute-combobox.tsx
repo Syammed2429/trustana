@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { formatAttributeHeaderSimple } from "@/utils/attribute-formatting";
 import { AttributeGroup } from "@/app/enums/attribute";
+import { useMemo, useState, FC } from "react";
 
 interface AttributeComboboxProps {
   value?: string;
@@ -36,18 +36,18 @@ interface AttributeOption {
   originalKey?: string;
 }
 
-export function AttributeCombobox({
+export const AttributeCombobox: FC<AttributeComboboxProps> = ({
   value,
   onValueChange,
   availableAttributes,
   placeholder = "Select attribute...",
   className,
   disabled = false,
-}: AttributeComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+}) => {
+  const [open, setOpen] = useState(false);
 
   // Create attribute options with system attributes and custom attributes
-  const attributeOptions = React.useMemo((): AttributeOption[] => {
+  const attributeOptions = useMemo((): AttributeOption[] => {
     const systemAttributes: AttributeOption[] = [
       { value: "id", label: "ID", group: "System" },
       { value: "skuId", label: "SKU ID", group: "System" },
@@ -124,7 +124,7 @@ export function AttributeCombobox({
   }, [availableAttributes]);
 
   // Group attributes by category
-  const groupedAttributes = React.useMemo(() => {
+  const groupedAttributes = useMemo(() => {
     const groups: Record<string, AttributeOption[]> = {};
     attributeOptions.forEach((attr) => {
       if (!groups[attr.group]) {
@@ -156,7 +156,7 @@ export function AttributeCombobox({
       <PopoverContent className='w-80 p-0' align='start'>
         <Command
           className='rounded-lg border shadow-md'
-          filter={(value, search) => {
+          filter={(value: string, search: string) => {
             const searchLower = search.toLowerCase();
             const valueLower = value.toLowerCase();
             if (valueLower.includes(searchLower)) return 1;
@@ -208,4 +208,4 @@ export function AttributeCombobox({
       </PopoverContent>
     </Popover>
   );
-}
+};

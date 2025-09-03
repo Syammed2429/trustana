@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { IconLoader } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import {
@@ -27,7 +26,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Product } from "@/app/types/product";
@@ -39,6 +37,7 @@ import {
 } from "@/utils/attribute-formatting";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader2 } from "lucide-react";
+import { FC, MouseEvent, useEffect, useMemo, useState } from "react";
 
 interface ColumnMeta {
   sticky?: "left";
@@ -46,7 +45,7 @@ interface ColumnMeta {
   className?: string;
 }
 
-function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
+const createProductColumns = (attributes: string[]): ColumnDef<Product>[] => {
   const columns: ColumnDef<Product>[] = [
     {
       id: "select",
@@ -57,7 +56,7 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
             }
-            onCheckedChange={(value) =>
+            onCheckedChange={(value: boolean) =>
               table.toggleAllPageRowsSelected(!!value)
             }
             aria-label='Select all'
@@ -68,7 +67,7 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
         <div className='flex items-center justify-center'>
           <Checkbox
             checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
             aria-label='Select row'
           />
         </div>
@@ -164,50 +163,48 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
               const hasMore = value.length > maxLength;
 
               return (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className='w-full max-w-full overflow-hidden cursor-help'>
-                        <div className='flex items-center min-w-0'>
-                          <div className='flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap'>
-                            <RichContentRenderer
-                              content={value}
-                              maxLength={maxLength}
-                              allowWrap={false}
-                              className='inline'
-                            />
-                          </div>
-                          {hasMore && (
-                            <span className='text-muted-foreground ml-1 text-xs flex-shrink-0'>
-                              more
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent className='max-w-md'>
-                      <div className='space-y-2'>
-                        <div className='font-medium text-sm'>Full Content</div>
-                        <div
-                          className='text-xs p-2 bg-gray-50 rounded'
-                          style={{
-                            wordBreak: "break-all",
-                            overflowWrap: "anywhere",
-                            hyphens: "auto",
-                            whiteSpace: "normal",
-                          }}
-                        >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className='w-full max-w-full overflow-hidden cursor-help'>
+                      <div className='flex items-center min-w-0'>
+                        <div className='flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap'>
                           <RichContentRenderer
                             content={value}
-                            maxLength={-1}
-                            allowWrap={true}
-                            className=''
+                            maxLength={maxLength}
+                            allowWrap={false}
+                            className='inline'
                           />
                         </div>
+                        {hasMore && (
+                          <span className='text-muted-foreground ml-1 text-xs flex-shrink-0'>
+                            more
+                          </span>
+                        )}
                       </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className='max-w-md'>
+                    <div className='space-y-2'>
+                      <div className='font-medium text-sm'>Full Content</div>
+                      <div
+                        className='text-xs p-2 bg-gray-50 rounded'
+                        style={{
+                          wordBreak: "break-all",
+                          overflowWrap: "anywhere",
+                          hyphens: "auto",
+                          whiteSpace: "normal",
+                        }}
+                      >
+                        <RichContentRenderer
+                          content={value}
+                          maxLength={-1}
+                          allowWrap={true}
+                          className=''
+                        />
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
               );
             }
 
@@ -228,67 +225,65 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
             const hasMore = value.length > displayItems.length;
 
             return (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className='text-sm cursor-help'>
-                      <div className='flex flex-wrap gap-1'>
-                        {displayItems.map((item, idx) => (
-                          <span
-                            key={idx}
-                            className='inline-flex px-2 py-1 rounded text-xs bg-gray-100 text-gray-800 border border-gray-200'
-                          >
-                            {String(item).length > 15
-                              ? `${String(item).substring(0, 15)}...`
-                              : String(item)}
-                          </span>
-                        ))}
-                        {hasMore && (
-                          <span className='text-muted-foreground text-xs self-center'>
-                            +{value.length - displayItems.length} more
-                          </span>
-                        )}
-                      </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className='text-sm cursor-help'>
+                    <div className='flex flex-wrap gap-1'>
+                      {displayItems.map((item, idx) => (
+                        <span
+                          key={idx}
+                          className='inline-flex px-2 py-1 rounded text-xs bg-gray-100 text-gray-800 border border-gray-200'
+                        >
+                          {String(item).length > 15
+                            ? `${String(item).substring(0, 15)}...`
+                            : String(item)}
+                        </span>
+                      ))}
+                      {hasMore && (
+                        <span className='text-muted-foreground text-xs self-center'>
+                          +{value.length - displayItems.length} more
+                        </span>
+                      )}
                     </div>
-                  </TooltipTrigger>
-                  <TooltipContent className='max-w-md'>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className='max-w-md'>
+                  <div
+                    className='space-y-2'
+                    style={{
+                      wordBreak: "break-all",
+                      overflowWrap: "anywhere",
+                      hyphens: "auto",
+                    }}
+                  >
                     <div
-                      className='space-y-2'
+                      className='font-medium text-sm'
                       style={{
                         wordBreak: "break-all",
                         overflowWrap: "anywhere",
-                        hyphens: "auto",
                       }}
                     >
-                      <div
-                        className='font-medium text-sm'
-                        style={{
-                          wordBreak: "break-all",
-                          overflowWrap: "anywhere",
-                        }}
-                      >
-                        All Items ({value.length})
-                      </div>
-                      <div className='space-y-1'>
-                        {value.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className='text-xs p-1 bg-gray-50 rounded'
-                            style={{
-                              wordBreak: "break-all",
-                              overflowWrap: "anywhere",
-                              hyphens: "auto",
-                              whiteSpace: "normal",
-                            }}
-                          >
-                            {String(item)}
-                          </div>
-                        ))}
-                      </div>
+                      All Items ({value.length})
                     </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    <div className='space-y-1'>
+                      {value.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className='text-xs p-1 bg-gray-50 rounded'
+                          style={{
+                            wordBreak: "break-all",
+                            overflowWrap: "anywhere",
+                            hyphens: "auto",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {String(item)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
             );
           } else if (
             typeof value === "string" &&
@@ -338,65 +333,63 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
               const remainingCount = htmlElements.length - 3;
 
               return (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className='text-sm cursor-help'>
-                        <div className='flex flex-wrap gap-1'>
-                          {displayItems.map((item, idx) => (
-                            <span
-                              key={idx}
-                              className='inline-flex px-2 py-1 rounded text-xs bg-blue-100 text-blue-800 border border-blue-200'
-                            >
-                              {item.length > 15
-                                ? `${item.substring(0, 15)}...`
-                                : item}
-                            </span>
-                          ))}
-                          <span className='text-muted-foreground text-xs self-center'>
-                            +{remainingCount} more
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className='text-sm cursor-help'>
+                      <div className='flex flex-wrap gap-1'>
+                        {displayItems.map((item, idx) => (
+                          <span
+                            key={idx}
+                            className='inline-flex px-2 py-1 rounded text-xs bg-blue-100 text-blue-800 border border-blue-200'
+                          >
+                            {item.length > 15
+                              ? `${item.substring(0, 15)}...`
+                              : item}
                           </span>
-                        </div>
+                        ))}
+                        <span className='text-muted-foreground text-xs self-center'>
+                          +{remainingCount} more
+                        </span>
                       </div>
-                    </TooltipTrigger>
-                    <TooltipContent className='max-w-md'>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className='max-w-md'>
+                    <div
+                      className='space-y-2'
+                      style={{
+                        wordBreak: "break-all",
+                        overflowWrap: "anywhere",
+                        hyphens: "auto",
+                      }}
+                    >
                       <div
-                        className='space-y-2'
+                        className='font-medium text-sm'
                         style={{
                           wordBreak: "break-all",
                           overflowWrap: "anywhere",
-                          hyphens: "auto",
                         }}
                       >
-                        <div
-                          className='font-medium text-sm'
-                          style={{
-                            wordBreak: "break-all",
-                            overflowWrap: "anywhere",
-                          }}
-                        >
-                          Parsed Elements ({htmlElements.length})
-                        </div>
-                        <div className='space-y-1'>
-                          {htmlElements.map((item, idx) => (
-                            <div
-                              key={idx}
-                              className='text-xs p-1 bg-gray-50 rounded'
-                              style={{
-                                wordBreak: "break-all",
-                                overflowWrap: "anywhere",
-                                hyphens: "auto",
-                                whiteSpace: "normal",
-                              }}
-                            >
-                              {item}
-                            </div>
-                          ))}
-                        </div>
+                        Parsed Elements ({htmlElements.length})
                       </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                      <div className='space-y-1'>
+                        {htmlElements.map((item, idx) => (
+                          <div
+                            key={idx}
+                            className='text-xs p-1 bg-gray-50 rounded'
+                            style={{
+                              wordBreak: "break-all",
+                              overflowWrap: "anywhere",
+                              hyphens: "auto",
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
               );
             } else if (htmlElements.length > 0) {
               // Show all parsed elements if 3 or fewer
@@ -436,12 +429,12 @@ function createProductColumns(attributes: string[]): ColumnDef<Product>[] {
     });
 
   return [...columns, ...attributeColumns];
-}
+};
 
-function SimpleRow({ row }: { row: Row<Product> }) {
+const SimpleRow: FC<{ row: Row<Product> }> = ({ row }) => {
   const router = useRouter();
 
-  const handleRowClick = (e: React.MouseEvent) => {
+  const handleRowClick = (e: MouseEvent) => {
     // Don't navigate if clicking on checkbox or other interactive elements
     if ((e.target as HTMLElement).closest('input[type="checkbox"]')) {
       return;
@@ -495,7 +488,7 @@ function SimpleRow({ row }: { row: Row<Product> }) {
       })}
     </TableRow>
   );
-}
+};
 
 interface SimpleDataTableProps {
   data: Product[];
@@ -505,28 +498,25 @@ interface SimpleDataTableProps {
   isLoading: boolean;
 }
 
-export function SimpleDataTable({
+export const SimpleDataTable: FC<SimpleDataTableProps> = ({
   data: initialData,
   hasNextPage,
   fetchNextPage,
   isFetchingNextPage,
   isLoading,
-}: SimpleDataTableProps) {
-  const [data, setData] = React.useState(() => initialData);
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+}) => {
+  const [data, setData] = useState(() => initialData);
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   // Update data when prop changes
-  React.useEffect(() => {
+  useEffect(() => {
     setData(initialData);
   }, [initialData]);
 
-  const allAttributes = React.useMemo(() => {
+  const allAttributes = useMemo(() => {
     const attributeSet = new Set<string>();
     data.forEach((product) => {
       if (product.attributes && Array.isArray(product.attributes)) {
@@ -540,7 +530,7 @@ export function SimpleDataTable({
     return Array.from(attributeSet);
   }, [data]);
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => createProductColumns(allAttributes),
     [allAttributes]
   );
@@ -710,4 +700,4 @@ export function SimpleDataTable({
       </div>
     </div>
   );
-}
+};

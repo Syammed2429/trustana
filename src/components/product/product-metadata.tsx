@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
@@ -12,7 +12,7 @@ interface ProductMetadataProps {
 /**
  * Product metadata card component
  */
-export function ProductMetadata({ product }: ProductMetadataProps) {
+export const ProductMetadata: FC<ProductMetadataProps> = ({ product }) => {
   const metadata = generateProductMetadata(product);
 
   return (
@@ -45,4 +45,4 @@ export function ProductMetadata({ product }: ProductMetadataProps) {
       </CardContent>
     </Card>
   );
-}
+};

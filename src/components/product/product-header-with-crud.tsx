@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +29,7 @@ interface ProductHeaderWithCRUDProps {
  * Product detail page header with CRUD operations
  * Includes Edit, Delete, Duplicate functionality as dummy implementations
  */
-export const ProductHeaderWithCRUD = ({
+export const ProductHeaderWithCRUD: FC<ProductHeaderWithCRUDProps> = ({
   productName,
   productBrand,
   productCategory,
@@ -38,7 +38,7 @@ export const ProductHeaderWithCRUD = ({
   onUpdate,
   onDelete,
   onDuplicate,
-}: ProductHeaderWithCRUDProps) => {
+}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Star, Image, Globe } from "lucide-react";
 import { Product } from "@/app/types/product";
@@ -23,9 +23,9 @@ interface ProductDetailClientProps {
  * Handles user interactions and browser-specific functionality
  * Includes CRUD operations for product management
  */
-export const ProductDetailClient = ({
+export const ProductDetailClient: FC<ProductDetailClientProps> = ({
   product: initialProduct,
-}: ProductDetailClientProps) => {
+}) => {
   const router = useRouter();
   const [product, setProduct] = useState<Product>(initialProduct);
   const categorizedAttributes = categorizeAttributes(product.attributes || []);

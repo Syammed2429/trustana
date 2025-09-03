@@ -1,11 +1,12 @@
 "use client";
 
 import { Providers } from "@/providers/providers";
+import { FC, ReactNode } from "react";
 
 interface ClientWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export function ClientWrapper({ children }: ClientWrapperProps) {
+export const ClientWrapper: FC<ClientWrapperProps> = ({ children }) => {
   return <Providers>{children}</Providers>;
-}
+};

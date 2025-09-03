@@ -1,4 +1,3 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
@@ -6,6 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FC } from "react";
 
 interface RichContentRendererProps {
   content: string;
@@ -38,7 +38,7 @@ const SAFE_HTML_TAGS = [
 /**
  * Sanitizes HTML content by removing potentially dangerous tags and attributes
  */
-function sanitizeHTML(html: string): string {
+const sanitizeHTML = (html: string): string => {
   // Remove script tags and their content
   let sanitized = html.replace(
     /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
@@ -62,12 +62,12 @@ function sanitizeHTML(html: string): string {
   });
 
   return sanitized;
-}
+};
 
 /**
  * Parses HTML content and extracts meaningful elements (p, h1-h6, div tags with content)
  */
-function parseHTMLElements(html: string): string[] {
+const parseHTMLElements = (html: string): string[] => {
   const sanitized = sanitizeHTML(html);
   const elements: string[] = [];
 
@@ -89,18 +89,18 @@ function parseHTMLElements(html: string): string[] {
   });
 
   return elements;
-}
+};
 
 /**
  * Renders content as either plain text or rich HTML based on content type
  */
-export function RichContentRenderer({
+export const RichContentRenderer: FC<RichContentRendererProps> = ({
   content,
   maxLength = 100,
   className,
   allowWrap = false,
   showElementsLimit,
-}: RichContentRendererProps) {
+}) => {
   const isHTML = HTML_TAG_REGEX.test(content);
   const shouldTruncate =
     maxLength > 0 && !allowWrap && content.length > maxLength;
@@ -238,4 +238,4 @@ export function RichContentRenderer({
       />
     </div>
   );
-}
+};

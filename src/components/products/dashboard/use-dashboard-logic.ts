@@ -8,7 +8,7 @@ import { Product } from "@/app/types/product";
  * Custom hook that handles dashboard business logic and data transformations
  * Separates business logic from UI components for better maintainability
  */
-export function useDashboardLogic() {
+export const useDashboardLogic = () => {
   const {
     data,
     fetchNextPage,
@@ -114,4 +114,4 @@ export function useDashboardLogic() {
     handleCreateProduct,
     handleProductCreated,
   };
-}
+};

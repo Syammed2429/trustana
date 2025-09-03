@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -55,11 +55,11 @@ interface CreateProductDialogProps {
   onProductCreated: (product: Product) => void;
 }
 
-export function CreateProductDialog({
+export const CreateProductDialog: FC<CreateProductDialogProps> = ({
   open,
   onOpenChange,
   onProductCreated,
-}: CreateProductDialogProps) {
+}) => {
   const [isCreating, setIsCreating] = useState(false);
 
   // React Hook Form with Zod validation
@@ -82,7 +82,7 @@ export function CreateProductDialog({
   });
 
   // Reset form when dialog closes
-  React.useEffect(() => {
+  useEffect(() => {
     if (!open) {
       reset();
     }
@@ -153,7 +153,7 @@ export function CreateProductDialog({
           <form id='create-product-form' onSubmit={handleSubmit(onSubmit)}>
             <div className='space-y-4'>
               <div className='grid grid-cols-2 gap-4'>
-                <div>
+                <div className='space-y-2'>
                   <Label htmlFor='name'>Product Name *</Label>
                   <Input
                     id='name'
@@ -167,7 +167,7 @@ export function CreateProductDialog({
                     </p>
                   )}
                 </div>
-                <div>
+                <div className='space-y-2'>
                   <Label htmlFor='brand'>Brand</Label>
                   <Input
                     id='brand'
@@ -184,7 +184,7 @@ export function CreateProductDialog({
               </div>
 
               <div className='grid grid-cols-2 gap-4'>
-                <div>
+                <div className='space-y-2'>
                   <Label htmlFor='category'>Category</Label>
                   <Input
                     id='category'
@@ -198,7 +198,7 @@ export function CreateProductDialog({
                     </p>
                   )}
                 </div>
-                <div>
+                <div className='space-y-2'>
                   <Label htmlFor='sku'>SKU (Optional)</Label>
                   <Input
                     id='sku'
@@ -214,7 +214,7 @@ export function CreateProductDialog({
                 </div>
               </div>
 
-              <div>
+              <div className='space-y-2'>
                 <Label htmlFor='price'>Price</Label>
                 <Input
                   id='price'
@@ -232,7 +232,7 @@ export function CreateProductDialog({
                 )}
               </div>
 
-              <div>
+              <div className='space-y-2'>
                 <Label htmlFor='description'>Description</Label>
                 <Textarea
                   id='description'
@@ -281,4 +281,4 @@ export function CreateProductDialog({
       </DialogContent>
     </Dialog>
   );
-}
+};

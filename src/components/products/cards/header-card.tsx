@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { FC, memo } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { DashboardHeader } from "../dashboard/dashboard-header";
 import { DashboardStats } from "../dashboard/dashboard-stats";
@@ -18,7 +18,7 @@ interface HeaderCardProps {
   className?: string;
 }
 
-export const HeaderCard = memo(function HeaderCard({
+export const HeaderCard: FC<HeaderCardProps> = memo(function HeaderCard({
   totalProducts,
   availableAttributes,
   activeFiltersCount,
@@ -29,7 +29,7 @@ export const HeaderCard = memo(function HeaderCard({
   onSettings,
   onCreateProduct,
   className = "",
-}: HeaderCardProps) {
+}) {
   return (
     <Card className={className}>
       <CardHeader>

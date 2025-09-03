@@ -1,6 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  FC,
+  useEffect,
+} from "react";
 import { useInfiniteQuery, InfiniteData } from "@tanstack/react-query";
 import { Product } from "@/app/types/product";
 import { SupplierAttribute } from "@/app/types/attribute";
@@ -41,7 +49,7 @@ export function useProductsAdvanced() {
 }
 
 interface ProductsProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 // Fetch products with advanced filtering
@@ -97,7 +105,9 @@ async function fetchAttributes(): Promise<{
   }
 }
 
-export function ProductsProviderAdvanced({ children }: ProductsProviderProps) {
+export const ProductsProviderAdvanced: FC<ProductsProviderProps> = ({
+  children,
+}) => {
   const [currentFilters, setCurrentFilters] = useState<Record<string, unknown>>(
     {}
   );
@@ -128,7 +138,7 @@ export function ProductsProviderAdvanced({ children }: ProductsProviderProps) {
     SupplierAttribute[]
   >([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchAttributes().then(({ keys, attributes }) => {
       setAvailableAttributes(keys);
       setSupplierAttributes(attributes);
@@ -164,4 +174,4 @@ export function ProductsProviderAdvanced({ children }: ProductsProviderProps) {
       {children}
     </ProductsContext.Provider>
   );
-}
+};

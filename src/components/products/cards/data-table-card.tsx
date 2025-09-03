@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { FC, memo } from "react";
 import {
   Card,
   CardContent,
@@ -22,38 +22,40 @@ interface DataTableCardProps {
   className?: string;
 }
 
-export const DataTableCard = memo(function DataTableCard({
-  data,
-  totalProducts,
-  hasActiveFilters,
-  isLoading,
-  hasNextPage,
-  fetchNextPage,
-  isFetchingNextPage,
-  className = "",
-}: DataTableCardProps) {
-  const getDescription = () => {
-    if (isLoading) return "Loading products...";
+export const DataTableCard: FC<DataTableCardProps> = memo(
+  function DataTableCard({
+    data,
+    totalProducts,
+    hasActiveFilters,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    className = "",
+  }) {
+    const getDescription = () => {
+      if (isLoading) return "Loading products...";
 
-    const baseText = `Showing ${totalProducts.toLocaleString()} products`;
-    return hasActiveFilters ? `${baseText} (filtered)` : baseText;
-  };
+      const baseText = `Showing ${totalProducts.toLocaleString()} products`;
+      return hasActiveFilters ? `${baseText} (filtered)` : baseText;
+    };
 
-  return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle className='text-lg'>Product Data</CardTitle>
-        <CardDescription>{getDescription()}</CardDescription>
-      </CardHeader>
-      <CardContent className='p-0'>
-        <SimpleDataTable
-          data={data}
-          hasNextPage={hasNextPage ?? false}
-          fetchNextPage={fetchNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          isLoading={isLoading}
-        />
-      </CardContent>
-    </Card>
-  );
-});
+    return (
+      <Card className={className}>
+        <CardHeader>
+          <CardTitle className='text-lg'>Product Data</CardTitle>
+          <CardDescription>{getDescription()}</CardDescription>
+        </CardHeader>
+        <CardContent className='p-0'>
+          <SimpleDataTable
+            data={data}
+            hasNextPage={hasNextPage ?? false}
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            isLoading={isLoading}
+          />
+        </CardContent>
+      </Card>
+    );
+  }
+);

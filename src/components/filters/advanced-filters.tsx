@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { FC, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -36,13 +36,13 @@ interface AdvancedFiltersProps {
  * - Performance optimized with memoization
  * - Clean separation of concerns
  */
-export const AdvancedFilters = ({
+export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
   onFiltersChange,
   availableAttributes,
   isDisabled = false,
   className = "",
-}: AdvancedFiltersProps) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   const {
     // State

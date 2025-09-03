@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { FC, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 
@@ -10,11 +10,11 @@ interface ErrorStateProps {
   className?: string;
 }
 
-export const ErrorState = memo(function ErrorState({
+export const ErrorState: FC<ErrorStateProps> = memo(function ErrorState({
   error,
   onRetry,
   className = "",
-}: ErrorStateProps) {
+}) {
   return (
     <div
       className={`flex items-center justify-center h-64 text-center ${className}`}

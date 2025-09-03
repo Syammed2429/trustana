@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,14 @@ import {
   groupAttributesByGroup,
   getOperatorsForFieldType,
 } from "@/utils/attribute-utils";
+import {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  FC,
+  ChangeEvent,
+} from "react";
 
 interface EnhancedProductFiltersProps {
   products: Product[];
@@ -40,12 +47,12 @@ interface AttributeFilter {
  * Enhanced product filters that properly utilize AttributeFieldType and AttributeGroup enums
  * for type-aware filtering and validation as required by README.md
  */
-export function EnhancedProductFilters({
+export const EnhancedProductFilters: FC<EnhancedProductFiltersProps> = ({
   products,
   availableAttributes,
   onFiltersChange,
   className = "",
-}: EnhancedProductFiltersProps) {
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<AttributeGroup | "all">(
     "all"
@@ -70,7 +77,7 @@ export function EnhancedProductFilters({
   );
 
   // Filter attributes based on selected group and field type
-  const filteredAttributes = React.useMemo(() => {
+  const filteredAttributes = useMemo(() => {
     let filtered = availableAttributes;
 
     if (selectedGroup !== "all") {
@@ -144,7 +151,7 @@ export function EnhancedProductFilters({
   };
 
   // Apply all filters to products
-  const applyFilters = React.useCallback(() => {
+  const applyFilters = useCallback(() => {
     let filtered = products;
 
     // Apply attribute filters
@@ -169,7 +176,7 @@ export function EnhancedProductFilters({
   }, [products, attributeFilters, onFiltersChange]);
 
   // Apply filters whenever they change
-  React.useEffect(() => {
+  useEffect(() => {
     applyFilters();
   }, [applyFilters]);
 
@@ -258,7 +265,9 @@ export function EnhancedProductFilters({
             <Input
               placeholder='Search by attribute name...'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value)
+              }
               className='pl-8'
             />
           </div>
@@ -270,7 +279,7 @@ export function EnhancedProductFilters({
             <label className='text-sm font-medium'>Group</label>
             <Select
               value={selectedGroup}
-              onValueChange={(value) =>
+              onValueChange={(value: string) =>
                 setSelectedGroup(value as AttributeGroup | "all")
               }
             >
@@ -292,7 +301,7 @@ export function EnhancedProductFilters({
             <label className='text-sm font-medium'>Field Type</label>
             <Select
               value={selectedFieldType}
-              onValueChange={(value) =>
+              onValueChange={(value: string) =>
                 setSelectedFieldType(value as AttributeFieldType | "all")
               }
             >
@@ -341,7 +350,7 @@ export function EnhancedProductFilters({
                     <div className='flex items-center gap-2 flex-wrap'>
                       <Select
                         value={filter.attributeKey}
-                        onValueChange={(value) =>
+                        onValueChange={(value: string) =>
                           updateAttributeFilter(filter.id, {
                             attributeKey: value,
                           })
@@ -366,7 +375,7 @@ export function EnhancedProductFilters({
 
                       <Select
                         value={filter.operator}
-                        onValueChange={(value) =>
+                        onValueChange={(value: string) =>
                           updateAttributeFilter(filter.id, { operator: value })
                         }
                       >
@@ -387,7 +396,7 @@ export function EnhancedProductFilters({
                           filter.fieldType
                         ).toLowerCase()} value...`}
                         value={filter.value}
-                        onChange={(e) =>
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           updateAttributeFilter(filter.id, {
                             value: e.target.value,
                           })
@@ -422,4 +431,4 @@ export function EnhancedProductFilters({
       </CardContent>
     </Card>
   );
-}
+};

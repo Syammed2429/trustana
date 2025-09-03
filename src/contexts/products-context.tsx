@@ -1,6 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  FC,
+  useEffect,
+} from "react";
 import { useInfiniteQuery, InfiniteData } from "@tanstack/react-query";
 import { Product } from "@/app/types/product";
 import { SupplierAttribute } from "@/app/types/attribute";
@@ -44,7 +52,7 @@ export function useProducts() {
 }
 
 interface ProductsProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 // Fetch products with pagination
@@ -149,7 +157,7 @@ async function fetchAttributes(): Promise<SupplierAttribute[]> {
   }
 }
 
-export function ProductsProvider({ children }: ProductsProviderProps) {
+export const ProductsProvider: FC<ProductsProviderProps> = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [attributeFilters, setAttributeFilters] = useState<
     Record<string, string>
@@ -173,7 +181,7 @@ export function ProductsProvider({ children }: ProductsProviderProps) {
   }, []);
 
   // Load filters from URL on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const urlFilters = urlParams.get("filters");
     if (urlFilters) {
@@ -189,7 +197,7 @@ export function ProductsProvider({ children }: ProductsProviderProps) {
   }, []);
 
   // Fetch attributes on mount and extract available attribute keys
-  React.useEffect(() => {
+  useEffect(() => {
     const loadAttributes = async () => {
       try {
         const attrs = await fetchAttributes();
@@ -267,4 +275,4 @@ export function ProductsProvider({ children }: ProductsProviderProps) {
       {children}
     </ProductsContext.Provider>
   );
-}
+};

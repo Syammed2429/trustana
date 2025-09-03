@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { WebVitals } from "@/components/web-vitals";
 import "./globals.css";
 import { ClientWrapper } from "@/components/client-wrapper";
+import { ReactNode } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang='en'>

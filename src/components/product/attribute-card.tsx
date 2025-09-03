@@ -1,4 +1,4 @@
-import React from "react";
+import { ComponentType, FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RichContentRenderer } from "@/components/rich-content-renderer";
@@ -8,19 +8,19 @@ import { formatAttributeKey } from "@/app/utils/product-utils";
 interface AttributeCardProps {
   title: string;
   attributes: ProductAttribute[];
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   className?: string;
 }
 
 /**
  * Reusable card component for displaying categorized product attributes
  */
-export function AttributeCard({
+export const AttributeCard: FC<AttributeCardProps> = ({
   title,
   attributes,
   icon: Icon,
   className = "",
-}: AttributeCardProps) {
+}) => {
   if (attributes.length === 0) return null;
 
   return (
@@ -55,4 +55,4 @@ export function AttributeCard({
       </CardContent>
     </Card>
   );
-}
+};

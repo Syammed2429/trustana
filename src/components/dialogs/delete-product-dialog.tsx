@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,13 +21,13 @@ interface DeleteProductDialogProps {
   onBack?: () => void;
 }
 
-export const DeleteProductDialog = ({
+export const DeleteProductDialog: FC<DeleteProductDialogProps> = ({
   open,
   onOpenChange,
   product,
   onDelete,
   onBack,
-}: DeleteProductDialogProps) => {
+}) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Get product name for display

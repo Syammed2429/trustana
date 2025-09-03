@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   IconEye,
   IconEyeOff,
@@ -33,6 +32,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Product } from "@/app/types/product";
+import { ChangeEvent, FC, SetStateAction, useEffect, useState } from "react";
 
 interface ColumnCustomizationProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,7 +54,7 @@ interface ColumnItemProps {
   onToggleVisibility: (id: string) => void;
 }
 
-function ColumnItem({ column, onToggleVisibility }: ColumnItemProps) {
+const ColumnItem: FC<ColumnItemProps> = ({ column, onToggleVisibility }) => {
   return (
     <div
       className={`
@@ -107,9 +107,9 @@ function ColumnItem({ column, onToggleVisibility }: ColumnItemProps) {
       </div>
     </div>
   );
-}
+};
 
-function formatColumnName(columnId: string): string {
+const formatColumnName = (columnId: string): string => {
   // Enhanced column name formatting
   return columnId
     .replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -119,11 +119,11 @@ function formatColumnName(columnId: string): string {
     .replace(/\bsku\b/gi, "SKU")
     .replace(/\burl\b/gi, "URL")
     .replace(/\bapi\b/gi, "API");
-}
+};
 
-function getColumnDataType(
+const getColumnDataType = (
   column: Column<Product, unknown>
-): ColumnState["dataType"] {
+): ColumnState["dataType"] => {
   // Determine data type based on column ID and sample data
   if (column.id.includes("date") || column.id.includes("time")) return "date";
   if (
@@ -137,22 +137,20 @@ function getColumnDataType(
   if (column.id.includes("attributes") || column.id.includes("media"))
     return "object";
   return "string";
-}
+};
 
-export function ColumnCustomization({
+export const ColumnCustomization: FC<ColumnCustomizationProps> = ({
   table,
   onColumnVisibilityChange,
-}: ColumnCustomizationProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [columns, setColumns] = React.useState<ColumnState[]>([]);
-  const [originalColumns, setOriginalColumns] = React.useState<ColumnState[]>(
-    []
-  );
-  const [hasChanges, setHasChanges] = React.useState(false);
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [columns, setColumns] = useState<ColumnState[]>([]);
+  const [originalColumns, setOriginalColumns] = useState<ColumnState[]>([]);
+  const [hasChanges, setHasChanges] = useState(false);
 
   // Initialize columns state
-  React.useEffect(() => {
+  useEffect(() => {
     const tableColumns = table
       .getAllColumns()
       .filter((column: Column<Product, unknown>) => column.getCanHide())
@@ -271,7 +269,9 @@ export function ColumnCustomization({
               <Input
                 placeholder='Search columns...'
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSearchTerm(e.target.value)
+                }
                 className='w-64'
               />
               <Badge variant='outline'>
@@ -358,4 +358,4 @@ export function ColumnCustomization({
       </DialogContent>
     </Dialog>
   );
-}
+};

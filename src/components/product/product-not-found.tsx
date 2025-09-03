@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Package } from "lucide-react";
 import Link from "next/link";
@@ -10,7 +10,7 @@ interface ProductNotFoundProps {
 /**
  * Product not found error component
  */
-export function ProductNotFound({ productId }: ProductNotFoundProps) {
+export const ProductNotFound: FC<ProductNotFoundProps> = ({ productId }) => {
   return (
     <div className='container mx-auto p-6'>
       <div className='flex items-center justify-center h-64 text-center'>
@@ -33,4 +33,4 @@ export function ProductNotFound({ productId }: ProductNotFoundProps) {
       </div>
     </div>
   );
-}
+};

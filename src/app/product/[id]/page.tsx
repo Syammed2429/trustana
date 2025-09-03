@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Metadata } from "next";
 import { fetchProductById } from "@/app/lib/product-api";
 import { ProductNotFound } from "@/components/product/product-not-found";
-import { ProductDetailSkeleton } from "@/components/product/product-detail-skeleton";
+import { ProductDetailSkeleton } from "@/components/skeleton/product-detail-skeleton";
 import { ProductDetailClient } from "@/components/product/product-detail-client";
 
 interface ProductPageProps {
