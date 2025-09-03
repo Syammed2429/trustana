@@ -15,9 +15,10 @@ import {
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Save, Download, Upload, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { Save, Download, Upload, ChevronDown, ChevronUp, Trash2, Share2 } from 'lucide-react';
 import { SavedFilter } from '@/utils/filters/filter-utils';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 interface SavedFiltersCardProps {
   savedFilters: SavedFilter[];
@@ -49,6 +50,33 @@ export const SavedFiltersCard: FC<SavedFiltersCardProps> = memo(function SavedFi
     description: '',
     isShared: false,
   });
+
+  const handleShareFilter = async (filter: SavedFilter) => {
+    try {
+      // Generate a shareable URL with filter parameters
+      const filterParams = new URLSearchParams();
+      filterParams.set('shared_filter', filter.id);
+      filterParams.set('filter_name', filter.name);
+
+      const shareableUrl = `${window.location.origin}/products?${filterParams.toString()}`;
+
+      // Copy to clipboard
+      await navigator.clipboard.writeText(shareableUrl);
+
+      toast.success('🔗 Shared filter link copied!', {
+        description: `Link for "${filter.name}" has been copied to your clipboard.`,
+        duration: 4000,
+      });
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+
+      // Fallback for browsers that don't support clipboard API
+      toast.error('❌ Failed to copy link', {
+        description: "Your browser doesn't support clipboard access. Please copy manually.",
+        duration: 5000,
+      });
+    }
+  };
 
   const handleSaveFilter = () => {
     if (!saveFormData.name.trim()) return;
@@ -159,17 +187,39 @@ export const SavedFiltersCard: FC<SavedFiltersCardProps> = memo(function SavedFi
                           )}
                         </div>
                       </div>
-                      <Button
-                        size='sm'
-                        variant='ghost'
-                        className='absolute top-2 right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100'
-                        onClick={(e: { stopPropagation: () => void }) => {
-                          e.stopPropagation();
-                          onDeleteFilter(filter.id);
-                        }}
-                      >
-                        <Trash2 className='h-3 w-3' />
-                      </Button>
+
+                      {/* Action buttons that appear on hover */}
+                      <div className='absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100'>
+                        {/* Share button - only show for shared filters */}
+                        {filter.isShared && (
+                          <Button
+                            size='sm'
+                            variant='ghost'
+                            className='h-6 w-6 p-0 text-blue-500 hover:bg-blue-100 hover:text-blue-600'
+                            onClick={(e: { stopPropagation: () => void }) => {
+                              e.stopPropagation();
+                              handleShareFilter(filter);
+                            }}
+                            title='Copy shared filter link'
+                          >
+                            <Share2 className='h-3 w-3' />
+                          </Button>
+                        )}
+
+                        {/* Delete button */}
+                        <Button
+                          size='sm'
+                          variant='ghost'
+                          className='h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600'
+                          onClick={(e: { stopPropagation: () => void }) => {
+                            e.stopPropagation();
+                            onDeleteFilter(filter.id);
+                          }}
+                          title='Delete filter'
+                        >
+                          <Trash2 className='h-3 w-3' />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>

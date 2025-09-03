@@ -112,11 +112,6 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
                     />
                     <div className='flex flex-col'>
                       <span className='font-medium'>{attribute.label}</span>
-                      {/* {attribute.originalKey && (
-                            <span className='text-xs text-muted-foreground'>
-                              {attribute.originalKey}
-                            </span>
-                          )} */}
                     </div>
                   </CommandItem>
                 ))}

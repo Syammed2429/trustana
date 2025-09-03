@@ -30,6 +30,7 @@ export const TableRowComponent = memo<TableRowComponentProps>(({ row }) => {
 
   return (
     <TableRow
+      data-testid='product-row'
       data-state={row.getIsSelected() && 'selected'}
       className='hover:bg-muted/50 cursor-pointer transition-colors'
       onClick={(event) => handleProductClick(row.original.id, event)}
