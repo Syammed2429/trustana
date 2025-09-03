@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { formatAttributeHeaderSimple } from '@/utils/attribute-formatting';
-import { AttributeGroup } from '@/app/enums/attribute';
 import { useMemo, useState, FC } from 'react';
+import { AttributeOption, coreAttributes, systemAttributes } from '@/utils/attribute-options';
 
 interface AttributeComboboxProps {
   value?: string;
@@ -23,13 +23,6 @@ interface AttributeComboboxProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
-}
-
-interface AttributeOption {
-  value: string;
-  label: string;
-  group: string;
-  originalKey?: string;
 }
 
 export const AttributeCombobox: FC<AttributeComboboxProps> = ({
@@ -42,66 +35,12 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
 
+  const attrs = ['name', 'brand', 'category', 'price', 'description', 'sku', 'status', 'type'];
+
   // Create attribute options with system attributes and custom attributes
   const attributeOptions = useMemo((): AttributeOption[] => {
-    const systemAttributes: AttributeOption[] = [
-      { value: 'id', label: 'ID', group: 'System' },
-      { value: 'skuId', label: 'SKU ID', group: 'System' },
-      { value: 'createdAt', label: 'Created At', group: 'System' },
-      { value: 'updatedAt', label: 'Updated At', group: 'System' },
-    ];
-
-    // Core product attributes that are most commonly used
-    const coreAttributes: AttributeOption[] = [
-      {
-        value: 'attributes.name',
-        label: 'Product Name',
-        group: AttributeGroup.BASIC_INFO,
-      },
-      {
-        value: 'attributes.brand',
-        label: 'Brand',
-        group: AttributeGroup.BASIC_INFO,
-      },
-      {
-        value: 'attributes.category',
-        label: 'Category',
-        group: AttributeGroup.BASIC_INFO,
-      },
-      {
-        value: 'attributes.price',
-        label: 'Price',
-        group: AttributeGroup.PRICING_AND_INVENTORY,
-      },
-      {
-        value: 'attributes.description',
-        label: 'Description',
-        group: AttributeGroup.DESCRIPTIONS,
-      },
-      {
-        value: 'attributes.sku',
-        label: 'SKU',
-        group: AttributeGroup.BASIC_INFO,
-      },
-      {
-        value: 'attributes.status',
-        label: 'Status',
-        group: AttributeGroup.BASIC_INFO,
-      },
-      {
-        value: 'attributes.type',
-        label: 'Type',
-        group: AttributeGroup.SPECIFICATIONS,
-      },
-    ];
-
     const customAttributes: AttributeOption[] = availableAttributes
-      .filter(
-        (attr) =>
-          !['name', 'brand', 'category', 'price', 'description', 'sku', 'status', 'type'].includes(
-            attr
-          )
-      )
+      .filter((attr) => !attrs.includes(attr))
       .map((attr) => ({
         value: `attributes.${attr}`,
         label: formatAttributeHeaderSimple(attr),
@@ -110,6 +49,7 @@ export const AttributeCombobox: FC<AttributeComboboxProps> = ({
       }));
 
     return [...systemAttributes, ...coreAttributes, ...customAttributes];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availableAttributes]);
 
   // Group attributes by category

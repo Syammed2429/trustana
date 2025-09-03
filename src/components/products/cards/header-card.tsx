@@ -32,7 +32,7 @@ export const HeaderCard: FC<HeaderCardProps> = memo(function HeaderCard({
 }) {
   return (
     <Card className={className}>
-      <CardHeader>
+      <CardHeader className='px-3'>
         <DashboardHeader
           onExport={onExport}
           onShare={onShare}
@@ -40,7 +40,7 @@ export const HeaderCard: FC<HeaderCardProps> = memo(function HeaderCard({
           onCreateProduct={onCreateProduct}
         />
       </CardHeader>
-      <CardContent>
+      <CardContent className='px-3'>
         <DashboardStats
           totalProducts={totalProducts}
           availableAttributes={availableAttributes}

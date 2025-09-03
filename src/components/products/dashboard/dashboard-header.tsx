@@ -20,7 +20,9 @@ export const DashboardHeader: FC<DashboardHeaderProps> = memo(function Dashboard
   className = '',
 }) {
   return (
-    <div className={`flex items-center justify-between ${className}`}>
+    <div
+      className={`flex flex-col items-baseline justify-between space-y-2 md:flex-row md:items-center md:space-y-0 ${className}`}
+    >
       <div>
         <h1 className='text-2xl font-bold'>Advanced Product Dashboard</h1>
         <p className='text-muted-foreground'>

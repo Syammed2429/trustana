@@ -57,7 +57,7 @@ export const AdvancedProductsDashboard = () => {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 px-1'>
       {/* Header with Stats */}
       <HeaderCard
         totalProducts={totalProducts}

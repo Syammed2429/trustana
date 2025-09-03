@@ -21,7 +21,7 @@ export default function HomePage() {
     <ErrorBoundary>
       <ProductsProviderAdvanced>
         <div className='container mx-auto py-8'>
-          <div className='space-y-6'>
+          <div className='space-y-6 px-1'>
             <div className='space-y-2'>
               <h1 className='text-3xl font-bold tracking-tight'>
                 Trustana Advanced Product Dashboard
