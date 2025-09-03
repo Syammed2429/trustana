@@ -5,6 +5,7 @@ import { WebVitals } from '@/components/web-vitals';
 import './globals.css';
 import { ClientWrapper } from '@/components/client-wrapper';
 import { ReactNode } from 'react';
+import { Analytics } from '@vercel/analytics/next';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ClientWrapper>
           {children}
+          <Analytics />
           <Toaster />
           <WebVitals />
         </ClientWrapper>
