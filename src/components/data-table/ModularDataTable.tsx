@@ -39,35 +39,37 @@ export const ModularDataTable: FC<DataTableProps> = ({
       {/* <TableToolbar table={table} /> */}
 
       {/* Table Container */}
-      <div className='relative flex flex-col gap-4 overflow-auto px-4 lg:px-6'>
+      <div className='relative flex flex-col gap-4 px-2 sm:px-4 lg:px-6'>
         <div className='overflow-hidden rounded-lg border'>
-          <InfiniteScroll
-            dataLength={data.length}
-            next={fetchNextPage}
-            hasMore={hasNextPage}
-            loader={<LoadingState type='infinite' />}
-            endMessage={
-              <div className='p-4 text-center'>
-                <p className='text-muted-foreground text-sm'>
-                  You have seen all {data.length} products
-                </p>
+          <div className='overflow-x-auto'>
+            <InfiniteScroll
+              dataLength={data.length}
+              next={fetchNextPage}
+              hasMore={hasNextPage}
+              loader={<LoadingState type='infinite' />}
+              endMessage={
+                <div className='p-4 text-center'>
+                  <p className='text-muted-foreground text-sm'>
+                    You have seen all {data.length} products
+                  </p>
+                </div>
+              }
+              scrollableTarget='scrollableDiv'
+            >
+              <div id='scrollableDiv' style={{ height: '600px', overflow: 'auto' }}>
+                <Table
+                  data-testid='products-table'
+                  className='w-full min-w-[800px] table-fixed border-separate border-spacing-0'
+                >
+                  <TableHeaderComponent table={table} />
+                  <TableBodyComponent table={table} columnsLength={columns.length} />
+                </Table>
               </div>
-            }
-            scrollableTarget='scrollableDiv'
-          >
-            <div id='scrollableDiv' style={{ height: '600px', overflow: 'auto' }}>
-              <Table
-                data-testid='products-table'
-                className='w-full table-fixed border-separate border-spacing-0'
-              >
-                <TableHeaderComponent table={table} />
-                <TableBodyComponent table={table} columnsLength={columns.length} />
-              </Table>
-            </div>
-          </InfiniteScroll>
+            </InfiniteScroll>
 
-          {/* Fetching More Indicator */}
-          {isFetchingNextPage && <LoadingState type='fetching' />}
+            {/* Fetching More Indicator */}
+            {isFetchingNextPage && <LoadingState type='fetching' />}
+          </div>
         </div>
       </div>
     </div>

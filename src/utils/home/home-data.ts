@@ -64,13 +64,6 @@ export const DEMO_LINKS: DemoLink[] = [
     variant: 'default',
     icon: Filter,
   },
-  {
-    id: 'simple-dashboard',
-    href: '/simple',
-    title: 'Simple Dashboard',
-    variant: 'outline',
-    icon: Database,
-  },
 ];
 
 export const ADVANCED_FEATURES: FeatureList[] = [

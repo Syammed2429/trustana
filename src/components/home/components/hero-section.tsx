@@ -1,6 +1,6 @@
-'use client';
-
 import { memo } from 'react';
+import { motion } from 'motion/react';
+import { containerVariants, fadeInUpVariants, heroTitleVariants } from '@/lib/animation-variants';
 import { PAGE_CONFIG } from '@/utils/home';
 
 interface HeroSectionProps {
@@ -9,14 +9,37 @@ interface HeroSectionProps {
 
 /**
  * Hero section component with title and subtitle
- * Memoized for performance optimization
+ * Enhanced with Motion animations for engaging entrance
  */
 const HeroSection = memo<HeroSectionProps>(({ className = '' }) => {
   return (
-    <div className={`space-y-4 text-center ${className}`}>
-      <h1 className='text-4xl font-bold tracking-tight'>{PAGE_CONFIG.title}</h1>
-      <p className='text-muted-foreground mx-auto max-w-2xl text-xl'>{PAGE_CONFIG.subtitle}</p>
-    </div>
+    <motion.div
+      className={`space-y-4 text-center ${className}`}
+      variants={containerVariants}
+      initial='hidden'
+      animate='visible'
+    >
+      <motion.h1
+        className='text-4xl font-bold tracking-tight'
+        variants={heroTitleVariants}
+        whileHover={{
+          scale: 1.02,
+          transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+        }}
+      >
+        {PAGE_CONFIG.title}
+      </motion.h1>
+      <motion.p
+        className='text-muted-foreground mx-auto max-w-2xl text-xl'
+        variants={fadeInUpVariants}
+        whileHover={{
+          scale: 1.01,
+          transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
+        }}
+      >
+        {PAGE_CONFIG.subtitle}
+      </motion.p>
+    </motion.div>
   );
 });
 
