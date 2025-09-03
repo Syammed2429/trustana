@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { containerVariants, fadeInUpVariants, heroTitleVariants } from '@/lib/animation-variants';

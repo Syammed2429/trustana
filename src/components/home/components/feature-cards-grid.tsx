@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { staggerContainerVariants, card3DVariants, badgeVariants } from '@/lib/animation-variants';
