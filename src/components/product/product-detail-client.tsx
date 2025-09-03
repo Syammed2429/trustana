@@ -1,7 +1,6 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { Star, Image, Globe } from 'lucide-react';
 import { Product } from '@/app/types/product';
@@ -11,6 +10,7 @@ import { ProductOverview } from '@/components/product/product-overview';
 import { AttributeCard } from '@/components/product/attribute-card';
 import { ProductMetadata } from '@/components/product/product-metadata';
 import { containerVariants, fadeInUpVariants, fadeInLeftVariants } from '@/lib/animation-variants';
+import { useRouter } from '@bprogress/next/app';
 
 interface ProductDetailClientProps {
   product: Product;
@@ -28,7 +28,7 @@ export const ProductDetailClient: FC<ProductDetailClientProps> = ({ product: ini
   const { name, brand, category } = extractProductInfo(product);
 
   const handleBack = () => {
-    router.back();
+    router.push('/products');
   };
 
   // Handle product update

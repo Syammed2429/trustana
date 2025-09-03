@@ -3,6 +3,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, ReactNode } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/sonner';
+import { Analytics } from '@vercel/analytics/next';
+import { ProgressProvider } from '@bprogress/next/app';
+import { WebVitals } from '@/components/web-vitals';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -23,7 +27,17 @@ const queryClient = new QueryClient({
 export const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>{children}</TooltipProvider>
+      <ProgressProvider
+        height='3.5px'
+        color='#6a47ee'
+        options={{ showSpinner: false }}
+        shallowRouting
+      >
+        <TooltipProvider>{children}</TooltipProvider>
+      </ProgressProvider>
+      <Analytics />
+      <Toaster />
+      <WebVitals />
     </QueryClientProvider>
   );
 };

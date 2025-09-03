@@ -1,11 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { Toaster } from '@/components/ui/sonner';
-import { WebVitals } from '@/components/web-vitals';
 import './globals.css';
-import { ClientWrapper } from '@/components/client-wrapper';
 import { ReactNode } from 'react';
-import { Analytics } from '@vercel/analytics/next';
+import { Providers } from '@/providers/providers';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,8 +27,14 @@ export const metadata: Metadata = {
     apple: [{ url: '/apple-touch-icon.svg', sizes: '180x180', type: 'image/svg+xml' }],
   },
   manifest: '/manifest.json',
+};
+
+export const viewport: Viewport = {
   themeColor: '#3b82f6',
-  viewport: 'width=device-width, initial-scale=1',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -42,12 +45,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ClientWrapper>
-          {children}
-          <Analytics />
-          <Toaster />
-          <WebVitals />
-        </ClientWrapper>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

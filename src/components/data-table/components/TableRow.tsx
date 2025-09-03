@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { Row, flexRender } from '@tanstack/react-table';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { Product } from '@/app/types/product';
 import { ColumnMeta } from '../types';
+import { useRouter } from '@bprogress/next/app';
 
 interface TableRowComponentProps {
   row: Row<Product>;
