@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -43,6 +43,7 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
   className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const {
     // State
@@ -80,6 +81,19 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
     onFiltersChange,
     availableAttributes,
   });
+
+  const handleAddGroup = useCallback(() => {
+    addGroup();
+    // Scroll to the bottom to show the new group after a brief delay
+    setTimeout(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({
+          top: scrollContainerRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
+  }, [addGroup]);
 
   const handleLoadFilter = (filter: SavedFilter) => {
     loadFilter(filter);
@@ -119,68 +133,72 @@ export const AdvancedFilters: FC<AdvancedFiltersProps> = ({
               </Button>
             </DialogTrigger>
 
-            <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-4xl'>
-              <DialogHeader>
+            <DialogContent className='flex h-[90vh] max-h-[90vh] flex-col sm:max-w-4xl'>
+              {/* Sticky Header */}
+              <DialogHeader className='flex-shrink-0 border-b pb-4'>
                 <DialogTitle>Advanced Filter Builder</DialogTitle>
                 <DialogDescription>
                   Create complex filters with multiple conditions and logical operators
                 </DialogDescription>
               </DialogHeader>
 
-              <div className='space-y-6'>
-                {/* Saved Filters Section */}
-                <SavedFiltersCard
-                  savedFilters={savedFilters}
-                  onSaveFilter={saveFilter}
-                  onLoadFilter={handleLoadFilter}
-                  onDeleteFilter={deleteFilter}
-                  onExportFilters={exportFilters}
-                  onImportFilters={handleImportFilters}
-                />
+              {/* Scrollable Content */}
+              <div className='flex-1 overflow-y-auto py-4' ref={scrollContainerRef}>
+                <div className='space-y-6'>
+                  {/* Saved Filters Section */}
+                  <SavedFiltersCard
+                    savedFilters={savedFilters}
+                    onSaveFilter={saveFilter}
+                    onLoadFilter={handleLoadFilter}
+                    onDeleteFilter={deleteFilter}
+                    onExportFilters={exportFilters}
+                    onImportFilters={handleImportFilters}
+                  />
 
-                {/* Filter Groups */}
-                <div className='space-y-4'>
-                  {filterGroups.map((group) => (
-                    <FilterGroupCard
-                      key={group.id}
-                      group={group}
-                      availableAttributes={availableAttributes}
-                      canRemove={filterGroups.length > 1}
-                      onNameChange={(name) => updateGroup(group.id, { name })}
-                      onLogicalOperatorChange={(logicalOperator) =>
-                        updateGroup(group.id, { logicalOperator })
-                      }
-                      onAddCondition={() => addCondition(group.id)}
-                      onRemoveGroup={() => removeGroup(group.id)}
-                      onConditionChange={(conditionId, updates) =>
-                        updateCondition(group.id, conditionId, updates)
-                      }
-                      onRemoveCondition={(conditionId) => removeCondition(group.id, conditionId)}
-                      onAttributeChange={(conditionId, attribute) =>
-                        handleAttributeChange(group.id, conditionId, attribute)
-                      }
-                    />
-                  ))}
+                  {/* Filter Groups */}
+                  <div className='space-y-4'>
+                    {filterGroups.map((group) => (
+                      <FilterGroupCard
+                        key={group.id}
+                        group={group}
+                        availableAttributes={availableAttributes}
+                        canRemove={filterGroups.length > 1}
+                        onNameChange={(name) => updateGroup(group.id, { name })}
+                        onLogicalOperatorChange={(logicalOperator) =>
+                          updateGroup(group.id, { logicalOperator })
+                        }
+                        onAddCondition={() => addCondition(group.id)}
+                        onRemoveGroup={() => removeGroup(group.id)}
+                        onConditionChange={(conditionId, updates) =>
+                          updateCondition(group.id, conditionId, updates)
+                        }
+                        onRemoveCondition={(conditionId) => removeCondition(group.id, conditionId)}
+                        onAttributeChange={(conditionId, attribute) =>
+                          handleAttributeChange(group.id, conditionId, attribute)
+                        }
+                      />
+                    ))}
 
-                  <div className='flex justify-center'>
-                    <Button variant='outline' onClick={addGroup}>
-                      <Plus className='mr-2 h-4 w-4' />
-                      Add Filter Group
-                    </Button>
+                    <div className='flex justify-center'>
+                      <Button variant='outline' onClick={handleAddGroup}>
+                        <Plus className='mr-2 h-4 w-4' />
+                        Add Filter Group
+                      </Button>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className='flex justify-between border-t pt-4'>
-                  <Button variant='outline' onClick={clearAllFilters}>
-                    Clear All Filters
+              {/* Sticky Footer */}
+              <div className='flex flex-shrink-0 justify-between border-t pt-4'>
+                <Button variant='outline' onClick={clearAllFilters}>
+                  Clear All Filters
+                </Button>
+                <div className='flex gap-2'>
+                  <Button variant='outline' onClick={() => setIsOpen(false)}>
+                    Cancel
                   </Button>
-                  <div className='flex gap-2'>
-                    <Button variant='outline' onClick={() => setIsOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleApplyFilters}>Apply Filters</Button>
-                  </div>
+                  <Button onClick={handleApplyFilters}>Apply Filters</Button>
                 </div>
               </div>
             </DialogContent>
